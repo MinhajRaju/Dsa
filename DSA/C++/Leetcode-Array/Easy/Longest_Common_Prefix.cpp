@@ -4,7 +4,25 @@
 
 
 
+void LongestCommonPrefixBruteForce(std::vector<std::string>& strs){
 
+    if (strs.empty()) std::cout << "";
+
+    std::string prefix   = "";
+
+    for (int i = 0 ; i < strs[0].size(); i++){
+        char c = strs[0][i]; 
+        for (int j = 1 ; j < strs.size(); j++){            
+            if(i >= strs[j].size() || strs[j][i] !=c ){               
+                goto end;
+            }
+        }
+        prefix += c;
+
+    }
+    end:
+        std::cout << prefix;
+}
 
 
 
@@ -48,6 +66,7 @@ int main(){
 
 
   std::vector<std::string> strs = {"flower" , "flow" , "flight"};
-  LongestCommonPrefix(strs);
+  //LongestCommonPrefix(strs);
+  LongestCommonPrefixBruteForce(strs);
 
 }
