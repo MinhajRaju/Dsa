@@ -1,5 +1,24 @@
 public class Longest_common_prefix {
 
+    void LogestCommonPrefixBruteFroce(String[] strs) {
+
+        String prefix = "";
+
+        outer: for (int i = 0; i < strs[0].length(); i++) {
+
+            for (int j = 1; j < strs.length; j++) {
+
+                if (strs[j].charAt(i) != strs[0].charAt(i)) {
+                    break outer;
+                }
+
+            }
+            prefix += strs[0].charAt(i);
+
+        }
+        System.out.println(prefix);
+    }
+
     void LongestCommonPrefix(String[] strs) {
 
         if (strs.length == 0)
@@ -30,7 +49,9 @@ public class Longest_common_prefix {
         String[] strs = { "flower", "flow", "flight" };
 
         Longest_common_prefix lcp = new Longest_common_prefix();
-        lcp.LongestCommonPrefix(strs);
+        // lcp.LongestCommonPrefix(strs);
+
+        lcp.LogestCommonPrefixBruteFroce(strs);
 
         return;
     }
