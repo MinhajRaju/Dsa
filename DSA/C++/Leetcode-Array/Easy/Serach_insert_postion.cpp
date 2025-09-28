@@ -89,8 +89,8 @@ void Search_insert_postion_logn(std::vector<int>& nums , int target){
 
 int main(){
 
-    std::vector<int> nums = {1,3,5,6};
-    int target = 2;
+    std::vector<int> nums = {1,3,5,6 , 10};
+    int target = 10;
     
     //Search_insert_postion(nums , target);
     //Search_insert_postion_two_pointer(nums ,target);
