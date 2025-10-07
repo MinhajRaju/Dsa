@@ -6,16 +6,30 @@
 void MaxConsecutiveOne(std::vector<int>& nums){
 
     int n  = nums.size();
+  
 
-    for(int i=0; i< n; i++){
+    int i = 0;
+    int count = 0;
+    int max = 0;
+    while(i < n ){
 
-        for (int j = 0;  j < n; j++){
-
-
+      
+        if(nums[i] != 0){
+            count++;
+        }else{
+            count = 0;
         }
 
-    }
+        if(max < count){
+            max = count;
+        }
+        
+        i++;
+    
 
+
+    }
+    std::cout << max;    
 
 
 }
@@ -23,9 +37,9 @@ void MaxConsecutiveOne(std::vector<int>& nums){
 
 int main(){
 
-    std::vector<int> nums = {1,1,0,1,1,1};
+    std::vector<int> nums = {1,0,0,0,0};
 
-
+    MaxConsecutiveOne(nums);
 
 
     return 0;
