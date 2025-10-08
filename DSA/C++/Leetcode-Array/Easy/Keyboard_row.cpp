@@ -1,50 +1,40 @@
 #include <iostream>
 #include <vector>
-
+using namespace std;
 
 void keyboardRow(std::vector<std::string>& words ){
 
     int ws = words.size();
+    vector<string> res;
 
-    std::vector<std::string> res;
+    string firstrow  = "qwertyuiop";
+    string secondrow = "asdfghjkl";
+    string thirdrow  = "zxcvbnm";
 
-
-    std::string firstrow  = "qwertyuiop";
-    std::string secondrow = "asdfghjkl";
-    std::string thirdrow  = "zxcvbnm";
-
-    
-    for(std::string w : words){
-
+    for (int i = 0; i < ws; i++) {
+        string w = words[i];
         if (w.empty()) continue;
 
-        
         char first = tolower(w[0]);
-        std::cout << first;
         int rowType = 0;
 
-        if(firstrow.find(first) != std::string::npos) rowType = 1;
-        else if (secondrow.find(first) != std::string::npos) rowType = 2;
-        else if (thirdrow.find(first) != std::string::npos ) rowType = 3;
+        if (firstrow.find(first) != string::npos) rowType = 1;
+        else if (secondrow.find(first) != string::npos) rowType = 2;
+        else if (thirdrow.find(first) != string::npos) rowType = 3;
 
         bool ok = true;
 
-
-        for (char c : w){
-            c = tolower(c);
-          
-
-            if(rowType == 1 && firstrow.find(c) == std::string::npos) { ok = false; break; }
-            if (rowType == 2 && secondrow.find(c) == std::string::npos) { ok = false; break; }
-            if (rowType == 3 && thirdrow.find(c) == std::string::npos) { ok = false; break; }
+        for (int j = 0; j < w.size(); j++) {
+            char c = tolower(w[j]);
+            if (rowType == 1 && firstrow.find(c) == string::npos) { ok = false; break; }
+            if (rowType == 2 && secondrow.find(c) == string::npos) { ok = false; break; }
+            if (rowType == 3 && thirdrow.find(c) == string::npos) { ok = false; break; }
         }
 
         if (ok) res.push_back(w);
-
     }
 
-
-    //for (auto n : res) std::cout << n << " ";
+    for (int i = 0; i < res.size(); i++) cout << res[i] << " ";
 
 
 }
