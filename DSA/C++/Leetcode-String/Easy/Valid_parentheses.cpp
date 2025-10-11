@@ -13,13 +13,13 @@ bool ValidParentheses(std::string s){
         if(ch == '(' || ch == '{' || ch == '['){
             st.push(ch);
         }else{
-            if(st.empty()) return false;
+            if(st.empty()) return false;  // closing কিন্তু open নাই
 
             char top = st.top();
 
             if( (ch == ')' && top != '(') 
-             ||  (ch == '}' && top != '{') 
-             ||              (ch == ']' && top != '[')){
+             || (ch == '}' && top != '{') 
+             || (ch == ']' && top != '[')){
 
                 return false;
             }
@@ -37,7 +37,7 @@ bool ValidParentheses(std::string s){
 
 
 int main(){
-    std::string s = "([])";
+    std::string s = "()";
     bool res  = ValidParentheses(s);
     std::cout << res;
     return 0;
