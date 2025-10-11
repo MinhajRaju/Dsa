@@ -25,8 +25,8 @@ int findPoisonedDuration(int timeSeries[], int n, int duration) {
 
 
 int main(){
-    int timeSeries[] = {1, 4};
-    int n = 2;
+    int timeSeries[] = {1,2 ,3, 4};
+    int n = 4;
     int duration = 1;
 
     int result = findPoisonedDuration(timeSeries, n, duration);
