@@ -13,12 +13,8 @@ int FirstOccurrence(std::string h  , std::string n){
     for(int i =0; i < h.size(); i++){
         int j = 0;
         for(; j <  n.size() ; j++){
-
-            if(n[j] != h[i+j]) break;   
-          
-
-           
-            
+            if(n[j] != h[i+j]) break; 
+   
         }
       
         if (j == n.size()) return i;  
