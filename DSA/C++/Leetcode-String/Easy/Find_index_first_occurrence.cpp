@@ -32,7 +32,7 @@ int FirstOccurrence(std::string h  , std::string n){
 
 
 int main(){
-    std::string haystack = "tadbutsad";
+    std::string haystack = "taadbutsad";
     std::string needle = "sad";
     int res  = FirstOccurrence(haystack , needle);
     std::cout << res;
