@@ -31,11 +31,34 @@ void MaximunProduct(std::vector<int>& nums){
 
 
 
+int  BruteForceMaximunProduct(std::vector<int>& nums){
 
+
+    for(int i = 0; i < nums.size(); i++){
+
+        if(nums[i] < 0){
+            nums[i] = -nums[i];
+            
+        }
+    }
+
+    sort(nums.begin() , nums.end());
+    int n  = nums.size();
+    return nums[n-1] * nums[n-2] * nums[n-3];
+
+}
 
 
 int main(){
-    std::vector<int> nums  = {-10, -10, 1, 2, 3};
-    MaximunProduct(nums);
+
+
+
+
+
+
+    std::vector<int> nums  = {-5, -1, 2, 3};
+    //MaximunProduct(nums);
+    int res = BruteForceMaximunProduct(nums);
+    std::cout << res;
     return 0;
 }

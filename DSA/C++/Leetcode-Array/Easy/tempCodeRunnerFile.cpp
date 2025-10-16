@@ -1,4 +1,1 @@
-if(target > nums[n]){
-                res = n;
-            }
-            
+   sum += nums[i+j];
