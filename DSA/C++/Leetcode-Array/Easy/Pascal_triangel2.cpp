@@ -31,7 +31,7 @@ void getRow(int rowIndex){
 
 int main(){
 
-    int rowIndex = 4;
+    int rowIndex = 3;
     getRow(rowIndex);    
 
 

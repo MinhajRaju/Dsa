@@ -31,15 +31,13 @@ void PascalTriangelNaiveApproch(int numRows){
         }
         std::cout << std::endl;
     }   
-
-
 }
 
 
 
 int main(){
 
-    int numsRows = 1;
+    int numsRows = 3;
 
 
     PascalTriangelNaiveApproch(numsRows);
