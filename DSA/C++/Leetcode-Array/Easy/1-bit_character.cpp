@@ -13,7 +13,7 @@ bool Bits(std::vector<int>& bits){
         else i +=1;
     }
     return i == n-1;
-
+    
 
   
 
