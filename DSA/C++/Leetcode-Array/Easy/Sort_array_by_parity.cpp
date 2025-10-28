@@ -24,7 +24,7 @@ void sortArrayByParity(std::vector<int>& nums){
             left++;
         }
 
-        
+        //Done
 
     }
 
