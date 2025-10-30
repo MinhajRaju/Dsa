@@ -1,0 +1,65 @@
+#include <iostream>
+#include <vector>
+
+
+void sortArrayByParityII(std::vector<int>& nums){
+
+    int n = nums.size();
+
+    int oddIndex = 1;
+    for(int i = 0 ; i < n;  i+=2){
+       
+     
+        if (nums[i] % 2 != 0) {
+
+    while (oddIndex < n && nums[oddIndex] % 2 != 0) {
+                    oddIndex += 2;
+        }
+
+    if (oddIndex < n) {
+                    int temp = nums[i];
+                    nums[i] = nums[oddIndex];
+                    nums[oddIndex] = temp;
+                }
+        
+        }
+          
+
+
+    }
+  
+
+    for(auto num : nums) std::cout << num;
+
+
+}
+/*
+
+class Solution {
+public:
+    vector<int> sortArrayByParityII(vector<int>& nums) {
+        int n = nums.size();
+        int even = 0;
+        int odd = 1;
+        vector<int>ans(n);
+        for(int i = 0; i < n;i++){
+            if(nums[i] % 2 == 0){
+                ans[even] = nums[i];
+                even+=2;
+            }
+            else {
+                ans[odd] = nums[i];
+                odd+=2;
+            }
+        }
+        return ans;        
+    }
+};
+*/
+
+int main(){
+
+    std::vector<int> nums = {4,2,5,7};
+    sortArrayByParityII(nums);
+    return 0;
+}
