@@ -47,7 +47,7 @@ void numUniqueEmails(std::vector<std::string>& emails){
 
 void numUniqueEmails(std::vector<std::string>& emails) {
     std::unordered_set<std::string> uniqueEmails;
-
+    //
     for (auto &email : emails) {
         std::string local = "", domain = "";
         bool isDomain = false, plusFound = false;
