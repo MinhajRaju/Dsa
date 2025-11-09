@@ -19,7 +19,7 @@ std::vector<std::string> SummaryRange(std::vector<int>& nums) {
             result.push_back(std::to_string(start) + "->" + std::to_string(end));
         }
     }
-
+    //
     return result;
 }
 
