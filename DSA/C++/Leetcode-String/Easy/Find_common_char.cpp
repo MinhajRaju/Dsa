@@ -71,7 +71,7 @@ void findCommonChar(std::vector<std::string>& words){
 
     for (auto re : result) std::cout << re;
 
-    //for(auto n : common) std::cout << n << " ";
+  
 
     
 
