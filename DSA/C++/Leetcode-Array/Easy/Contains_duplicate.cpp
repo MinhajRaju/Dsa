@@ -19,7 +19,7 @@ bool Contains_duplicateBruteForce(std::vector<int>& nums){
 
 
 bool Contains_duplicateHashMap(std::vector<int>& nums){
-        //test2
+        //test3
         std::unordered_map<int  , int >  mp;
 
         for (int v : nums){
