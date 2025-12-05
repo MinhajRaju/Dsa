@@ -24,7 +24,7 @@ bool Bits(std::vector<int>& bits){
 
 
 int main(){
-
+    //
     std::vector<int> bits = {1,1,1,0};
     
     bool res = Bits(bits);
