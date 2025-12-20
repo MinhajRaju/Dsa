@@ -2,7 +2,7 @@
 #include <vector>
 
 void checkStraightLine(std::vector<std::vector<int>>& coordinates){
-
+    //done
     int x1 = coordinates[0][0];
     int y1 = coordinates[0][1];
 
