@@ -3,7 +3,7 @@
 
 
 bool Bits(std::vector<int>& bits){
-    //
+    ///
     int n = bits.size();
 
     int i = 0;
