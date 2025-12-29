@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <cmath> // abs() এর জন্য এটি দরকার
+#include <cmath> 
 
 void FindtheDistance(std::vector<int>& arr1 , std::vector<int> &arr2 , int d){
 
