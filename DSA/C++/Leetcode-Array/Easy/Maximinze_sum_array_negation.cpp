@@ -6,7 +6,7 @@ void largestSumAfterKNegations(std::vector<int>& nums , int k){
 
     sort(nums.begin() , nums.end());
 
-    //done
+    //donee
     for (int i = 0; i < nums.size() && k > 0  ; i++){
 
         if(nums[i] < 0){
