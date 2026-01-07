@@ -6,7 +6,7 @@
 std::vector<int> kWeakestRow(std::vector<std::vector<int>>& mat , int k){
 
     std::vector<std::pair<int , int>> v;
-
+  
 
     int m = mat.size();
     int n = mat[0].size();
