@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DSA Master — Stack Complete Guide · বাংলায়</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fafaf8;--bg2:#f3f1ec;--bg3:#e8e4da;--card:#fff;--bd:#e4e0d5;
+  --t:#1a1614;--t2:#6b6560;--t3:#a09890;
+  --blue:#2563eb;--green:#059669;--red:#dc2626;--purple:#7c3aed;
+  --teal:#0891b2;--orange:#d97706;--acc:#0891b2;
+  --sh:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:15px;}
+body{background:var(--bg);color:var(--t);font-family:'DM Sans',sans-serif;line-height:1.6;overflow-x:hidden;}
+.layout{display:flex;min-height:100vh;}
+.sb{width:236px;min-width:236px;position:sticky;top:0;height:100vh;background:var(--card);border-right:1px solid var(--bd);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--bd) transparent;flex-shrink:0;}
+.sb-logo{padding:14px 14px 10px;border-bottom:1px solid var(--bd);}
+.sb-logo-t{font-size:13px;font-weight:700;}
+.sb-logo-s{font-size:10px;color:var(--t3);margin-top:1px;}
+.ng{padding:3px 0;border-bottom:1px solid var(--bd);}
+.ng:last-child{border-bottom:none;}
+.ng-t{padding:5px 13px 2px;font-size:9px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--t3);}
+.nl{display:block;padding:4px 13px;font-size:11.5px;color:var(--t2);text-decoration:none;border-left:2px solid transparent;transition:all .1s;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.nl:hover{color:var(--teal);border-left-color:var(--teal);background:#ecfeff;}
+.nl.sub{padding-left:22px;font-size:11px;color:var(--t3);}
+.nl.sub:hover{color:var(--teal);}
+.main{flex:1;min-width:0;}
+.hero{padding:46px 48px 38px;background:linear-gradient(150deg,#fafaf8 55%,#f0fdfa);border-bottom:1px solid var(--bd);}
+.hero-e{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;}
+.hero h1{font-size:clamp(24px,3.5vw,46px);font-weight:700;letter-spacing:-1px;line-height:1.1;margin-bottom:8px;}
+.hero h1 em{font-style:normal;color:var(--teal);}
+.hero p{font-size:13.5px;color:var(--t2);max-width:520px;line-height:1.75;margin-bottom:22px;}
+.stats-row{display:flex;gap:0;border:1px solid var(--bd);border-radius:8px;overflow:hidden;width:fit-content;background:var(--card);box-shadow:var(--sh);}
+.stat{padding:10px 17px;text-align:center;border-right:1px solid var(--bd);}
+.stat:last-child{border-right:none;}
+.stat-n{font-size:18px;font-weight:700;font-family:'DM Mono',monospace;}
+.stat-l{font-size:9px;color:var(--t3);margin-top:1px;}
+.sec-divider{padding:28px 48px 0;background:var(--bg);}
+.sec-divider-inner{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--bd);padding-bottom:14px;}
+.sec-divider-icon{font-size:22px;}
+.sec-divider-title{font-size:20px;font-weight:700;letter-spacing:-.4px;}
+.sec-divider-sub{font-size:12px;color:var(--t3);margin-top:1px;}
+.theory{padding:28px 48px 36px;border-bottom:1px solid var(--bd);background:var(--card);}
+.theory-h{font-size:15px;font-weight:700;letter-spacing:-.2px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.theory-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.tbox{background:var(--bg);border:1px solid var(--bd);border-radius:7px;padding:13px 15px;}
+.tbox-h{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:7px;display:flex;align-items:center;gap:5px;}
+.tbox p,.tbox li{font-size:12px;color:var(--t);line-height:1.8;}
+.tbox ul{padding-left:14px;}
+.tbox li{margin-bottom:1px;}
+.tbox li b,.tbox p b{color:var(--teal);}
+.sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;}
+.sig{background:var(--card);border:1px solid var(--bd);border-radius:5px;padding:6px 9px;font-size:11px;color:var(--t2);display:flex;align-items:flex-start;gap:6px;line-height:1.55;}
+.ptrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px;}
+.ptcard{background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:9px 11px;}
+.ptcard-h{font-size:10px;font-weight:700;margin-bottom:5px;}
+.ptcard pre{font-family:'DM Mono';font-size:10px;color:var(--t2);background:var(--bg);padding:5px 7px;border-radius:4px;line-height:1.65;white-space:pre;}
+.ptcard p{font-size:10.5px;margin-top:5px;color:var(--t3);}
+.probs-sec{padding:28px 48px 40px;border-bottom:2px solid var(--bd);}
+.diff-bar{display:flex;align-items:center;gap:8px;margin-bottom:10px;margin-top:22px;}
+.diff-bar:first-of-type{margin-top:0;}
+.diff-dot{width:9px;height:9px;border-radius:50%;}
+.diff-lbl{font-size:12.5px;font-weight:700;}
+.diff-sub{font-size:11px;color:var(--t3);}
+.pbar{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;}
+.pb-btn{padding:4px 10px;border-radius:15px;border:1.5px solid var(--bd);font-family:inherit;font-size:11px;font-weight:500;cursor:pointer;background:var(--card);color:var(--t2);transition:all .12s;white-space:nowrap;}
+.pb-btn:hover{border-color:var(--teal);color:var(--teal);}
+.pb-btn.sel{color:#fff;border-color:transparent;}
+.pb-btn.sel.e{background:#059669;}
+.pb-btn.sel.m{background:#d97706;}
+.pb-btn.sel.h{background:#dc2626;}
+.pdesc{background:var(--card);border:1px solid var(--bd);border-radius:7px;padding:11px 14px;margin-bottom:11px;box-shadow:var(--sh);}
+.pdesc-h{font-size:13px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.pdesc-t{font-size:12px;color:var(--t2);line-height:1.7;}
+.pdesc-why{font-size:11.5px;color:var(--t);background:var(--bg);border-left:3px solid var(--teal);padding:5px 10px;border-radius:0 5px 5px 0;margin-top:7px;line-height:1.6;}
+.pdesc-cards{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px;}
+.pdesc-card{border-radius:6px;padding:8px 11px;font-size:11.5px;line-height:1.65;}
+.pdesc-card-h{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:4px;}
+.pdesc-card.intuition{background:#ecfeff;border:1px solid #a5f3fc;color:#164e63;}
+.pdesc-card.intuition .pdesc-card-h{color:#0891b2;}
+.pdesc-card.analogy{background:#fdf4ff;border:1px solid #e9d5ff;color:#3b1f52;}
+.pdesc-card.analogy .pdesc-card-h{color:#7c3aed;}
+.diff{padding:1px 6px;border-radius:4px;font-size:9px;font-weight:700;}
+.diff-E{background:#dcfce7;color:#059669;}
+.diff-M{background:#fef3c7;color:#d97706;}
+.diff-H{background:#fee2e2;color:#dc2626;}
+.pcols{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.pcol{display:flex;flex-direction:column;gap:10px;}
+.acard{background:var(--card);border:1px solid var(--bd);border-radius:8px;overflow:hidden;box-shadow:var(--sh);}
+.ahead{display:flex;align-items:center;justify-content:space-between;padding:6px 11px;background:var(--bg2);border-bottom:1px solid var(--bd);gap:6px;flex-wrap:wrap;}
+.atit{font-size:9px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--t3);}
+.asi{font-size:9px;font-family:'DM Mono',monospace;color:var(--teal);white-space:nowrap;}
+.abtns{display:flex;gap:4px;align-items:center;}
+.ab{padding:3px 9px;border-radius:4px;border:1px solid var(--bd);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;transition:all .12s;background:var(--card);color:var(--t2);}
+.ab.run:hover{background:var(--teal);color:#fff;border-color:var(--teal);}
+.ab.stp:hover{background:#2563eb;color:#fff;border-color:#2563eb;}
+.ab.rst:hover{background:var(--bg3);}
+.spd{display:flex;align-items:center;gap:4px;border-left:1px solid var(--bd);padding-left:7px;margin-left:2px;}
+.spd-lbl{font-size:9px;color:var(--t3);}
+.spd-range{width:55px;height:3px;cursor:pointer;accent-color:var(--teal);}
+canvas.acv{width:100%;display:block;background:#fafaf8;}
+.amsg{padding:5px 11px;font-size:11px;color:var(--teal);border-top:1px solid var(--bd);font-family:'DM Mono',monospace;min-height:28px;background:var(--bg2);line-height:1.5;}
+.ccard{background:var(--card);border:1px solid var(--bd);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--sh);}
+.chead{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:var(--bg2);border-bottom:1px solid var(--bd);}
+.clang{font-size:11px;font-weight:700;color:var(--t2);}
+.cpb{background:none;border:1px solid var(--bd);color:var(--t2);padding:2px 8px;border-radius:4px;font-size:10px;cursor:pointer;font-family:inherit;transition:all .12s;}
+.cpb:hover{background:var(--teal);color:#fff;border-color:var(--teal);}
+.clines{padding:6px 0;overflow:auto;font-family:'DM Mono',monospace;font-size:11.5px;line-height:1.75;max-height:500px;background:#fafafa;scrollbar-width:thin;scrollbar-color:var(--bd) transparent;}
+.cline{display:flex;align-items:stretch;transition:background .15s;padding:0 12px;min-height:24px;}
+.cline:hover{background:#f3f1ec;}
+.cline.hl{background:#ecfeff !important;border-left:3px solid var(--teal);}
+.cline.hl .ln{color:var(--teal);}
+.ln{width:24px;flex-shrink:0;font-size:10px;color:#c0bab3;text-align:right;padding-right:12px;padding-top:2px;user-select:none;}
+.lc{color:#1a1614;white-space:pre;}
+.ex-bar{display:flex;align-items:center;gap:5px;padding:3px 11px;background:#f0fdfa;border-top:1px solid #99f6e4;font-size:10px;font-family:'DM Mono',monospace;color:var(--teal);min-height:22px;}
+#prog{position:fixed;top:0;left:236px;right:0;height:2px;background:linear-gradient(90deg,#0891b2,#7c3aed,#059669);transform-origin:left;transform:scaleX(0);z-index:100;transition:transform .08s;}
+.footer{padding:28px 48px;text-align:center;border-top:1px solid var(--bd);background:var(--bg2);}
+@media(max-width:900px){.pcols{grid-template-columns:1fr;}.sb{display:none;}#prog{left:0;}.theory-grid,.ptrow,.sig-grid{grid-template-columns:1fr;}.probs-sec,.theory,.hero,.sec-divider{padding:20px 16px;}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<div class="layout">
+
+<nav class="sb">
+  <div class="sb-logo">
+    <div class="sb-logo-t">DSA Pattern Master</div>
+    <div class="sb-logo-s">Stack · Monotonic Stack · 30 Problems</div>
+  </div>
+  <div class="ng">
+    <div class="ng-t">📚 Core Stack</div>
+    <a class="nl" onclick="goto('cs-theory')">📖 Theory & Patterns</a>
+    <a class="nl sub" onclick="pickAndGo('cs',0)">Baseball Game ·E</a>
+    <a class="nl sub" onclick="pickAndGo('cs',1)">Valid Parentheses ·E</a>
+    <a class="nl sub" onclick="pickAndGo('cs',2)">Remove Outer Parens ·E</a>
+    <a class="nl sub" onclick="pickAndGo('cs',3)">Min Stack ·E</a>
+    <a class="nl sub" onclick="pickAndGo('cs',4)">Backspace Compare ·E</a>
+    <a class="nl sub" onclick="pickAndGo('cs',5)">Decode String ·M</a>
+    <a class="nl sub" onclick="pickAndGo('cs',6)">Asteroid Collision ·M</a>
+    <a class="nl sub" onclick="pickAndGo('cs',7)">Evaluate RPN ·M</a>
+    <a class="nl sub" onclick="pickAndGo('cs',8)">Remove K Digits ·M</a>
+    <a class="nl sub" onclick="pickAndGo('cs',9)">Make String Great ·M</a>
+    <a class="nl sub" onclick="pickAndGo('cs',10)">Largest Rect Histogram ·H</a>
+    <a class="nl sub" onclick="pickAndGo('cs',11)">Trapping Rain Water ·H</a>
+    <a class="nl sub" onclick="pickAndGo('cs',12)">Max Rect in Binary ·H</a>
+    <a class="nl sub" onclick="pickAndGo('cs',13)">Basic Calculator ·H</a>
+    <a class="nl sub" onclick="pickAndGo('cs',14)">Score of Parens ·H</a>
+  </div>
+  <div class="ng">
+    <div class="ng-t">📉 Monotonic Stack</div>
+    <a class="nl" onclick="goto('ms-theory')">📖 Theory & Patterns</a>
+    <a class="nl sub" onclick="pickAndGo('ms',0)">Next Greater Element I ·E</a>
+    <a class="nl sub" onclick="pickAndGo('ms',1)">Next Smaller Element ·E</a>
+    <a class="nl sub" onclick="pickAndGo('ms',2)">Stock Span ·E</a>
+    <a class="nl sub" onclick="pickAndGo('ms',3)">Buildings with Ocean ·E</a>
+    <a class="nl sub" onclick="pickAndGo('ms',4)">Remove Dups II ·E</a>
+    <a class="nl sub" onclick="pickAndGo('ms',5)">Daily Temperatures ·M</a>
+    <a class="nl sub" onclick="pickAndGo('ms',6)">Next Greater Elem II ·M</a>
+    <a class="nl sub" onclick="pickAndGo('ms',7)">132 Pattern ·M</a>
+    <a class="nl sub" onclick="pickAndGo('ms',8)">Online Stock Span ·M</a>
+    <a class="nl sub" onclick="pickAndGo('ms',9)">Visible People Queue ·M</a>
+    <a class="nl sub" onclick="pickAndGo('ms',10)">Max Width Ramp ·H</a>
+    <a class="nl sub" onclick="pickAndGo('ms',11)">Sum Subarray Mins ·H</a>
+    <a class="nl sub" onclick="pickAndGo('ms',12)">Max Subarray Min×Max ·H</a>
+    <a class="nl sub" onclick="pickAndGo('ms',13)">Jump Game VI ·H</a>
+    <a class="nl sub" onclick="pickAndGo('ms',14)">Sliding Window Max ·H</a>
+  </div>
+</nav>
+
+<main class="main">
+
+<section class="hero">
+  <div class="hero-e">Complete Guide · 30 Problems · Step-by-Step Code Trace · বাংলায়</div>
+  <h1>Stack &amp;<br><em>Monotonic Stack Master</em></h1>
+  <p>প্রতিটি step এ code এর line highlight হয়। Stack এর push/pop — সব live animate হয়। Baseball Game থেকে শুরু করে Largest Rectangle পর্যন্ত সব বাংলায় বোঝো।</p>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-n">30</div><div class="stat-l">Problems</div></div>
+    <div class="stat"><div class="stat-n">2</div><div class="stat-l">Patterns</div></div>
+    <div class="stat"><div class="stat-n">5+5+5</div><div class="stat-l">E · M · H each</div></div>
+    <div class="stat"><div class="stat-n">Live</div><div class="stat-l">Code Trace</div></div>
+  </div>
+</section>
+
+<!-- ══ CORE STACK ══ -->
+<div class="sec-divider" id="cs-section">
+  <div class="sec-divider-inner">
+    <span class="sec-divider-icon">📚</span>
+    <div>
+      <div class="sec-divider-title">Core Stack Problems</div>
+      <div class="sec-divider-sub">Push · Pop · LIFO · Valid Parens · Decode · 15 problems</div>
+    </div>
+  </div>
+</div>
+
+<section class="theory" id="cs-theory">
+  <div class="theory-h">📖 Stack — কী, কেন, কখন?</div>
+  <div class="theory-grid">
+    <div class="tbox">
+      <div class="tbox-h">💡 মূল ধারণা</div>
+      <p><b>Stack</b> মানে থালার স্তূপ। সবার উপরে রাখা → সবার আগে নেওয়া। এটাই <b>LIFO</b> (Last In, First Out)।</p><br>
+      <p>মূল operations: <b>push(x)</b> — উপরে রাখো। <b>pop()</b> — উপর থেকে নাও। <b>top()</b> — উপরেরটা দেখো।</p><br>
+      <p>Key insight: <b>আগের state remember করতে</b> বা <b>নেস্টেড structure undo করতে</b> stack সবচেয়ে কার্যকর।</p>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">🎯 কখন ব্যবহার করবো?</div>
+      <ul>
+        <li><b>Bracket matching</b> → push open, pop on close</li>
+        <li><b>Undo/redo</b> → state stack এ রাখো</li>
+        <li><b>Nested structures</b> → recursion replace</li>
+        <li><b>Expression evaluation</b> → operator/operand</li>
+        <li><b>DFS traversal</b> → recursion stack</li>
+        <li>যখন <b>সাম্প্রতিক element</b> বারবার দরকার হয়</li>
+      </ul>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">🔍 এই signal দেখলে Stack ভাবো</div>
+      <div class="sig-grid">
+        <div class="sig">📌 "valid brackets / parentheses" → push/pop</div>
+        <div class="sig">📌 "undo last operation" → pop</div>
+        <div class="sig">📌 "evaluate expression" → operator stack</div>
+        <div class="sig">📌 "decode/expand nested string"</div>
+        <div class="sig">📌 "cancel/remove previous element"</div>
+        <div class="sig">📌 "last seen" বা "previous element" দরকার</div>
+      </div>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">⚡ তিনটি Main Pattern</div>
+      <div class="ptrow">
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#0891b2">① Match & Pop</div>
+          <pre>for ch in s:
+  if opening:
+    push(ch)
+  elif closing:
+    if top matches:
+      pop()
+    else: invalid</pre>
+          <p>Valid Parentheses</p>
+        </div>
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#7c3aed">② Simulate Score</div>
+          <pre>for op in ops:
+  if num: push
+  elif 'C': pop
+  elif 'D': push(2×top)
+  elif '+': push(top+prev)
+return sum(stack)</pre>
+          <p>Baseball Game</p>
+        </div>
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#059669">③ Nested Decode</div>
+          <pre>for ch in s:
+  if ch != ']': push
+  else:
+    pop until '['
+    pop count
+    push expanded</pre>
+          <p>Decode String</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="probs-sec" id="cs-problems">
+  <div class="diff-bar"><div class="diff-dot" style="background:#059669"></div><span class="diff-lbl">Easy</span><span class="diff-sub">— basic push/pop operations</span></div>
+  <div class="pbar" id="cs-pbar-e"></div>
+  <div class="diff-bar"><div class="diff-dot" style="background:#d97706"></div><span class="diff-lbl">Medium</span><span class="diff-sub">— nested structures, expressions</span></div>
+  <div class="pbar" id="cs-pbar-m"></div>
+  <div class="diff-bar"><div class="diff-dot" style="background:#dc2626"></div><span class="diff-lbl">Hard</span><span class="diff-sub">— histogram, rain water, calculator</span></div>
+  <div class="pbar" id="cs-pbar-h"></div>
+
+  <div class="pdesc" id="cs-pdesc" style="margin-top:14px;">
+    <div class="pdesc-h">⬆️ উপর থেকে problem select করো</div>
+    <div class="pdesc-t">Click করলে description, কেন এই pattern, code এবং animation দেখাবে।</div>
+  </div>
+
+  <div class="pcols">
+    <div class="pcol">
+      <div class="acard">
+        <div class="ahead">
+          <span class="atit">⚡ VISUALIZATION</span>
+          <span class="asi" id="cs-si">—</span>
+          <div class="abtns">
+            <button class="ab run" onclick="run('cs')">▶ Run</button>
+            <button class="ab stp" onclick="step('cs')">⏭ Step</button>
+            <button class="ab rst" onclick="rst('cs')">↺</button>
+            <div class="spd">
+              <span class="spd-lbl">Speed</span>
+              <input type="range" class="spd-range" id="cs-spd" min="1" max="5" value="3" oninput="setSpd('cs',this.value)">
+              <span class="spd-lbl" id="cs-spd-lbl">2x</span>
+            </div>
+          </div>
+        </div>
+        <canvas id="cs-cv" class="acv" height="300"></canvas>
+        <div id="cs-msg" class="amsg">▶ Problem select করো</div>
+      </div>
+    </div>
+    <div class="pcol">
+      <div class="ccard">
+        <div class="chead">
+          <span class="clang" id="cs-ctit">C++ — Core Stack</span>
+          <button class="cpb" onclick="cpCode('cs')">Copy</button>
+        </div>
+        <div id="cs-code" class="clines"><div class="cline"><span class="ln">1</span><span class="lc">// উপর থেকে problem select করো</span></div></div>
+        <div class="ex-bar" id="cs-ex"><span>▶</span><span id="cs-ex-t">—</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MONOTONIC STACK ══ -->
+<div class="sec-divider" id="ms-section">
+  <div class="sec-divider-inner">
+    <span class="sec-divider-icon">📉</span>
+    <div>
+      <div class="sec-divider-title">Monotonic Stack</div>
+      <div class="sec-divider-sub">Next Greater · Daily Temp · Histogram · O(n) · 15 problems</div>
+    </div>
+  </div>
+</div>
+
+<section class="theory" id="ms-theory">
+  <div class="theory-h">📖 Monotonic Stack — কী, কেন, কখন?</div>
+  <div class="theory-grid">
+    <div class="tbox">
+      <div class="tbox-h">💡 মূল ধারণা</div>
+      <p><b>Monotonic Stack</b> মানে এমন stack যেটা সবসময় increasing বা decreasing order maintain করে।</p><br>
+      <p>নতুন element ঢোকানোর আগে stack এর top এর চেয়ে ছোট/বড় element গুলো pop করে দেওয়া হয়।</p><br>
+      <p>Key: pop হওয়ার সময়ই <b>answer calculate</b> হয়। O(n) — প্রতিটি element একবার push, একবার pop।</p>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">🎯 কখন ব্যবহার করবো?</div>
+      <ul>
+        <li><b>Next Greater Element</b> → decreasing stack</li>
+        <li><b>Next Smaller Element</b> → increasing stack</li>
+        <li><b>Previous Greater/Smaller</b> → same idea, left→right</li>
+        <li><b>Largest Rectangle</b> → সব bars এর span</li>
+        <li><b>Stock Span</b> → days since last bigger price</li>
+        <li>যখন <b>nearest bigger/smaller</b> দরকার O(n) এ</li>
+      </ul>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">🔍 এই signal দেখলে Monotonic Stack ভাবো</div>
+      <div class="sig-grid">
+        <div class="sig">📌 "next greater / smaller element"</div>
+        <div class="sig">📌 "previous greater / smaller element"</div>
+        <div class="sig">📌 "daily temperatures" wait days</div>
+        <div class="sig">📌 "stock span" consecutive days</div>
+        <div class="sig">📌 "largest rectangle" in histogram</div>
+        <div class="sig">📌 "subarray min/max" contribution</div>
+      </div>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">⚡ তিনটি Main Pattern</div>
+      <div class="ptrow">
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#0891b2">① Next Greater</div>
+          <pre>stk = [] (decreasing)
+for i in range(n):
+  while stk and
+    arr[stk[-1]]<arr[i]:
+    ans[stk.pop()]=arr[i]
+  stk.append(i)</pre>
+          <p>NGE, Daily Temp</p>
+        </div>
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#dc2626">② Histogram</div>
+          <pre>stk = [] (increasing)
+for i in 0..n:
+  while stk and
+    h[stk[-1]]>h[i]:
+    idx=stk.pop()
+    w=i-(stk[-1]+1 or 0)
+    ans=max(ans,h[idx]*w)</pre>
+          <p>Largest Rect</p>
+        </div>
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#7c3aed">③ Contribution</div>
+          <pre>// left[i]=prev smaller
+// right[i]=next smaller
+for each i:
+  ans += arr[i]
+  * (i-left[i])
+  * (right[i]-i)</pre>
+          <p>Sum Subarray Mins</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="probs-sec" id="ms-problems">
+  <div class="diff-bar"><div class="diff-dot" style="background:#059669"></div><span class="diff-lbl">Easy</span><span class="diff-sub">— basic next greater/smaller</span></div>
+  <div class="pbar" id="ms-pbar-e"></div>
+  <div class="diff-bar"><div class="diff-dot" style="background:#d97706"></div><span class="diff-lbl">Medium</span><span class="diff-sub">— circular, 132 pattern, span</span></div>
+  <div class="pbar" id="ms-pbar-m"></div>
+  <div class="diff-bar"><div class="diff-dot" style="background:#dc2626"></div><span class="diff-lbl">Hard</span><span class="diff-sub">— contribution, sliding max, advanced</span></div>
+  <div class="pbar" id="ms-pbar-h"></div>
+
+  <div class="pdesc" id="ms-pdesc" style="margin-top:14px;">
+    <div class="pdesc-h">⬆️ উপর থেকে problem select করো</div>
+    <div class="pdesc-t">Click করলে description, why Monotonic Stack, code এবং animation দেখাবে।</div>
+  </div>
+
+  <div class="pcols">
+    <div class="pcol">
+      <div class="acard">
+        <div class="ahead">
+          <span class="atit">⚡ VISUALIZATION</span>
+          <span class="asi" id="ms-si">—</span>
+          <div class="abtns">
+            <button class="ab run" onclick="run('ms')">▶ Run</button>
+            <button class="ab stp" onclick="step('ms')">⏭ Step</button>
+            <button class="ab rst" onclick="rst('ms')">↺</button>
+            <div class="spd">
+              <span class="spd-lbl">Speed</span>
+              <input type="range" class="spd-range" id="ms-spd" min="1" max="5" value="3" oninput="setSpd('ms',this.value)">
+              <span class="spd-lbl" id="ms-spd-lbl">2x</span>
+            </div>
+          </div>
+        </div>
+        <canvas id="ms-cv" class="acv" height="300"></canvas>
+        <div id="ms-msg" class="amsg">▶ Problem select করো</div>
+      </div>
+    </div>
+    <div class="pcol">
+      <div class="ccard">
+        <div class="chead">
+          <span class="clang" id="ms-ctit">C++ — Monotonic Stack</span>
+          <button class="cpb" onclick="cpCode('ms')">Copy</button>
+        </div>
+        <div id="ms-code" class="clines"><div class="cline"><span class="ln">1</span><span class="lc">// উপর থেকে problem select করো</span></div></div>
+        <div class="ex-bar" id="ms-ex"><span>▶</span><span id="ms-ex-t">—</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  <div style="font-size:14px;font-weight:700;margin-bottom:4px;">Happy Coding! 🚀</div>
+  <div style="font-size:11px;color:var(--t3);">DSA Master · Stack + Monotonic Stack · 30 Problems · বাংলায়</div>
+</div>
+</main>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// NAV
+// ══════════════════════════════════════════
+window.addEventListener('scroll',()=>{
+  const p=document.getElementById('prog');
+  const r=window.scrollY/(document.body.scrollHeight-window.innerHeight)||0;
+  p.style.transform='scaleX('+Math.min(1,r)+')';
+});
+function goto(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'});}
+function pickAndGo(sec,idx){selProb(sec,idx);document.getElementById(sec+'-problems').scrollIntoView({behavior:'smooth'});}
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+const S={cs:{frames:null,idx:0,timer:null,speed:800},ms:{frames:null,idx:0,timer:null,speed:800}};
+function setSpd(sec,v){
+  const SPDS=[2000,1300,800,450,200],LBLS=['0.5x','1x','2x','3x','5x'];
+  S[sec].speed=SPDS[parseInt(v)-1];document.getElementById(sec+'-spd-lbl').textContent=LBLS[parseInt(v)-1];
+  if(S[sec].timer){clearInterval(S[sec].timer);S[sec].timer=null;run(sec);}
+}
+function stopTimer(sec){if(S[sec].timer){clearInterval(S[sec].timer);S[sec].timer=null;}}
+
+// ══════════════════════════════════════════
+// CANVAS
+// ══════════════════════════════════════════
+function getCtx(sec){
+  const c=document.getElementById(sec+'-cv');
+  const W=c.clientWidth||600,H=parseInt(c.getAttribute('height'))||300;
+  c.width=W;c.height=H;return{ctx:c.getContext('2d'),W,H};
+}
+function rr(ctx,x,y,w,h,r,fill,stroke,lw){
+  r=Math.min(r||0,w/2,h/2);
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);
+  ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();
+  if(fill){ctx.fillStyle=fill;ctx.fill();}
+  if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1.5;ctx.stroke();}
+}
+
+// ══════════════════════════════════════════
+// DRAW FRAME
+// ══════════════════════════════════════════
+function drawFrame(sec,frame){
+  const{ctx,W,H}=getCtx(sec);
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#fafaf8';ctx.fillRect(0,0,W,H);
+  if(!frame){
+    ctx.fillStyle='#a09890';ctx.font='12px DM Sans';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('⬆ Problem select করো, তারপর Run বা Step চাপো',W/2,H/2);
+    ctx.textBaseline='alphabetic';return;
+  }
+  if(frame.type==='stack')drawStack(ctx,W,H,frame);
+  else if(frame.type==='bar')drawBar(ctx,W,H,frame);
+  else drawArr(ctx,W,H,frame);
+  drawVars(ctx,W,H,frame);
+  drawCond(ctx,W,H,frame);
+}
+
+// ── draw input array ──
+function drawArr(ctx,W,H,frame){
+  const arr=frame.arr||[];const n=arr.length;if(!n)return;
+  const bw=Math.min(50,Math.floor((W-32)/n)-5),bh=40,gap=5;
+  const tot=n*(bw+gap)-gap,sx=Math.floor((W-tot)/2),sy=14;
+  arr.forEach((v,i)=>{
+    const x=sx+i*(bw+gap);
+    let bg='#fff',bd='#e4e0d5',tc='#1a1614',lw=1.5;
+    if(frame.fnd&&frame.fnd.includes(i)){bg='#dcfce7';bd='#059669';tc='#059669';lw=2.5;}
+    else if(frame.hi&&frame.hi.includes(i)){bg='#ecfeff';bd='#0891b2';tc='#164e63';lw=2.5;}
+    else if(frame.popped&&frame.popped.includes(i)){bg='#fee2e2';bd='#dc2626';tc='#991b1b';lw:2;}
+    else if(frame.org&&frame.org.includes(i)){bg='#fef3c7';bd='#d97706';tc='#92400e';}
+    rr(ctx,x,sy,bw,bh,6,bg,bd,lw);
+    ctx.fillStyle=tc;ctx.font=`bold ${bw>42?12:10}px DM Mono`;ctx.textAlign='center';
+    const vs=String(v);ctx.fillText(vs.length>4?vs.slice(0,4):vs,x+bw/2,sy+bh-10);
+    ctx.fillStyle='#a09890';ctx.font='8px DM Mono';ctx.fillText(String(i),x+bw/2,sy+bh+12);
+  });
+  if(frame.ptrs){
+    const PC={i:'#0891b2',j:'#7c3aed',l:'#2563eb',r:'#dc2626'};
+    const SEEN={};
+    Object.entries(frame.ptrs).forEach(([nm,pos])=>{
+      if(pos===undefined||pos<0||pos>=n)return;
+      const x=sx+pos*(bw+gap)+bw/2,c=PC[nm]||'#475569';
+      const off=(SEEN[pos]||0)*13;SEEN[pos]=(SEEN[pos]||0)+1;
+      const by=sy+bh+14+off;
+      ctx.fillStyle=c;ctx.font='bold 9px DM Mono';ctx.textAlign='center';
+      ctx.fillText(nm.toUpperCase(),x,by+9);
+      ctx.beginPath();ctx.moveTo(x-4,by+11);ctx.lineTo(x+4,by+11);ctx.lineTo(x,by+17);
+      ctx.fillStyle=c;ctx.fill();
+    });
+  }
+  if(frame.res!==undefined){
+    const rw=220,rh=26,rx=Math.floor((W-rw)/2),ry=H-rh-8;
+    rr(ctx,rx,ry,rw,rh,6,'#dcfce7','#059669',1.5);
+    ctx.fillStyle='#059669';ctx.font='bold 12px DM Mono';ctx.textAlign='center';
+    ctx.fillText('✅  ans = '+String(frame.res),rx+rw/2,ry+rh-8);
+  }
+}
+
+// ── draw stack (vertical) + input array ──
+function drawStack(ctx,W,H,frame){
+  const arr=frame.arr||[];const stk=frame.stk||[];
+  const n=arr.length;
+  // input strip at top
+  if(n>0){
+    const bw=Math.min(44,Math.floor((W-16)/n)-4),bh=32,gap=3;
+    const tot=n*(bw+gap)-gap,sx=Math.floor((W-tot)/2),sy=8;
+    ctx.fillStyle='#a09890';ctx.font='bold 7px DM Mono';ctx.textAlign='left';
+    ctx.fillText('INPUT:',Math.max(4,sx-46),sy+22);
+    arr.forEach((v,i)=>{
+      const x=sx+i*(bw+gap);
+      let bg='#fff',bd='#e4e0d5',tc='#1a1614',lw=1;
+      if(frame.cur===i){bg='#ecfeff';bd='#0891b2';tc='#164e63';lw=2;}
+      else if(frame.done&&frame.done.includes(i)){bg='#f3f1ec';bd='#e4e0d5';tc='#a09890';}
+      rr(ctx,x,sy,bw,bh,5,bg,bd,lw);
+      ctx.fillStyle=tc;ctx.font=`bold ${bw>36?11:9}px DM Mono`;ctx.textAlign='center';
+      const vs=String(v);ctx.fillText(vs.length>4?vs.slice(0,4):vs,x+bw/2,sy+bh-8);
+    });
+    if(frame.cur>=0&&frame.cur<n){
+      const cx=sx+frame.cur*(bw+gap)+bw/2;
+      ctx.fillStyle='#0891b2';ctx.font='bold 8px DM Mono';ctx.textAlign='center';
+      ctx.fillText('▼',cx,sy+bh+10);
+    }
+  }
+  // stack visualization (horizontal cells, bottom-up labelled)
+  const stkY=n>0?58:10;
+  const maxShow=Math.min(stk.length,10);
+  const cellW=Math.min(58,Math.floor((W-80)/Math.max(maxShow,1))-4),cellH=38,cellGap=4;
+  const totW=stk.length>0?stk.length*(cellW+cellGap)-cellGap:0;
+  const stackX=Math.floor((W-Math.min(totW,W-80))/2);
+  ctx.fillStyle='#a09890';ctx.font='bold 7px DM Mono';ctx.textAlign='left';
+  ctx.fillText('STACK (bottom→top):',8,stkY-4);
+  // draw stack base line
+  const baseY=stkY+cellH+8;
+  ctx.strokeStyle='#e4e0d5';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(8,baseY);ctx.lineTo(W-8,baseY);ctx.stroke();
+  stk.forEach((v,i)=>{
+    const x=stackX+i*(cellW+cellGap);
+    const isTop=i===stk.length-1;
+    const justPushed=frame.pushed&&i===stk.length-1;
+    const bg=justPushed?'#ecfeff':isTop?'#f0fdfa':'#fff';
+    const bd=justPushed?'#0891b2':isTop?'#99f6e4':'#e4e0d5';
+    const lw=isTop?2.5:1;
+    rr(ctx,x,stkY,cellW,cellH,6,bg,bd,lw);
+    ctx.fillStyle=isTop?'#0891b2':'#6b6560';
+    ctx.font=`bold ${cellW>50?12:10}px DM Mono`;ctx.textAlign='center';
+    const vs=String(v);ctx.fillText(vs.length>5?vs.slice(0,5)+'…':vs,x+cellW/2,stkY+cellH-10);
+    if(isTop){
+      ctx.fillStyle='#0891b2';ctx.font='bold 7px DM Mono';
+      ctx.fillText('TOP',x+cellW/2,stkY-4);
+    }
+    ctx.fillStyle='#c0bab3';ctx.font='7px DM Mono';ctx.fillText(String(i),x+cellW/2,baseY+11);
+  });
+  if(stk.length===0){
+    ctx.fillStyle='#c0bab3';ctx.font='11px DM Mono';ctx.textAlign='center';
+    ctx.fillText('(empty)',W/2,stkY+cellH/2+4);
+  }
+  if(frame.popmsg){
+    const py=baseY+20;const tw=ctx.measureText(frame.popmsg).width+20;
+    rr(ctx,Math.floor((W-tw)/2),py,tw,22,5,'#fee2e2','#dc2626',1.5);
+    ctx.fillStyle='#dc2626';ctx.font='bold 10px DM Mono';ctx.textAlign='center';
+    ctx.fillText(frame.popmsg,W/2,py+15);
+  }
+  if(frame.res!==undefined){
+    const rw=220,rh=26,rx=Math.floor((W-rw)/2),ry=H-rh-8;
+    rr(ctx,rx,ry,rw,rh,6,'#dcfce7','#059669',1.5);
+    ctx.fillStyle='#059669';ctx.font='bold 12px DM Mono';ctx.textAlign='center';
+    ctx.fillText('✅  ans = '+String(frame.res),rx+rw/2,ry+rh-8);
+  }
+}
+
+// ── bar chart for histogram / monotonic problems ──
+function drawBar(ctx,W,H,frame){
+  const heights=frame.heights||[];const stk=frame.stk||[];const n=heights.length;
+  if(!n)return;
+  const maxH=Math.max(...heights,1);
+  const barW=Math.min(46,Math.floor((W-32)/n)-4),gap=4;
+  const chartH=130,chartY=H-chartH-50,tot=n*(barW+gap)-gap,sx=Math.floor((W-tot)/2);
+  // draw bars
+  heights.forEach((h,i)=>{
+    const bh=Math.max(2,Math.round(h/maxH*chartH));
+    const x=sx+i*(barW+gap),y=chartY+(chartH-bh);
+    let bg='#e0f2fe',bd='#7dd3fc',tc='#1a1614',lw=1;
+    if(frame.hi&&frame.hi.includes(i)){bg='#ecfeff';bd='#0891b2';lw=2.5;}
+    if(frame.fnd&&frame.fnd.includes(i)){bg='#dcfce7';bd='#059669';lw=2.5;}
+    if(frame.popped&&frame.popped.includes(i)){bg='#fee2e2';bd='#dc2626';lw=2;}
+    if(stk&&stk.includes(i)&&!(frame.hi&&frame.hi.includes(i))){bg='#fef3c7';bd='#d97706';lw=2;}
+    rr(ctx,x,y,barW,bh,3,bg,bd,lw);
+    ctx.fillStyle='#6b6560';ctx.font='bold 10px DM Mono';ctx.textAlign='center';
+    ctx.fillText(String(h),x+barW/2,y-4);
+    ctx.fillStyle='#a09890';ctx.font='8px DM Mono';ctx.fillText(String(i),x+barW/2,chartY+chartH+13);
+  });
+  // base line
+  ctx.strokeStyle='#e4e0d5';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(sx-8,chartY+chartH);ctx.lineTo(sx+tot+8,chartY+chartH);ctx.stroke();
+  // stack label
+  if(stk.length>0){
+    ctx.fillStyle='#d97706';ctx.font='bold 7px DM Mono';ctx.textAlign='left';
+    ctx.fillText('STACK: ['+stk.map(s=>heights[s]!==undefined?s+'('+heights[s]+')':s).join(', ')+']',8,chartY-8);
+  }
+  if(frame.maxRect!==undefined){
+    const rw=230,rh=26,rx=Math.floor((W-rw)/2),ry=H-rh-8;
+    rr(ctx,rx,ry,rw,rh,6,'#dcfce7','#059669',1.5);
+    ctx.fillStyle='#059669';ctx.font='bold 12px DM Mono';ctx.textAlign='center';
+    ctx.fillText('✅  max rect = '+String(frame.maxRect),rx+rw/2,ry+rh-8);
+  } else if(frame.water!==undefined){
+    const rw=230,rh=26,rx=Math.floor((W-rw)/2),ry=H-rh-8;
+    rr(ctx,rx,ry,rw,rh,6,'#dbeafe','#2563eb',1.5);
+    ctx.fillStyle='#2563eb';ctx.font='bold 12px DM Mono';ctx.textAlign='center';
+    ctx.fillText('💧 total water = '+String(frame.water),rx+rw/2,ry+rh-8);
+  } else if(frame.res!==undefined){
+    const rw=220,rh=26,rx=Math.floor((W-rw)/2),ry=H-rh-8;
+    rr(ctx,rx,ry,rw,rh,6,'#dcfce7','#059669',1.5);
+    ctx.fillStyle='#059669';ctx.font='bold 12px DM Mono';ctx.textAlign='center';
+    ctx.fillText('✅  ans = '+String(frame.res),rx+rw/2,ry+rh-8);
+  }
+}
+
+function drawVars(ctx,W,H,frame){
+  if(!frame.vars)return;
+  const entries=Object.entries(frame.vars);if(!entries.length)return;
+  const CW=72,RH=32,cols=Math.min(entries.length,Math.floor((W-12)/CW));
+  const rows=Math.ceil(entries.length/cols);
+  const pW=cols*CW,pH=rows*RH+14,px=5,py=H-pH-5;
+  if(frame.res!==undefined)return;
+  rr(ctx,px,py,pW,pH,5,'rgba(243,241,236,.97)','#e4e0d5',1);
+  ctx.fillStyle='#a09890';ctx.font='bold 7px DM Mono';ctx.textAlign='left';ctx.fillText('VARS',px+4,py+10);
+  entries.forEach(([k,v],idx)=>{
+    const col=idx%cols,row=Math.floor(idx/cols);
+    const ex=px+col*CW,ey=py+14+row*RH;
+    if(col>0){ctx.strokeStyle='#e4e0d5';ctx.lineWidth=0.4;ctx.beginPath();ctx.moveTo(ex,py+14);ctx.lineTo(ex,py+pH);ctx.stroke();}
+    const chg=frame.chg&&frame.chg.includes(k);
+    ctx.fillStyle=chg?'#0e7490':'#6b6560';ctx.font='7px DM Mono';ctx.textAlign='center';ctx.fillText(String(k),ex+CW/2,ey+10);
+    ctx.fillStyle=chg?'#0891b2':'#1a1614';
+    const vstr=String(v);ctx.font=`bold ${vstr.length>7?'9':'11'}px DM Mono`;ctx.textAlign='center';
+    ctx.fillText(vstr.length>9?vstr.slice(0,9)+'…':vstr,ex+CW/2,ey+RH-2);
+  });
+}
+function drawCond(ctx,W,H,frame){
+  if(frame.cond===undefined||frame.cond===null)return;
+  if(frame.res!==undefined)return;
+  const cond=String(frame.cond),cv=frame.cv;
+  const pw=Math.min(190,W*.36),ph=42,px=W-pw-5,py=H-ph-5;
+  const bg=cv===true?'#dcfce7':cv===false?'#fee2e2':'#f3f1ec';
+  const bd=cv===true?'#059669':cv===false?'#dc2626':'#e4e0d5';
+  const tc=cv===true?'#059669':cv===false?'#dc2626':'#6b6560';
+  rr(ctx,px,py,pw,ph,7,bg,bd,1.5);
+  ctx.fillStyle=tc;ctx.font='10px DM Mono';ctx.textAlign='center';
+  ctx.fillText(cond.length>24?cond.slice(0,24)+'…':cond,px+pw/2,py+14);
+  if(cv!==undefined){ctx.font='bold 12px DM Mono';ctx.fillText(cv===true?'✓  TRUE':'✗  FALSE',px+pw/2,py+32);}
+}
+
+// ══════════════════════════════════════════
+// CONTROLLER
+// ══════════════════════════════════════════
+function setMsg(sec,t){document.getElementById(sec+'-msg').textContent=t||'';}
+function setSI(sec,i,n){document.getElementById(sec+'-si').textContent='Step '+(i+1)+'/'+n;}
+function setEx(sec,t){document.getElementById(sec+'-ex-t').textContent=t||'—';}
+function hlLine(sec,ln){
+  document.querySelectorAll('#'+sec+'-code .cline').forEach(el=>el.classList.remove('hl'));
+  if(ln>0){const el=document.getElementById(sec+'-cl-'+ln);if(el){el.classList.add('hl');el.scrollIntoView({block:'nearest',behavior:'smooth'});}}
+}
+function renderCode(sec,lines){
+  const c=document.getElementById(sec+'-code');c.innerHTML='';
+  lines.forEach((ln,i)=>{const d=document.createElement('div');d.className='cline';d.id=sec+'-cl-'+(i+1);d.innerHTML=`<span class="ln">${i+1}</span><span class="lc">${ln}</span>`;c.appendChild(d);});
+}
+function applyFrame(sec){
+  const s=S[sec];if(!s.frames)return;
+  const fr=s.frames[s.idx];drawFrame(sec,fr);setMsg(sec,fr.msg);setSI(sec,s.idx,s.frames.length);hlLine(sec,fr.line||0);setEx(sec,fr.exec||'—');
+}
+function selProb(sec,idx){
+  stopTimer(sec);
+  const PROBS=sec==='cs'?CS_PROBS:MS_PROBS;const p=PROBS[idx];
+  document.querySelectorAll('#'+sec+'-pbar-e .pb-btn,#'+sec+'-pbar-m .pb-btn,#'+sec+'-pbar-h .pb-btn').forEach(b=>b.classList.remove('sel','e','m','h'));
+  const btn=document.getElementById(sec+'-pb-'+idx);if(btn){btn.classList.add('sel',''+p.d.toLowerCase());}
+  document.getElementById(sec+'-pdesc').innerHTML=
+    `<div class="pdesc-h">${p.name}&nbsp;<span class="diff diff-${p.d}">${p.d==='E'?'Easy':p.d==='M'?'Medium':'Hard'}</span></div>`+
+    `<div class="pdesc-t">${p.desc}</div>`+
+    `<div class="pdesc-why">🧠 <b>কেন এই Pattern?</b> ${p.why}</div>`+
+    `<div class="pdesc-cards">`+
+    `<div class="pdesc-card intuition"><div class="pdesc-card-h">💡 Intuition</div>${p.intuition||''}</div>`+
+    `<div class="pdesc-card analogy"><div class="pdesc-card-h">🌍 Real-Life Analogy</div>${p.analogy||''}</div></div>`;
+  document.getElementById(sec+'-ctit').textContent='C++ — '+p.name;
+  renderCode(sec,p.codeLines);S[sec].frames=p.sim();S[sec].idx=0;applyFrame(sec);
+}
+function run(sec){
+  stopTimer(sec);
+  if(!S[sec].frames){setMsg(sec,'⚠️ আগে problem select করো!');return;}
+  S[sec].timer=setInterval(()=>{const s=S[sec];if(s.idx>=s.frames.length-1){stopTimer(sec);return;}s.idx++;applyFrame(sec);},S[sec].speed);
+}
+function step(sec){
+  stopTimer(sec);if(!S[sec].frames){setMsg(sec,'⚠️ আগে problem select করো!');return;}
+  const s=S[sec];if(s.idx<s.frames.length-1)s.idx++;applyFrame(sec);
+}
+function rst(sec){
+  stopTimer(sec);S[sec].idx=0;
+  if(S[sec].frames){applyFrame(sec);setMsg(sec,'↺ Reset — Run বা Step চাপো');}else drawFrame(sec,null);
+}
+function cpCode(sec){
+  const lines=document.querySelectorAll('#'+sec+'-code .lc');
+  navigator.clipboard.writeText([...lines].map(l=>l.textContent).join('\n')).then(()=>{
+    const b=document.querySelector('#'+sec+'-problems .cpb');
+    if(b){b.textContent='✓ Copied';b.style.background='#0891b2';b.style.color='#fff';setTimeout(()=>{b.textContent='Copy';b.style.background='';b.style.color='';},1800);}
+  });
+}
+
+// ══════════════════════════════════════════
+// FRAME BUILDERS
+// ══════════════════════════════════════════
+// SF = Stack Frame
+function SF(arr,stk,vars,msg,line,exec,ex){
+  return Object.assign({type:'stack',arr:[...arr],stk:[...stk],vars:vars||{},msg:msg||'',line:line||0,exec:exec||''},ex||{});
+}
+// AF = Array Frame
+function AF(arr,ptrs,vars,msg,line,exec,ex){
+  return Object.assign({type:'arr',arr:[...arr],ptrs:ptrs||{},vars:vars||{},msg:msg||'',line:line||0,exec:exec||''},ex||{});
+}
+// BF = Bar Frame (histogram / monotonic)
+function BF(heights,stk,vars,msg,line,exec,ex){
+  return Object.assign({type:'bar',heights:[...heights],stk:[...stk],vars:vars||{},msg:msg||'',line:line||0,exec:exec||''},ex||{});
+}
+function E(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ══════════════════════════════════════════════════════
+// CORE STACK PROBLEMS (15: 5E 5M 5H)
+// ══════════════════════════════════════════════════════
+const CS_PROBS=[
+
+// ── E1: Baseball Game ──⭐
+{name:'Baseball Game',d:'E',
+ desc:'LeetCode 682. Record এ সংখ্যা, C (cancel), D (double), + (sum of last 2) আছে। ops=["5","2","C","D","+"] → 30।',
+ why:'Stack দিয়ে simulate করো। সংখ্যা → push। C → pop। D → push(2×top)। + → push(top+prev)। সব শেষে sum।',
+ intuition:'খাতায় স্কোর লেখার মতো। C মানে শেষেরটা কেটে দাও। D মানে শেষেরটা double করে নতুন লাইন। + মানে শেষ দুটো যোগ করে নতুন লাইন।',
+ analogy:'📒 Scorebook of a referee. C=cancel last, D=double last, +=sum last two. Stack exactly mirrors the page.',
+ codeLines:[
+   E('int calPoints(vector<string>& ops) {'),
+   E('  vector<int> stk;'),
+   E('  for (auto& op : ops) {'),
+   E('    if (op == "+") {'),
+   E('      int top = stk.back();'),
+   E('      stk.push_back(top + stk[stk.size()-2]);'),
+   E('    } else if (op == "D") {'),
+   E('      stk.push_back(2 * stk.back());'),
+   E('    } else if (op == "C") {'),
+   E('      stk.pop_back();'),
+   E('    } else {'),
+   E('      stk.push_back(stoi(op));'),
+   E('    }'),
+   E('  }'),
+   E('  return accumulate(stk.begin(),stk.end(),0);'),
+   E('}')
+ ],
+ sim(){
+   const ops=['5','2','C','D','+'];const F=[];let stk=[];
+   F.push(SF(ops,stk,{},'শুরু। Stack খালি।',2,'stk = []'));
+   ops.forEach((op,ci)=>{
+     let msg='',ln=0,exec='',ex={};
+     if(op==='+'){
+       const t=stk[stk.length-1],p=stk[stk.length-2],nv=t+p;
+       stk=[...stk,nv];msg=`op="+": ${t}+${p}=${nv} push!`;ln=6;exec=`push(${nv})`;ex={pushed:true,cur:ci};
+     }else if(op==='D'){
+       const nv=2*stk[stk.length-1];stk=[...stk,nv];msg=`op="D": 2×${stk[stk.length-2]}=${nv} push!`;ln=8;exec=`push(${nv})`;ex={pushed:true,cur:ci};
+     }else if(op==='C'){
+       const pv=stk[stk.length-1];stk=stk.slice(0,-1);msg=`op="C": ${pv} pop হলো!`;ln=10;exec=`pop()`;ex={popmsg:`❌ pop: ${pv}`,cur:ci};
+     }else{
+       const nv=parseInt(op);stk=[...stk,nv];msg=`op="${op}": push ${nv}`;ln=12;exec=`push(${nv})`;ex={pushed:true,cur:ci};
+     }
+     F.push(SF(ops,stk,{op,stk_size:stk.length},msg,ln,exec,{...ex,done:[...Array(ci+1).keys()]}));
+   });
+   const total=stk.reduce((a,b)=>a+b,0);
+   F.push(SF(ops,stk,{total},'✅ Total = '+total,15,'return '+total,{res:total}));
+   return F;
+ }},
+
+// ── E2: Valid Parentheses ──⭐
+{name:'Valid Parentheses',d:'E',
+ desc:'LeetCode 20. (, ), {, }, [, ] দিয়ে তৈরি string valid কি? s="({[]})" → true। s="([)]" → false।',
+ why:'Opening bracket → push। Closing bracket → top কে check করো match করে কিনা। শেষে stack empty → valid।',
+ intuition:'বাক্সের ভেতর বাক্স — সবচেয়ে ভেতরের বাক্স আগে বন্ধ হয়। LIFO স্বাভাবিকভাবেই এই structure follow করে।',
+ analogy:'📦 Boxes inside boxes. The most recently opened box (last pushed) must be closed first (LIFO). Stack tracks which box needs closing next.',
+ codeLines:[
+   E('bool isValid(string s) {'),
+   E('  stack<char> stk;'),
+   E('  map<char,char> mp={{\')\',\'(\'},{\'}\',\'{\'},{\']\',\'[\'}};'),
+   E('  for (char c : s) {'),
+   E('    if (mp.count(c)) {  // closing bracket'),
+   E('      if (stk.empty() || stk.top()!=mp[c])'),
+   E('        return false;'),
+   E('      stk.pop();'),
+   E('    } else {'),
+   E('      stk.push(c);  // opening bracket'),
+   E('    }'),
+   E('  }'),
+   E('  return stk.empty();'),
+   E('}')
+ ],
+ sim(){
+   const s='({[]})';const F=[];let stk=[];
+   const match={')':'(','}':`{`,']':'['};
+   F.push(SF([...s],stk,{},'শুরু। s="'+s+'"। Stack খালি।',2,'init'));
+   for(let i=0;i<s.length;i++){
+     const c=s[i];const isClose=!!match[c];
+     if(isClose){
+       const ok=stk.length>0&&stk[stk.length-1]===match[c];
+       if(ok){
+         const popped=stk[stk.length-1];stk=stk.slice(0,-1);
+         F.push(SF([...s],stk,{char:c,match:match[c]},`'${c}': closing. top='${popped}' ✓ pop!`,8,'pop()',{cur:i,popmsg:`✓ match: '${popped}' popped`,done:[...Array(i+1).keys()]}));
+       }else{
+         F.push(SF([...s],stk,{char:c,result:'FALSE'},`'${c}': mismatch → FALSE!`,6,'return false',{cur:i,res:'FALSE',cond:`top matches?`,cv:false}));
+         return F;
+       }
+     }else{
+       stk=[...stk,c];
+       F.push(SF([...s],stk,{char:c},`'${c}': opening → push!`,10,'push(c)',{pushed:true,cur:i,done:[...Array(i).keys()]}));
+     }
+   }
+   const valid=stk.length===0;
+   F.push(SF([...s],stk,{empty:stk.length===0,result:valid?'TRUE':'FALSE'},'Stack empty? '+valid+' → '+valid,13,'return stk.empty()',{res:String(valid).toUpperCase()}));
+   return F;
+ }},
+
+// ── E3: Remove Outermost Parentheses ──
+{name:'Remove Outermost Parentheses',d:'E',
+ desc:'LeetCode 1021. "(()(()))" এর outermost parentheses বাদ দাও → "()(())"। Every primitive decomposition এ outer বাদ।',
+ why:'depth counter। depth=0 থাকলে outer। ( এ depth++, depth>0 হলে result এ add। ) এ add করে depth-- (বা আগে depth--)।',
+ intuition:'Depth বাড়লে ভেতরে ঢুকছো। depth=0 → 1 এ যাওয়া মানে outermost open — add করো না। depth=1 → 0 এ যাওয়া মানে outermost close — add করো না।',
+ analogy:'🏠 House → room → closet। Outermost wall (house) বাদ দাও। ভেতরের সব রাখো।',
+ codeLines:[
+   E('string removeOuterParentheses(string s) {'),
+   E('  string res = "";'),
+   E('  int depth = 0;'),
+   E('  for (char c : s) {'),
+   E('    if (c == \'(\') {'),
+   E('      if (depth > 0) res += c;  // not outer'),
+   E('      depth++;'),
+   E('    } else {'),
+   E('      depth--;'),
+   E('      if (depth > 0) res += c;  // not outer'),
+   E('    }'),
+   E('  }'),
+   E('  return res;'),
+   E('}')
+ ],
+ sim(){
+   const s='(()(()))';const F=[];let res='',depth=0;
+   F.push(AF([...s],{},{depth,res:`"${res}"`},'শুরু। depth=0, res=""।',3,'init'));
+   for(let i=0;i<s.length;i++){
+     const c=s[i];const old_depth=depth;
+     let added=false;
+     if(c==='('){if(depth>0){res+=c;added=true;}depth++;}
+     else{depth--;if(depth>0){res+=c;added=true;}}
+     F.push(AF([...s],{i},{depth,res:`"${res}"`},
+       `'${c}': depth ${old_depth}→${depth}. ${added?`Added "${c}" to res.`:'Outermost — skip.'}`,
+       c==='('?6:10,added?`res+="${c}"`:'skip (outer)',
+       {hi:[i],done:[...Array(i).keys()],cond:`depth${c==='('?'>0 before push':'>0 after pop'}?`,cv:added,chg:added?['res']:['depth']}));
+   }
+   F.push(AF([...s],{},{result:`"${res}"`},'✅ Result: "'+res+'"',13,'return res',{res:`"${res}"`}));
+   return F;
+ }},
+
+// ── E4: Min Stack ──
+{name:'Min Stack',d:'E',
+ desc:'LeetCode 155. push, pop, top, getMin সব O(1) এ সাপোর্ট করো। Trick: একটা auxiliary stack রাখো minimum track করার জন্য।',
+ why:'Auxiliary min stack। push করার সময় min stack এ current min push করো। pop করলে দুটো stack থেকেই pop।',
+ intuition:'যদি দুটো stack রাখি — একটা data, একটা minimums — তাহলে যেকোনো সময় current min হলো min stack এর top।',
+ analogy:'🏦 Bank vault with two logs. One for transactions, one for "minimum balance ever at this depth". Both are always in sync.',
+ codeLines:[
+   E('class MinStack {'),
+   E('  stack<int> stk, minStk;'),
+   E('  void push(int v) {'),
+   E('    stk.push(v);'),
+   E('    int mn = minStk.empty()?v:min(v,minStk.top());'),
+   E('    minStk.push(mn);'),
+   E('  }'),
+   E('  void pop() {'),
+   E('    stk.pop(); minStk.pop();'),
+   E('  }'),
+   E('  int top()    { return stk.top(); }'),
+   E('  int getMin() { return minStk.top(); }'),
+   E('};')
+ ],
+ sim(){
+   const ops=[['push',-2],['push',0],['push',-3],['getMin'],['pop'],['top'],['getMin']];
+   const F=[];let stk=[],minStk=[];
+   F.push(SF([],stk,{minStk_top:'—'},'শুরু। MinStack তৈরি।',2,'init'));
+   ops.forEach(([op,v])=>{
+     if(op==='push'){
+       stk=[...stk,v];const mn=minStk.length===0?v:Math.min(v,minStk[minStk.length-1]);minStk=[...minStk,mn];
+       F.push(SF([v],stk,{minStk:`[${minStk.join(',')}]`,'min now':mn},`push(${v}). stk=[${stk.join(',')}]. min=${mn}।`,4,'push('+v+')',{pushed:true}));
+     }else if(op==='pop'){
+       const pv=stk[stk.length-1];stk=stk.slice(0,-1);minStk=minStk.slice(0,-1);
+       F.push(SF([],stk,{minStk:`[${minStk.join(',')}]`,'popped':pv},`pop() → ${pv} removed.`,9,'pop()',{popmsg:'❌ pop: '+pv}));
+     }else if(op==='top'){
+       const tv=stk[stk.length-1];
+       F.push(SF([],stk,{top:tv,minStk:`[${minStk.join(',')}]`},`top() = ${tv}।`,11,'return top='+tv,{hi:[stk.length-1],res:tv}));
+     }else if(op==='getMin'){
+       const mv=minStk[minStk.length-1];
+       F.push(SF([],stk,{getMin:mv,minStk:`[${minStk.join(',')}]`},`getMin() = ${mv}।`,12,'return min='+mv,{res:mv}));
+     }
+   });
+   return F;
+ }},
+
+// ── E5: Backspace String Compare ──
+{name:'Backspace String Compare',d:'E',
+ desc:'LeetCode 844. "#" মানে backspace। s="ab#c", t="ad#c" → true (দুটোই "ac" হয়)।',
+ why:'Stack simulate করো। Regular char → push। "#" → pop (থাকলে)। দুটো stack এর result compare করো।',
+ intuition:'Text editor এর typing simulate করো। # backspace মানে আগের character মুছে যাবে — exactly stack এর pop।',
+ analogy:'⌨️ Typing on keyboard with backspace. Every # erases the last typed character. Stack naturally models a text buffer with backspace.',
+ codeLines:[
+   E('string process(string s) {'),
+   E('  string stk = "";'),
+   E('  for (char c : s) {'),
+   E('    if (c != \'#\') stk += c;'),
+   E('    else if (!stk.empty()) stk.pop_back();'),
+   E('  }'),
+   E('  return stk;'),
+   E('}'),
+   E('bool backspaceCompare(string s,string t){'),
+   E('  return process(s) == process(t);'),
+   E('}')
+ ],
+ sim(){
+   const s='ab#c',t='ad#c';const F=[];let stkS=[],stkT=[];
+   F.push(SF([...s,'/','/',... t],stkS,{processing:'s="'+s+'"'},'s 처리 শুরু।',2,'process(s)'));
+   for(let i=0;i<s.length;i++){
+     const c=s[i];
+     if(c!=='#'){stkS=[...stkS,c];F.push(SF([...s],stkS,{char:c,stk:`"${stkS.join('')}"`},`s[${i}]='${c}': push।`,4,'push c',{pushed:true,cur:i}));}
+     else{const pv=stkS[stkS.length-1];stkS=stkS.slice(0,-1);F.push(SF([...s],stkS,{char:'#',popped:pv,stk:`"${stkS.join('')}"`},`s[${i}]='#': pop '${pv}'।`,5,'pop_back()',{popmsg:'❌ pop: '+pv,cur:i}));}
+   }
+   F.push(SF([...s],stkS,{result_s:`"${stkS.join('')}"`},'s processed: "'+stkS.join('')+'"',7,'s done',{fnd:[...Array(s.length).keys()]}));
+   for(let i=0;i<t.length;i++){
+     const c=t[i];
+     if(c!=='#'){stkT=[...stkT,c];}else if(stkT.length){stkT=stkT.slice(0,-1);}
+   }
+   const eq=stkS.join('')===stkT.join('');
+   F.push(SF([...t],stkT,{result_s:`"${stkS.join('')}"`,result_t:`"${stkT.join('')}"`,equal:eq},'t processed: "'+stkT.join('')+'". Equal? '+eq,10,'return '+(eq?'true':'false'),{res:String(eq).toUpperCase()}));
+   return F;
+ }},
+
+// ── M1: Decode String ──
+{name:'Decode String',d:'M',
+ desc:'LeetCode 394. "3[a2[c]]" → "accaccacc"। Nested encoding decode করো।',
+ why:'Stack তে (current_string, repeat_count) push করো। "[" এ নতুন context start। "]" এ pop করে expand।',
+ intuition:'ভেতর থেকে বাইরে। "3[a2[c]]" → আগে "2[c]" = "cc", তারপর "a"+"cc" = "acc", তারপর "3[acc]" = "accaccacc"।',
+ analogy:'📂 Nested folders. "]" মানে ভেতরের folder বন্ধ করে বাইরে যাও এবং files পেস্ট করো।',
+ codeLines:[
+   E('string decodeString(string s) {'),
+   E('  stack<pair<string,int>> stk;'),
+   E('  string cur = ""; int k = 0;'),
+   E('  for (char c : s) {'),
+   E('    if (isdigit(c)) k=k*10+(c-\'0\');'),
+   E('    else if (c==\'[\') {'),
+   E('      stk.push({cur,k}); cur=""; k=0;'),
+   E('    } else if (c==\']\') {'),
+   E('      auto [prev,n]=stk.top(); stk.pop();'),
+   E('      for(int i=0;i<n;i++) prev+=cur;'),
+   E('      cur=prev;'),
+   E('    } else cur+=c;'),
+   E('  }'),
+   E('  return cur;'),
+   E('}')
+ ],
+ sim(){
+   const s='3[a2[c]]';const F=[];let stk=[],cur='',k=0;
+   F.push(SF([...s],[],{cur:`"${cur}"`,k},'শুরু: cur="", k=0।',3,'init'));
+   for(let i=0;i<s.length;i++){
+     const c=s[i];
+     if(/\d/.test(c)){k=k*10+parseInt(c);F.push(SF([...s],stk.map(x=>x[1]+'['+x[0]+']'),{cur:`"${cur}"`,k},`'${c}': digit → k=${k}。`,5,'k='+k,{cur:i}));}
+     else if(c==='['){stk=[...stk,[cur,k]];cur='';k=0;F.push(SF([...s],stk.map(x=>x[1]+'['+x[0]+']'),{cur:`"${cur}"`,k,pushed:`("${stk[stk.length-1][0]}",${stk[stk.length-1][1]})`},`'[': push("${stk[stk.length-1][0]}",${stk[stk.length-1][1]})।`,7,'push(cur,k)',{pushed:true,cur:i}));}
+     else if(c===']'){const[prev,n]=stk[stk.length-1];stk=stk.slice(0,-1);const rep=cur.repeat(n);cur=prev+rep;F.push(SF([...s],stk.map(x=>x[1]+'['+x[0]+']'),{cur:`"${cur}"`,expanded:`"${rep}"`},`']': "${prev}"+ "${cur}"×${n}= "${cur}"।`,10,'cur=prev+repeat',{popmsg:`pop → ×${n}`,cur:i}));}
+     else{cur+=c;F.push(SF([...s],stk.map(x=>x[1]+'['+x[0]+']'),{cur:`"${cur}"`,k},`'${c}': cur += '${c}'।`,12,'cur+=c',{cur:i}));}
+   }
+   F.push(SF([...s],[],{result:`"${cur}"`},'✅ Decoded: "'+cur+'"',14,'return cur',{res:`"${cur}"`}));
+   return F;
+ }},
+
+// ── M2: Asteroid Collision ──
+{name:'Asteroid Collision',d:'M',
+ desc:'LeetCode 735. asteroids=[5,10,-5] → [5,10]। Positive ডানে যায়, Negative বামে। সমান হলে দুটোই destroy। কে কে survive করবে?',
+ why:'Stack এ positive রাখো। Negative আসলে stack এর top (positive) এর সাথে compare করো। বড় জিতে, সমান হলে দুটোই pop।',
+ intuition:'Negative asteroid আসলে সে left-moving। Stack এ থাকা positive right-moving asteroids এর সাথে collide। ছোটটা ধ্বংস।',
+ analogy:'☄️ Space collision. Positive asteroids fly right (stored in stack), negative ones fly left (try to destroy stack top). Larger survives.',
+ codeLines:[
+   E('vector<int> asteroidCollision(vector<int>& a) {'),
+   E('  vector<int> stk;'),
+   E('  for (int x : a) {'),
+   E('    bool alive = true;'),
+   E('    while (alive && x<0 && !stk.empty() && stk.back()>0) {'),
+   E('      if (stk.back() < -x) stk.pop_back();'),
+   E('      else if(stk.back() == -x){stk.pop_back();alive=false;}'),
+   E('      else alive = false;'),
+   E('    }'),
+   E('    if (alive) stk.push_back(x);'),
+   E('  }'),
+   E('  return stk;'),
+   E('}')
+ ],
+ sim(){
+   const a=[5,10,-5,8,-8,-3];const F=[];let stk=[];
+   F.push(SF(a,stk,{},'শুরু। asteroids=[5,10,-5,8,-8,-3]।',2,'init'));
+   a.forEach((x,ci)=>{
+     let alive=true,tmpStk=[...stk];
+     F.push(SF(a,tmpStk,{x,alive},`x=${x}. ${x>0?'Positive→ push করবো।':'Negative→ collision check!'}`,4,`x=${x}`,{cur:ci}));
+     if(x<0){
+       while(alive&&tmpStk.length>0&&tmpStk[tmpStk.length-1]>0){
+         const top=tmpStk[tmpStk.length-1];
+         if(top<-x){tmpStk=tmpStk.slice(0,-1);F.push(SF(a,tmpStk,{x,top,result:`${top} destroyed`},`|${x}|>|${top}|: ${top} ধ্বংস!`,6,'pop back',{popmsg:`❌ ${top} destroyed`,cur:ci,cond:`${top} < ${-x}?`,cv:true}));}
+         else if(top===-x){tmpStk=tmpStk.slice(0,-1);alive=false;F.push(SF(a,tmpStk,{x,result:'both destroyed'},`Equal! দুটোই ধ্বংস।`,7,'both pop',{popmsg:`❌ both destroyed`,cur:ci,cond:`${top}==${-x}?`,cv:true}));}
+         else{alive=false;F.push(SF(a,tmpStk,{x,top,result:`${x} destroyed`},`|${x}|<|${top}|: ${x} ধ্বংস!`,8,'x=dead',{cur:ci,cond:`${top} > ${-x}?`,cv:true}));}
+       }
+     }
+     if(alive){tmpStk=[...tmpStk,x];F.push(SF(a,tmpStk,{x,alive},`${x} survive! push।`,10,'push(x)',{pushed:true,cur:ci}));}
+     stk=tmpStk;
+   });
+   F.push(SF(a,stk,{result:`[${stk.join(',')}]`},'✅ Survivors: ['+stk.join(',')+']',11,'return stk',{res:`[${stk.join(',')}]`}));
+   return F;
+ }},
+
+// ── M3: Evaluate Reverse Polish Notation ──
+{name:'Evaluate Reverse Polish Notation',d:'M',
+ desc:'LeetCode 150. tokens=["2","1","+","3","*"] → 9। ((2+1)*3)। RPN evaluate করো।',
+ why:'Number → push। Operator → pop দুটো, calculate, push result। O(n), O(n)।',
+ intuition:'RPN এ operator সবসময় তার operands এর পরে। Stack top দুটো সর্বদা current operator এর operands।',
+ analogy:'🧮 Old calculators use RPN. Numbers stack up, operators trigger computation on top two. No parentheses needed.',
+ codeLines:[
+   E('int evalRPN(vector<string>& tokens) {'),
+   E('  stack<int> stk;'),
+   E('  for (auto& t : tokens) {'),
+   E('    if(t=="+"||t=="-"||t=="*"||t=="/"){'),
+   E('      int b=stk.top(); stk.pop();'),
+   E('      int a=stk.top(); stk.pop();'),
+   E('      if(t=="+") stk.push(a+b);'),
+   E('      else if(t=="-") stk.push(a-b);'),
+   E('      else if(t=="*") stk.push(a*b);'),
+   E('      else stk.push(a/b);'),
+   E('    } else stk.push(stoi(t));'),
+   E('  }'),
+   E('  return stk.top();'),
+   E('}')
+ ],
+ sim(){
+   const tokens=['2','1','+','3','*'];const F=[];let stk=[];
+   F.push(SF(tokens,stk,{},'শুরু। tokens=["2","1","+","3","*"]।',2,'init'));
+   tokens.forEach((t,ci)=>{
+     if(['+','-','*','/'].includes(t)){
+       const b=stk[stk.length-1],a=stk[stk.length-2];
+       const ops={'+':a+b,'-':a-b,'*':a*b,'/':Math.trunc(a/b)};
+       const r=ops[t];stk=[...stk.slice(0,-2),r];
+       F.push(SF(tokens,stk,{a,b,op:t,result:r},`op='${t}': ${a}${t}${b}=${r}। pop a,b → push ${r}।`,7,'push('+r+')',{pushed:true,cur:ci,popmsg:`${a} ${t} ${b} = ${r}`}));
+     }else{stk=[...stk,parseInt(t)];F.push(SF(tokens,stk,{t,val:parseInt(t)},`'${t}': number → push ${t}।`,11,'push('+t+')',{pushed:true,cur:ci}));}
+   });
+   F.push(SF(tokens,stk,{result:stk[0]},'✅ Result = '+stk[0],13,'return top='+stk[0],{res:stk[0]}));
+   return F;
+ }},
+
+// ── M4: Remove K Digits ──
+{name:'Remove K Digits to Get Smallest',d:'M',
+ desc:'LeetCode 402. num="1432219", k=3 → "1219"। k টা digit সরিয়ে সবচেয়ছোট number বানাও।',
+ why:'Monotonic increasing stack। নতুন digit আগেরটার চেয়ে ছোট হলে এবং k>0 হলে pop করো। O(n)।',
+ intuition:'বড় digit দেখলে (পরেরটা ছোট) — বড়টাকে সরাও। Stack তে increasing sequence রাখো। যতক্ষণ k>0।',
+ analogy:'📉 শেয়ার market এ যদি দাম কমে, পুরনো উঁচু দামের record মুছে দাও। Smallest result পেতে চাই।',
+ codeLines:[
+   E('string removeKdigits(string num, int k) {'),
+   E('  string stk = "";'),
+   E('  for (char c : num) {'),
+   E('    while (k>0 && !stk.empty() && stk.back()>c) {'),
+   E('      stk.pop_back(); k--;'),
+   E('    }'),
+   E('    stk += c;'),
+   E('  }'),
+   E('  stk = stk.substr(0, stk.size()-k);  // remove remaining'),
+   E('  // remove leading zeros'),
+   E('  int i = stk.find_first_not_of(\'0\');'),
+   E('  return i==string::npos ? "0" : stk.substr(i);'),
+   E('}')
+ ],
+ sim(){
+   const num='1432219';let k=3;const F=[];let stk=[];
+   F.push(SF([...num],[],{k},'শুরু। num="'+num+'", k='+k+'।',2,'init'));
+   for(let i=0;i<num.length;i++){
+     const c=num[i];
+     while(k>0&&stk.length>0&&stk[stk.length-1]>c){
+       const pv=stk[stk.length-1];stk=stk.slice(0,-1);k--;
+       F.push(SF([...num],[...stk],{k,removed:pv,cur:c},`'${pv}'>'${c}': pop '${pv}', k=${k}।`,5,'pop+k--',{popmsg:`❌ pop: ${pv}`,cur:i,cond:`${pv}>${c}?`,cv:true,chg:['k']}));
+     }
+     stk=[...stk,c];
+     F.push(SF([...num],[...stk],{k},`push '${c}'. stk="${stk.join('')}"।`,7,'push c',{pushed:true,cur:i,done:[...Array(i).keys()]}));
+   }
+   if(k>0)stk=stk.slice(0,-k);
+   let res=stk.join('').replace(/^0+/,'')||'0';
+   F.push(SF([...num],[...stk],{result:`"${res}"`},'✅ Smallest: "'+res+'"',12,'return "'+res+'"',{res:`"${res}"`}));
+   return F;
+ }},
+
+// ── M5: Make the String Great ──
+{name:'Make the String Great',d:'M',
+ desc:'LeetCode 1544. s="leEeetcode" → "leetcode"। Adjacent same letter different case → remove both। Repeat।',
+ why:'Stack। Adjacent pair (a,A) বা (A,a) → bad pair। Stack top এ same letter different case হলে pop। O(n)।',
+ intuition:'"aAbB" → pop করো pair by pair। Stack top আর current char same letter but different case হলে দুটো cancel।',
+ analogy:'🧲 Opposite magnets। Capital এবং small same letter adjacent হলে attract ও annihilate। Stack handles the chain reaction.',
+ codeLines:[
+   E('string makeGood(string s) {'),
+   E('  string stk = "";'),
+   E('  for (char c : s) {'),
+   E('    if (!stk.empty() && stk.back()!=c &&'),
+   E('        tolower(stk.back())==tolower(c)) {'),
+   E('      stk.pop_back();  // cancel pair'),
+   E('    } else {'),
+   E('      stk += c;'),
+   E('    }'),
+   E('  }'),
+   E('  return stk;'),
+   E('}')
+ ],
+ sim(){
+   const s='leEeetcode';const F=[];let stk=[];
+   F.push(SF([...s],[],{},'শুরু। s="'+s+'"।',2,'init'));
+   for(let i=0;i<s.length;i++){
+     const c=s[i];
+     const bad=stk.length>0&&stk[stk.length-1]!==c&&stk[stk.length-1].toLowerCase()===c.toLowerCase();
+     if(bad){const pv=stk[stk.length-1];stk=stk.slice(0,-1);F.push(SF([...s],[...stk],{char:c,cancelled:pv},`'${c}' & '${pv}' → bad pair! cancel।`,6,'pop()',{popmsg:`❌ cancel: '${pv}'+'${c}'`,cur:i,cond:`bad pair?`,cv:true}));}
+     else{stk=[...stk,c];F.push(SF([...s],[...stk],{char:c},`'${c}' → push।`,8,'push c',{pushed:true,cur:i,done:[...Array(i).keys()]}));}
+   }
+   F.push(SF([...s],[...stk],{result:`"${stk.join('')}"`},'✅ Result: "'+stk.join('')+'"',11,'return stk',{res:`"${stk.join('')}"`}));
+   return F;
+ }},
+
+// ── H1: Largest Rectangle in Histogram ──⭐⭐
+{name:'Largest Rectangle in Histogram',d:'H',
+ desc:'LeetCode 84. heights=[2,1,5,6,2,3] → 10। Histogram এ সবচেয়ে বড় rectangle এর area।',
+ why:'Monotonic increasing stack। কোনো bar পপ হলে সেটা current i এর আগে কতদূর পর্যন্ত extend হতে পারে সেটা বের করো।',
+ intuition:'প্রতিটি bar এর height দিয়ে সর্বোচ্চ কতটা চওড়া rectangle বানানো যায়? সে তার চেয়ে ছোট neighbor পর্যন্ত extend হতে পারে।',
+ analogy:'🏙️ Cityscape. Each building wants to form the widest rectangle at its height. It can extend until a shorter building blocks it.',
+ codeLines:[
+   E('int largestRectangleArea(vector<int>& h) {'),
+   E('  int n=h.size(), ans=0;'),
+   E('  stack<int> stk;  // increasing height indices'),
+   E('  for (int i=0; i<=n; i++) {'),
+   E('    int cur = i==n ? 0 : h[i];'),
+   E('    while (!stk.empty() && h[stk.top()]>cur) {'),
+   E('      int idx = stk.top(); stk.pop();'),
+   E('      int left = stk.empty() ? -1 : stk.top();'),
+   E('      int w = i - left - 1;'),
+   E('      ans = max(ans, h[idx] * w);'),
+   E('    }'),
+   E('    stk.push(i);'),
+   E('  }'),
+   E('  return ans;'),
+   E('}')
+ ],
+ sim(){
+   const h=[2,1,5,6,2,3];const F=[];let stk=[],ans=0;
+   F.push(BF(h,[],{ans},'শুরু। heights=[2,1,5,6,2,3]।',3,'init'));
+   const hn=[...h,0];
+   for(let i=0;i<=h.length;i++){
+     const cur=hn[i];
+     while(stk.length>0&&h[stk[stk.length-1]]>cur){
+       const idx=stk[stk.length-1];stk=stk.slice(0,-1);
+       const left=stk.length>0?stk[stk.length-1]:-1;
+       const w=i-left-1;const area=h[idx]*w;
+       if(area>ans)ans=area;
+       F.push(BF(h,[...stk],{popped:idx,h:h[idx],w,area,ans},
+         `pop idx=${idx}(h=${h[idx]}). width=${i}-(${left})-1=${w}. area=${area}. ans=${ans}।`,10,`area=${h[idx]}×${w}=${area}`,
+         {popped:[idx],hi:i<h.length?[i]:undefined,fnd:area===ans?[idx]:undefined,maxRect:ans}));
+     }
+     if(i<h.length){stk=[...stk,i];F.push(BF(h,[...stk],{i,h_i:cur,ans},`i=${i}(h=${cur}): push।`,12,'push '+i,{hi:[i]}));}
+   }
+   F.push(BF(h,[],{maxRect:ans},'✅ Largest rectangle = '+ans,14,'return '+ans,{maxRect:ans}));
+   return F;
+ }},
+
+// ── H2: Trapping Rain Water ──⭐⭐
+{name:'Trapping Rain Water',d:'H',
+ desc:'LeetCode 42. height=[0,1,0,2,1,0,1,3,2,1,2,1] → 6। বৃষ্টির পানি কতটুকু জমবে?',
+ why:'Stack approach: valley detect করো। Pop করার সময় water = (min(left,right) - bottom) × width। O(n)।',
+ intuition:'Stack এ indices রাখো। Height কমলে push। Height বাড়লে valley পাওয়া গেছে — pop করে water calculate করো।',
+ analogy:'🌧️ Water between hills. Stack tracks the left walls. When a right wall appears, water fills the valley between stored left and current right.',
+ codeLines:[
+   E('int trap(vector<int>& h) {'),
+   E('  int ans=0;'),
+   E('  stack<int> stk;'),
+   E('  for (int i=0; i<h.size(); i++) {'),
+   E('    while (!stk.empty() && h[stk.top()]<h[i]) {'),
+   E('      int mid = stk.top(); stk.pop();'),
+   E('      if (!stk.empty()) {'),
+   E('        int left = stk.top();'),
+   E('        int w = i - left - 1;'),
+   E('        int water = (min(h[left],h[i])-h[mid])*w;'),
+   E('        ans += water;'),
+   E('      }'),
+   E('    }'),
+   E('    stk.push(i);'),
+   E('  }'),
+   E('  return ans;'),
+   E('}')
+ ],
+ sim(){
+   const h=[0,1,0,2,1,0,1,3];const F=[];let stk=[],ans=0;
+   F.push(BF(h,[],{ans},'শুরু। Rain water problem।',3,'init'));
+   for(let i=0;i<h.length;i++){
+     while(stk.length>0&&h[stk[stk.length-1]]<h[i]){
+       const mid=stk[stk.length-1];stk=stk.slice(0,-1);
+       if(stk.length>0){
+         const left=stk[stk.length-1];const w=i-left-1;
+         const water=(Math.min(h[left],h[i])-h[mid])*w;ans+=water;
+         F.push(BF(h,[...stk],{mid,left,right:i,w,water,ans},
+           `valley: mid=${mid}(h=${h[mid]}), left=${left}, right=${i}. water=${water}. ans=${ans}।`,10,`water+=${water}`,
+           {popped:[mid],hi:[i],fnd:water>0?[mid]:undefined,water:ans}));
+       }
+     }
+     stk=[...stk,i];F.push(BF(h,[...stk],{i,h_i:h[i],ans},`i=${i}(h=${h[i]}): push।`,14,'push '+i,{hi:[i]}));
+   }
+   F.push(BF(h,[],{water:ans},'✅ Total water = '+ans,16,'return '+ans,{water:ans}));
+   return F;
+ }},
+
+// ── H3: Maximal Rectangle (Binary Matrix) ──
+{name:'Max Rectangle in Binary Matrix',d:'H',
+ desc:'LeetCode 85. Binary matrix তে সব-1 এর সবচেয়ে বড় rectangle। matrix=["10100","10111","11111","10010"] → 6।',
+ why:'প্রতিটি row কে histogram এর heights ভাবো। Row by row "Largest Rectangle in Histogram" apply করো।',
+ intuition:'Row r এ heights[j] = row r পর্যন্ত consecutive 1s উপর থেকে। এই heights array তে largest rect = current row answer।',
+ analogy:'🏗️ Each row is a skyline. Build up heights row by row. For each skyline, find the largest rectangle using the histogram algorithm.',
+ codeLines:[
+   E('int maximalRectangle(vector<string>& mat) {'),
+   E('  int rows=mat.size(), cols=mat[0].size(), ans=0;'),
+   E('  vector<int> h(cols, 0);'),
+   E('  for (int r=0; r<rows; r++) {'),
+   E('    for (int c=0; c<cols; c++)'),
+   E('      h[c] = mat[r][c]==\'1\' ? h[c]+1 : 0;'),
+   E('    // largest histogram area for this row'),
+   E('    ans = max(ans, largestInRow(h));'),
+   E('  }'),
+   E('  return ans;'),
+   E('}'),
+   E('// largestInRow = LC84 histogram algorithm')
+ ],
+ sim(){
+   const mat=['10100','10111','11111','10010'];const F=[];
+   let h=Array(mat[0].length).fill(0),ans=0;
+   F.push(BF(h,[],{row:0,ans},'শুরু। Matrix → row by row histogram।',3,'init h=0'));
+   mat.forEach((row,r)=>{
+     for(let c=0;c<mat[0].length;c++)h[c]=row[c]==='1'?h[c]+1:0;
+     // compute histogram rect
+     let stk=[],rowAns=0;const hn=[...h,0];
+     for(let i=0;i<=h.length;i++){const cur=hn[i];while(stk.length&&h[stk[stk.length-1]]>cur){const idx=stk.pop();const left=stk.length?stk[stk.length-1]:-1;const area=h[idx]*(i-left-1);if(area>rowAns)rowAns=area;}if(i<h.length)stk.push(i);}
+     if(rowAns>ans)ans=rowAns;
+     F.push(BF([...h],[],{row:r,heights:`[${h.join(',')}]`,rowAns,ans},
+       `Row ${r}: heights=[${h.join(',')}]. maxRect this row=${rowAns}. ans=${ans}।`,8,'ans=max('+ans+')',
+       {fnd:rowAns>0?[...Array(h.length).keys()].filter(i=>h[i]>0):undefined,maxRect:ans}));
+   });
+   F.push(BF([...h],[],{maxRect:ans},'✅ Max rectangle = '+ans,10,'return '+ans,{maxRect:ans}));
+   return F;
+ }},
+
+// ── H4: Basic Calculator ──
+{name:'Basic Calculator',d:'H',
+ desc:'LeetCode 224. s="(1+(4+5+2)-3)+(6+8)" → 23। +, -, (, ) সহ expression evaluate করো।',
+ why:'Stack তে (result, sign) push করো। "(" এ push current state। ")" এ pop করে combine।',
+ intuition:'Number build করো। + → +1, - → -1 sign। "(" এ current sum আর sign save করে reset। ")" এ stack থেকে pop করে যোগ করো।',
+ analogy:'🧮 Nested accountant. Each "(" starts a sub-account. ")" closes it and adds to the outer account.',
+ codeLines:[
+   E('int calculate(string s) {'),
+   E('  stack<int> stk;'),
+   E('  int result=0, sign=1, num=0;'),
+   E('  for (char c : s) {'),
+   E('    if (isdigit(c)) num=num*10+(c-\'0\');'),
+   E('    else if (c==\'+\'||c==\'-\') {'),
+   E('      result+=sign*num; num=0;'),
+   E('      sign=(c==\'+\')?1:-1;'),
+   E('    } else if (c==\'(\') {'),
+   E('      stk.push(result); stk.push(sign);'),
+   E('      result=0; sign=1;'),
+   E('    } else if (c==\')\') {'),
+   E('      result+=sign*num; num=0;'),
+   E('      result*=stk.top(); stk.pop();'),
+   E('      result+=stk.top(); stk.pop();'),
+   E('    }'),
+   E('  }'),
+   E('  return result+sign*num;'),
+   E('}')
+ ],
+ sim(){
+   const s='(1+(4+5))';const F=[];let stk=[],result=0,sign=1,num=0;
+   F.push(SF([...s],stk,{result,sign,num},'শুরু। Evaluate "(1+(4+5))"।',3,'init'));
+   for(let i=0;i<s.length;i++){
+     const c=s[i];
+     if(/\d/.test(c)){num=num*10+parseInt(c);F.push(SF([...s],stk,{result,sign,num},`'${c}': num=${num}।`,5,'num='+num,{cur:i}));}
+     else if(c==='+'||c==='-'){result+=sign*num;const old_sign=sign;num=0;sign=c==='+'?1:-1;F.push(SF([...s],stk,{result,sign,num},`'${c}': result+=${old_sign}×prev. sign=${sign}।`,8,'result+=sign*num',{cur:i,chg:['result','sign']}));}
+     else if(c==='('){stk=[...stk,result,sign];result=0;sign=1;F.push(SF([...s],stk,{result,sign,num},`'(': push(${stk[stk.length-2]},${stk[stk.length-1]}). reset।`,10,'push state',{pushed:true,cur:i}));}
+     else if(c===')'){result+=sign*num;num=0;const ps=stk[stk.length-1];const pr=stk[stk.length-2];stk=stk.slice(0,-2);result=result*ps+pr;F.push(SF([...s],stk,{result,sign,num},`')': result=${result}. pop state।`,15,'pop+combine',{popmsg:'pop state',cur:i,chg:['result']}));}
+   }
+   result+=sign*num;
+   F.push(SF([...s],stk,{result},'✅ Result = '+result,18,'return '+result,{res:result}));
+   return F;
+ }},
+
+// ── H5: Score of Parentheses ──
+{name:'Score of Parentheses',d:'H',
+ desc:'LeetCode 856. s="(()(()))" → 6। "()" = 1, "(A)" = 2*A, "AB" = A+B।',
+ why:'Stack এ current score track করো। "(" → push 0 (নতুন context)। ")" → pop করো: 0 পেলে +1, নাহলে ×2।',
+ intuition:'Stack তে নতুন level এর score build করো। ")" এ ভেতরের score double করে বাইরে যোগ করো।',
+ analogy:'🎮 Game points with nested bonuses. Inner achievements get doubled by outer wrappers. Stack tracks the nesting level.',
+ codeLines:[
+   E('int scoreOfParentheses(string s) {'),
+   E('  stack<int> stk;'),
+   E('  stk.push(0);  // base score = 0'),
+   E('  for (char c : s) {'),
+   E('    if (c == \'(\') {'),
+   E('      stk.push(0);  // new nesting level'),
+   E('    } else {'),
+   E('      int v = stk.top(); stk.pop();'),
+   E('      int w = stk.top(); stk.pop();'),
+   E('      stk.push(w + max(2*v, 1));  // "()" or "(A)"'),
+   E('    }'),
+   E('  }'),
+   E('  return stk.top();'),
+   E('}')
+ ],
+ sim(){
+   const s='(()(()))';const F=[];let stk=[0];
+   F.push(SF([...s],[...stk],{},'শুরু। stk=[0]।',3,'push(0)'));
+   for(let i=0;i<s.length;i++){
+     const c=s[i];
+     if(c==='('){stk=[...stk,0];F.push(SF([...s],[...stk],{},`'(': new level push 0।`,6,'push(0)',{pushed:true,cur:i}));}
+     else{const v=stk[stk.length-1];stk=stk.slice(0,-1);const w=stk[stk.length-1];stk=stk.slice(0,-1);const nv=w+Math.max(2*v,1);stk=[...stk,nv];F.push(SF([...s],[...stk],{v,w,new_val:nv},`')': v=${v},w=${w}. push(${w}+max(2×${v},1))=${nv}।`,10,'push(w+max(2v,1))',{pushed:true,cur:i,chg:['top']}));}
+   }
+   F.push(SF([...s],[...stk],{result:stk[0]},'✅ Score = '+stk[0],13,'return top='+stk[0],{res:stk[0]}));
+   return F;
+ }}
+
+]; // end CS_PROBS
+
+// ══════════════════════════════════════════════════════
+// MONOTONIC STACK PROBLEMS (15: 5E 5M 5H)
+// ══════════════════════════════════════════════════════
+const MS_PROBS=[
+
+// ── E1: Next Greater Element I ──⭐
+{name:'Next Greater Element I',d:'E',
+ desc:'LeetCode 496. nums1=[4,1,2], nums2=[1,3,4,2] → [−1,3,−1]। nums1 এর প্রতিটির next greater in nums2।',
+ why:'nums2 তে decreasing stack দিয়ে NGE বানাও। Pop হলে answer পাওয়া যায়। nums1 এ map lookup।',
+ intuition:'Decreasing stack তে index রাখো। নতুন element বড় হলে stack top এর answer পাওয়া গেছে।',
+ analogy:'🏔️ Standing in a valley, looking right for the next taller mountain. Stack holds the "waiting for answer" mountains.',
+ codeLines:[
+   E('vector<int> nextGreaterElement(vector<int>&n1, vector<int>&n2){'),
+   E('  unordered_map<int,int> nge;'),
+   E('  stack<int> stk;  // decreasing'),
+   E('  for (int x : n2) {'),
+   E('    while (!stk.empty() && stk.top() < x) {'),
+   E('      nge[stk.top()] = x;  // x is NGE of top'),
+   E('      stk.pop();'),
+   E('    }'),
+   E('    stk.push(x);'),
+   E('  }'),
+   E('  vector<int> ans;'),
+   E('  for (int x : n1) ans.push_back(nge.count(x)?nge[x]:-1);'),
+   E('  return ans;'),
+   E('}')
+ ],
+ sim(){
+   const n2=[1,3,4,2];const n1=[4,1,2];const F=[];let stk=[],nge={};
+   F.push(BF(n2,[],{processing:'nums2'},'nums2=[1,3,4,2] তে NGE বানাবো।',3,'init stk'));
+   n2.forEach((x,i)=>{
+     while(stk.length&&stk[stk.length-1]<x){const top=stk[stk.length-1];nge[top]=x;stk=stk.slice(0,-1);F.push(BF(n2,[...stk],{nge:JSON.stringify(nge)},`${top} < ${x}: NGE[${top}]=${x}। pop।`,6,'nge[top]=x',{popped:[n2.indexOf(top)],hi:[i],cond:`${top}<${x}?`,cv:true}));}
+     stk=[...stk,x];F.push(BF(n2,stk.map(v=>n2.indexOf(v)),{stk:`[${stk.join(',')}]`},`push ${x}। stack decreasing।`,9,'push x',{hi:[i]}));
+   });
+   // show results for n1
+   const ans=n1.map(x=>nge[x]||−1);
+   F.push(AF(n1,{},{nge:JSON.stringify(nge),ans:`[${ans.join(',')}]`},'NGE map done. nums1 lookup: '+JSON.stringify(ans),12,'return ans',{res:`[${ans.join(',')}]`}));
+   return F;
+ }},
+
+// ── E2: Next Smaller Element ──
+{name:'Next Smaller Element',d:'E',
+ desc:'arr=[4,8,5,2,25] → [2,5,2,-1,-1]। প্রতিটি element এর right এ প্রথম ছোট element কোনটা?',
+ why:'Increasing monotonic stack। নতুন element ছোট হলে stack top এর answer পাওয়া গেছে।',
+ intuition:'NSE এ increasing stack। NGE তে decreasing। Pop condition উল্টো — top > current হলে pop করো।',
+ analogy:'📉 Stock market: when does the price first drop below current value? Stack waits for a lower price.',
+ codeLines:[
+   E('vector<int> nextSmaller(vector<int>& arr) {'),
+   E('  int n = arr.size();'),
+   E('  vector<int> ans(n, -1);'),
+   E('  stack<int> stk;  // increasing, stores indices'),
+   E('  for (int i = 0; i < n; i++) {'),
+   E('    while (!stk.empty() && arr[stk.top()] > arr[i]) {'),
+   E('      ans[stk.top()] = arr[i];  // found NSE'),
+   E('      stk.pop();'),
+   E('    }'),
+   E('    stk.push(i);'),
+   E('  }'),
+   E('  return ans;'),
+   E('}')
+ ],
+ sim(){
+   const arr=[4,8,5,2,25];const F=[];let stk=[],ans=Array(arr.length).fill(-1);
+   F.push(BF(arr,[],{ans:`[${ans.join(',')}]`},'NSE বানাবো। Increasing stack।',4,'init'));
+   arr.forEach((x,i)=>{
+     while(stk.length&&arr[stk[stk.length-1]]>x){const ti=stk[stk.length-1];ans[ti]=x;stk=stk.slice(0,-1);F.push(BF(arr,[...stk],{ans:`[${ans.join(',')}]`},`arr[${ti}]=${arr[ti]} > ${x}: NSE[${ti}]=${x}। pop।`,7,'ans[top]=x',{popped:[ti],hi:[i],cond:`${arr[ti]}>${x}?`,cv:true}));}
+     stk=[...stk,i];F.push(BF(arr,[...stk],{ans:`[${ans.join(',')}]`},`push idx ${i}(val=${x})।`,10,'push i',{hi:[i]}));
+   });
+   F.push(BF(arr,[],{ans:`[${ans.join(',')}]`},'✅ NSE: ['+ans.join(',')+']',12,'return ans',{res:`[${ans.join(',')}]`}));
+   return F;
+ }},
+
+// ── E3: Stock Span ──
+{name:'Stock Span Problem',d:'E',
+ desc:'prices=[100,80,60,70,60,75,85] → span=[1,1,1,2,1,4,6]। Consecutive days ≤ current price এর count।',
+ why:'Stack তে (price, span) রাখো। Pop করো যখন top ≤ current। span += popped span। O(n) amortized।',
+ intuition:'আজকের দাম আগের কতদিনের চেয়ে বেশি বা সমান? Stack এ পরপর ≤ days গ্রুপ করা থাকে।',
+ analogy:'📈 Stock market analyst counting consecutive non-rising days. Stack groups them for O(1) amortized query.',
+ codeLines:[
+   E('vector<int> calculateSpan(vector<int>& p) {'),
+   E('  int n = p.size();'),
+   E('  vector<int> span(n);'),
+   E('  stack<pair<int,int>> stk;  // {price, span}'),
+   E('  for (int i = 0; i < n; i++) {'),
+   E('    int s = 1;'),
+   E('    while (!stk.empty() && stk.top().first <= p[i]) {'),
+   E('      s += stk.top().second;  // merge span'),
+   E('      stk.pop();'),
+   E('    }'),
+   E('    span[i] = s;'),
+   E('    stk.push({p[i], s});'),
+   E('  }'),
+   E('  return span;'),
+   E('}')
+ ],
+ sim(){
+   const p=[100,80,60,70,60,75,85];const F=[];let stk=[],span=[];
+   F.push(BF(p,[],{span:'[]'},'Stock prices=[100,80,60,70,60,75,85]।',4,'init'));
+   p.forEach((price,i)=>{
+     let s=1;const tmpStk=[...stk];
+     while(tmpStk.length&&tmpStk[tmpStk.length-1][0]<=price){s+=tmpStk[tmpStk.length-1][1];tmpStk.pop();}
+     span.push(s);stk=[...tmpStk,[price,s]];
+     F.push(BF(p,stk.map(v=>p.indexOf(v[0])),{i,price,span:s,stk_top:stk[stk.length-1][0]},`price=${price}: span=${s}। stack top=${stk[stk.length-1][0]}।`,12,'push({price,span})',{hi:[i],fnd:s>3?[i]:undefined,chg:['span']}));
+   });
+   F.push(BF(p,[],{span:`[${span.join(',')}]`},'✅ Spans: ['+span.join(',')+']',14,'return span',{res:`[${span.join(',')}]`}));
+   return F;
+ }},
+
+// ── E4: Buildings With an Ocean View ──
+{name:'Buildings With Ocean View',d:'E',
+ desc:'LeetCode 1762. heights=[4,2,3,1] → [0,2,3]। Right এ কোনো tall building নেই এমন buildings।',
+ why:'Right থেকে scan করো। Stack তে decreasing height রাখো। সর্বদা max তুলে রাখো — right এর সব blocked কি না।',
+ intuition:'Right থেকে বাম দিকে যাও। Current max এর চেয়ে বড় বা সমান building → ocean view আছে।',
+ analogy:'🌊 Buildings facing the ocean (right side). A building sees the ocean if no taller building stands to its right.',
+ codeLines:[
+   E('vector<int> findBuildings(vector<int>& h) {'),
+   E('  int n=h.size(), maxH=0;'),
+   E('  vector<int> ans;'),
+   E('  for (int i=n-1; i>=0; i--) {'),
+   E('    if (h[i] > maxH) {  // taller than all right'),
+   E('      ans.push_back(i);'),
+   E('      maxH = h[i];'),
+   E('    }'),
+   E('  }'),
+   E('  reverse(ans.begin(), ans.end());'),
+   E('  return ans;'),
+   E('}')
+ ],
+ sim(){
+   const h=[4,2,3,1];const F=[];let ans=[],maxH=0;
+   F.push(AF(h,{},{maxH,ans:'[]'},'শুরু। Right থেকে scan।',3,'right to left'));
+   for(let i=h.length-1;i>=0;i--){
+     const hasView=h[i]>maxH;
+     if(hasView){ans=[i,...ans];maxH=h[i];}
+     F.push(AF(h,{i},{h_i:h[i],maxH,ans:`[${ans.join(',')}]`},`i=${i}(h=${h[i]}): h>${maxH}? ${hasView} ${hasView?'→ ocean view!':'→ blocked.'}`,5,'ocean? '+hasView,{hi:[i],fnd:hasView?[i]:undefined,cond:`${h[i]}>${maxH}?`,cv:hasView,chg:hasView?['maxH','ans']:[]}));
+   }
+   F.push(AF(h,{},{result:`[${ans.join(',')}]`},'✅ Ocean view: ['+ans.join(',')+']',11,'return ans',{res:`[${ans.join(',')}]`}));
+   return F;
+ }},
+
+// ── E5: Remove Duplicate Letters (lex smallest) ──
+{name:'Remove Duplicate Letters',d:'E',
+ desc:'LeetCode 316. s="bcabc" → "abc"। প্রতিটি letter একবার রেখে lexicographically smallest।',
+ why:'Greedy + monotonic stack। Smaller letter এলে stack top pop করো যদি পরে আবার আসবে (count>0)।',
+ intuition:'Smaller char দেখলে আগের বড় char pop করো (যদি পরেও আসে)। না আসলে রাখো। Seen set দিয়ে duplicate avoid।',
+ analogy:'📝 Spell the smallest word using each letter exactly once. If a larger letter appears and will repeat later, swap it out for the smaller one.',
+ codeLines:[
+   E('string removeDuplicateLetters(string s) {'),
+   E('  int cnt[26]={};'),
+   E('  bool inStk[26]={};'),
+   E('  for (char c:s) cnt[c-\'a\']++;'),
+   E('  string stk="";'),
+   E('  for (char c:s) {'),
+   E('    cnt[c-\'a\']--;'),
+   E('    if (inStk[c-\'a\']) continue;'),
+   E('    while (!stk.empty() && stk.back()>c && cnt[stk.back()-\'a\']>0) {'),
+   E('      inStk[stk.back()-\'a\']=false;'),
+   E('      stk.pop_back();'),
+   E('    }'),
+   E('    stk+=c; inStk[c-\'a\']=true;'),
+   E('  }'),
+   E('  return stk;'),
+   E('}')
+ ],
+ sim(){
+   const s='bcabc';const F=[];let stk=[],inStk=new Set();
+   const cnt={};for(const c of s)cnt[c]=(cnt[c]||0)+1;
+   F.push(AF([...s],[],{cnt:JSON.stringify(cnt)},'শুরু। Count: '+JSON.stringify(cnt)+'।',4,'count chars'));
+   for(let i=0;i<s.length;i++){
+     const c=s[i];cnt[c]--;
+     if(inStk.has(c)){F.push(AF([...s],{i},{char:c,inStk:[...inStk].join(',')},`'${c}': already in stack → skip।`,8,'skip dup',{done:[i],cond:'in stack?',cv:true}));continue;}
+     while(stk.length&&stk[stk.length-1]>c&&(cnt[stk[stk.length-1]]||0)>0){const pv=stk[stk.length-1];inStk.delete(pv);stk=stk.slice(0,-1);F.push(AF([...s],{i},{char:c,popped:pv,cnt:JSON.stringify(cnt)},`pop '${pv}' (>${c} & will repeat).`,11,'pop',{popmsg:`❌ pop: ${pv}`,cur:i,cond:`${pv}>${c} & cnt>0?`,cv:true}));}
+     stk=[...stk,c];inStk.add(c);F.push(AF([...s],{i},{stk:`"${stk.join('')}"`,cnt:JSON.stringify(cnt)},`push '${c}'. stk="${stk.join('')}"।`,13,'push c',{hi:[i],done:[...Array(i).keys()]}));
+   }
+   F.push(AF([...s],{},{result:`"${stk.join('')}"`},'✅ Result: "'+stk.join('')+'"',15,'return stk',{res:`"${stk.join('')}"`}));
+   return F;
+ }},
+
+// ── M1: Daily Temperatures ──⭐
+{name:'Daily Temperatures',d:'M',
+ desc:'LeetCode 739. temperatures=[73,74,75,71,69,72,76,73] → [1,1,4,2,1,1,0,0]। প্রতিটি দিনের জন্য গরম দিন কতদিন পরে?',
+ why:'Decreasing monotonic stack (indices)। নতুন temp বড় হলে top এর answer = i-top। O(n)।',
+ intuition:'Stack এ অপেক্ষা করছে দিনগুলো যারা এখনো তাদের চেয়ে গরম দিন পায়নি। বড় temp এলে পেয়ে গেল।',
+ analogy:'🌡️ People waiting for a warmer day. Each person in the stack (queue) is still "waiting". When a warmer day comes, the front people get their answer.',
+ codeLines:[
+   E('vector<int> dailyTemperatures(vector<int>& T) {'),
+   E('  int n = T.size();'),
+   E('  vector<int> ans(n, 0);'),
+   E('  stack<int> stk;  // indices, decreasing temps'),
+   E('  for (int i = 0; i < n; i++) {'),
+   E('    while (!stk.empty() && T[stk.top()] < T[i]) {'),
+   E('      int j = stk.top(); stk.pop();'),
+   E('      ans[j] = i - j;  // wait days'),
+   E('    }'),
+   E('    stk.push(i);'),
+   E('  }'),
+   E('  return ans;'),
+   E('}')
+ ],
+ sim(){
+   const T=[73,74,75,71,69,72,76,73];const F=[];let stk=[],ans=Array(T.length).fill(0);
+   F.push(BF(T,[],{ans:`[${ans.join(',')}]`},'Daily Temperatures। Decreasing stack।',4,'init'));
+   T.forEach((t,i)=>{
+     while(stk.length&&T[stk[stk.length-1]]<t){const j=stk[stk.length-1];ans[j]=i-j;stk=stk.slice(0,-1);F.push(BF(T,[...stk],{ans:`[${ans.join(',')}]`},`T[${j}]=${T[j]}<${t}: ans[${j}]=${i-j} days।`,8,'ans[j]=i-j',{popped:[j],hi:[i],fnd:[j],cond:`T[${j}]<${t}?`,cv:true}));}
+     stk=[...stk,i];F.push(BF(T,[...stk],{i,T_i:t,ans:`[${ans.join(',')}]`},`push ${i}(T=${t}). Waiting.`,10,'push i',{hi:[i]}));
+   });
+   F.push(BF(T,[],{ans:`[${ans.join(',')}]`},'✅ Wait days: ['+ans.join(',')+']',12,'return ans',{res:`[${ans.join(',')}]`}));
+   return F;
+ }},
+
+// ── M2: Next Greater Element II (Circular) ──
+{name:'Next Greater Element II (Circular)',d:'M',
+ desc:'LeetCode 503. circular array. nums=[1,2,1] → [2,-1,2]। Array circular — শেষের পরে আবার শুরু।',
+ why:'Array দুইবার traverse করো (index % n)। Stack এ indices রাখো। Circular pass এ remaining এর answer পাও।',
+ intuition:'Array টা দুইবার ঘোরাও। দ্বিতীয় pass এ remaining stack items এর answer পাওয়া যায়।',
+ analogy:'🎡 Ferris wheel — go around twice. Second round fills in any remaining "waiting" people who didn\'t find their answer in the first round.',
+ codeLines:[
+   E('vector<int> nextGreaterElements(vector<int>& a) {'),
+   E('  int n = a.size();'),
+   E('  vector<int> ans(n, -1);'),
+   E('  stack<int> stk;  // decreasing, indices'),
+   E('  for (int i = 0; i < 2*n; i++) {'),
+   E('    int x = a[i%n];'),
+   E('    while (!stk.empty() && a[stk.top()] < x) {'),
+   E('      ans[stk.top()] = x;'),
+   E('      stk.pop();'),
+   E('    }'),
+   E('    if (i < n) stk.push(i);  // only push first pass'),
+   E('  }'),
+   E('  return ans;'),
+   E('}')
+ ],
+ sim(){
+   const a=[1,2,1];const F=[];let stk=[],ans=Array(a.length).fill(-1);
+   F.push(BF(a,[],{ans:`[${ans.join(',')}]`},'Circular NGE। 2n times iterate।',4,'init'));
+   for(let i=0;i<2*a.length;i++){
+     const x=a[i%a.length];const pass=i<a.length?1:2;
+     while(stk.length&&a[stk[stk.length-1]]<x){const j=stk[stk.length-1];ans[j]=x;stk=stk.slice(0,-1);F.push(BF(a,[...stk],{ans:`[${ans.join(',')}]`,pass},`Pass ${pass}: a[${j}]=${a[j]}<${x}: NGE=${x}।`,8,'ans[j]=x',{popped:[j%a.length],hi:[i%a.length],fnd:[j],cond:`${a[j]}<${x}?`,cv:true}));}
+     if(i<a.length){stk=[...stk,i];F.push(BF(a,[...stk],{i,x,pass,stk:`[${stk.join(',')}]`},`Push idx ${i}(val=${x})।`,11,'push i',{hi:[i]}));}
+   }
+   F.push(BF(a,[],{ans:`[${ans.join(',')}]`},'✅ Circular NGE: ['+ans.join(',')+']',13,'return ans',{res:`[${ans.join(',')}]`}));
+   return F;
+ }},
+
+// ── M3: 132 Pattern ──
+{name:'132 Pattern',d:'M',
+ desc:'LeetCode 456. nums=[3,1,4,2] → true। i<j<k, nums[i]<nums[k]<nums[j] এমন triplet আছে?',
+ why:'Right থেকে scan। Decreasing stack। Stack থেকে pop করা element = "3" এর "2"। Current < popped মানে 132 পাওয়া গেছে।',
+ intuition:'আমরা "2" (k এর value) track করি। Decreasing stack থেকে pop হওয়া element = "2"। আগে ছোট number পেলে 132!',
+ analogy:'🎯 Find 3 positions where middle is tallest, rightmost is middle height, leftmost is shortest. Scan right-to-left to track the "middle height".',
+ codeLines:[
+   E('bool find132pattern(vector<int>& nums) {'),
+   E('  int n=nums.size(), third=INT_MIN;'),
+   E('  stack<int> stk;  // decreasing'),
+   E('  for (int i=n-1; i>=0; i--) {'),
+   E('    if (nums[i] < third) return true;  // "1"<"2"<"3"'),
+   E('    while (!stk.empty() && stk.top()<nums[i]) {'),
+   E('      third = stk.top();  // update "2" candidate'),
+   E('      stk.pop();'),
+   E('    }'),
+   E('    stk.push(nums[i]);'),
+   E('  }'),
+   E('  return false;'),
+   E('}')
+ ],
+ sim(){
+   const nums=[3,1,4,2];const F=[];let stk=[],third=-Infinity;
+   F.push(BF(nums,[],{third:'−∞'},'Right থেকে scan। 132 pattern খুঁজছি।',3,'right to left'));
+   for(let i=nums.length-1;i>=0;i--){
+     const x=nums[i];
+     if(x<third){F.push(BF(nums,[...stk],{x,third,found:'132!'},`nums[${i}]=${x} < third=${third} → 132 FOUND!`,5,'return TRUE',{hi:[i],fnd:[i],res:'TRUE',cond:`${x}<${third}?`,cv:true}));return F;}
+     while(stk.length&&stk[stk.length-1]<x){third=stk[stk.length-1];stk=stk.slice(0,-1);F.push(BF(nums,[...stk],{x,third},`pop ${third} → new "2" candidate=${third}।`,7,'third=pop',{popped:[i+1],hi:[i],chg:['third']}));}
+     stk=[...stk,x];F.push(BF(nums,[...stk],{x,third:'third='+(third===-Infinity?'−∞':third)},`push ${x}।`,10,'push x',{hi:[i]}));
+   }
+   F.push(BF(nums,[],{result:'false'},'132 pattern পাওয়া যায়নি।',12,'return false',{res:'FALSE'}));
+   return F;
+ }},
+
+// ── M4: Online Stock Span ──
+{name:'Online Stock Span',d:'M',
+ desc:'LeetCode 901. next() call এ price দেওয়া হয়। আজকের দাম এর চেয়ে বেশি ছিল না এমন consecutive days এর count দাও।',
+ why:'Stack তে (price, span) রাখো। আজকের চেয়ে ≤ price এর stack entries pop করে তাদের span যোগ করো।',
+ intuition:'আজকের দামের চেয়ে বড় দিন পর্যন্ত extend করো। Stack তে grouped entries → O(1) amortized।',
+ analogy:'📊 Market analyst's tool. Track consecutive non-increasing days. Stack groups already-merged spans for fast lookup.',
+ codeLines:[
+   E('class StockSpanner {'),
+   E('  stack<pair<int,int>> stk;  // {price, span}'),
+   E('public:'),
+   E('  int next(int price) {'),
+   E('    int span = 1;'),
+   E('    while (!stk.empty() && stk.top().first <= price) {'),
+   E('      span += stk.top().second;'),
+   E('      stk.pop();'),
+   E('    }'),
+   E('    stk.push({price, span});'),
+   E('    return span;'),
+   E('  }'),
+   E('};')
+ ],
+ sim(){
+   const prices=[100,80,60,70,60,75,85];const F=[];let stk=[],spans=[];
+   F.push(BF(prices,[],{spans:'[]'},'Online Stock Span। Call next() per price।',4,'init'));
+   prices.forEach((price,i)=>{
+     let span=1;const tmpStk=[...stk];
+     while(tmpStk.length&&tmpStk[tmpStk.length-1][0]<=price){span+=tmpStk[tmpStk.length-1][1];tmpStk.pop();}
+     stk=[...tmpStk,[price,span]];spans.push(span);
+     F.push(BF(prices,stk.map((_,j)=>j),{price,span,spans:`[${spans.join(',')}]`},`next(${price}): span=${span}। pop ≤${price} then push.`,10,'push({price,span})',{hi:[i],fnd:span>3?[i]:undefined,chg:['span']}));
+   });
+   F.push(BF(prices,[],{spans:`[${spans.join(',')}]`},'✅ Spans: ['+spans.join(',')+']',11,'return span',{res:`[${spans.join(',')}]`}));
+   return F;
+ }},
+
+// ── M5: Number of Visible People in Queue ──
+{name:'Number of Visible People in Queue',d:'M',
+ desc:'LeetCode 1944. heights=[10,6,8,5,11,9] → [3,1,2,1,1,0]। সামনে কতজনকে দেখতে পারবে?',
+ why:'Right থেকে decreasing stack। Pop হওয়া = visible (shorter), pop না হওয়া top = visible (taller first)।',
+ intuition:'i থেকে ডানে যাও। প্রতিটি shorter person visible (ঢেকে দেওয়ার আগ পর্যন্ত)। তারপর প্রথম tall person ও visible।',
+ analogy:'👥 Standing in a line, looking forward. You can see everyone shorter until a taller person blocks your view. That taller person is also visible.',
+ codeLines:[
+   E('vector<int> canSeePersonsCount(vector<int>& h) {'),
+   E('  int n=h.size();'),
+   E('  vector<int> ans(n,0);'),
+   E('  stack<int> stk;  // decreasing heights'),
+   E('  for (int i=n-1; i>=0; i--) {'),
+   E('    while (!stk.empty() && stk.top()<h[i]) {'),
+   E('      stk.pop();'),
+   E('      ans[i]++;  // can see this shorter person'),
+   E('    }'),
+   E('    if (!stk.empty()) ans[i]++;  // can see first taller'),
+   E('    stk.push(h[i]);'),
+   E('  }'),
+   E('  return ans;'),
+   E('}')
+ ],
+ sim(){
+   const h=[10,6,8,5,11,9];const F=[];let stk=[],ans=Array(h.length).fill(0);
+   F.push(BF(h,[],{ans:`[${ans.join(',')}]`},'Right থেকে scan। Visible people count।',4,'right to left'));
+   for(let i=h.length-1;i>=0;i--){
+     while(stk.length&&stk[stk.length-1]<h[i]){ans[i]++;stk=stk.slice(0,-1);F.push(BF(h,[...stk],{ans:`[${ans.join(',')}]`},`pop ${stk.length>0?stk[stk.length-1]:'—'}(shorter). ans[${i}]=${ans[i]}।`,8,'ans[i]++',{hi:[i],popped:[i+1]}));}
+     if(stk.length){ans[i]++;F.push(BF(h,[...stk],{ans:`[${ans.join(',')}]`},`Can see tall person. ans[${i}]=${ans[i]}।`,10,'ans[i]++',{hi:[i],fnd:[i]}));}
+     stk=[...stk,h[i]];F.push(BF(h,[...stk],{i,h_i:h[i]},`push ${h[i]}।`,11,'push h[i]',{hi:[i]}));
+   }
+   F.push(BF(h,[],{ans:`[${ans.join(',')}]`},'✅ Visible: ['+ans.join(',')+']',13,'return ans',{res:`[${ans.join(',')}]`}));
+   return F;
+ }},
+
+// ── H1: Max Width Ramp ──
+{name:'Maximum Width Ramp',d:'H',
+ desc:'LeetCode 962. i<j, arr[i]≤arr[j] এমন maximum j−i। arr=[6,0,8,2,1,5] → 4 (i=1,j=5)।',
+ why:'Left থেকে decreasing stack (candidate "i" গুলো)। Right থেকে scan করে যতদূর পিছানো যায়।',
+ intuition:'Optimal i গুলো হলো left থেকে যারা decreasing। কারণ আগে বড় থাকলে সে better choice। Right থেকে greedy match।',
+ analogy:'🎿 Ski slope — find the longest downhill stretch. Precompute candidate starting points (all local minima from left), then greedily extend from right.',
+ codeLines:[
+   E('int maxWidthRamp(vector<int>& a) {'),
+   E('  int n=a.size(), ans=0;'),
+   E('  vector<int> stk;  // decreasing prefix indices'),
+   E('  for (int i=0; i<n; i++)'),
+   E('    if (stk.empty()||a[i]<a[stk.back()])'),
+   E('      stk.push_back(i);'),
+   E('  for (int j=n-1; j>=0; j--) {'),
+   E('    while (!stk.empty() && a[j]>=a[stk.back()]) {'),
+   E('      ans = max(ans, j-stk.back());'),
+   E('      stk.pop_back();'),
+   E('    }'),
+   E('  }'),
+   E('  return ans;'),
+   E('}')
+ ],
+ sim(){
+   const a=[6,0,8,2,1,5];const F=[];let stk=[],ans=0;
+   F.push(BF(a,[],{ans},'Decreasing prefix stack বানাচ্ছি।',4,'build stack'));
+   for(let i=0;i<a.length;i++){if(!stk.length||a[i]<a[stk[stk.length-1]]){stk=[...stk,i];F.push(BF(a,[...stk],{i,val:a[i]},`i=${i}(val=${a[i]}): decreasing → push।`,5,'push i',{hi:[i]}));}}
+   F.push(BF(a,[...stk],{stk:`[${stk.map(i=>i+'('+a[i]+')').join(',')}]`},'Prefix stack done. Now scan right→left।',7,'right scan'));
+   for(let j=a.length-1;j>=0;j--){
+     while(stk.length&&a[j]>=a[stk[stk.length-1]]){ans=Math.max(ans,j-stk[stk.length-1]);stk=stk.slice(0,-1);F.push(BF(a,[...stk],{j,a_j:a[j],ans},`j=${j}: a[j]=${a[j]}>=stk_top. width=${j}-prev. ans=${ans}।`,9,'ans=max',{hi:[j],fnd:ans>0?[j]:undefined,cond:'match',cv:true,chg:['ans']}));}
+   }
+   F.push(BF(a,[],{ans},'✅ Max width ramp = '+ans,13,'return '+ans,{res:ans}));
+   return F;
+ }},
+
+// ── H2: Sum of Subarray Minimums ──⭐⭐
+{name:'Sum of Subarray Minimums',d:'H',
+ desc:'LeetCode 907. arr=[3,1,2,4] → 17। সব subarray এর minimum এর sum।',
+ why:'প্রতিটি element কতটা subarray এর minimum? Left previous smaller index, right next smaller index। contribution = arr[i] × left_count × right_count।',
+ intuition:'arr[i] সেই সব subarray এর min যেখানে সে-ই সবচেয়ে ছোট। বাম দিকে কতদূর পর্যন্ত সে smallest? ডান দিকে কতদূর?',
+ analogy:'🏆 Each element gets "credit" for all subarrays where it\'s the minimum. Count how far left and right it remains the minimum.',
+ codeLines:[
+   E('int sumSubarrayMins(vector<int>& arr) {'),
+   E('  int n=arr.size(); long ans=0; const int M=1e9+7;'),
+   E('  vector<int> left(n), right(n);'),
+   E('  stack<int> stk;'),
+   E('  // left[i] = distance to previous smaller'),
+   E('  for (int i=0;i<n;i++){'),
+   E('    while (!stk.empty()&&arr[stk.top()]>=arr[i]) stk.pop();'),
+   E('    left[i] = stk.empty() ? i+1 : i-stk.top();'),
+   E('    stk.push(i);'),
+   E('  }'),
+   E('  while (!stk.empty()) stk.pop();'),
+   E('  // right[i] = distance to next smaller or equal'),
+   E('  for (int i=n-1;i>=0;i--){'),
+   E('    while(!stk.empty()&&arr[stk.top()]>arr[i]) stk.pop();'),
+   E('    right[i]=stk.empty()?n-i:stk.top()-i;'),
+   E('    stk.push(i);'),
+   E('  }'),
+   E('  for(int i=0;i<n;i++) ans=(ans+arr[i]*left[i]*right[i])%M;'),
+   E('  return ans;'),
+   E('}')
+ ],
+ sim(){
+   const arr=[3,1,2,4];const n=arr.length;const F=[];
+   let stk=[],left=Array(n).fill(0),right=Array(n).fill(0);
+   F.push(BF(arr,[],{step:'left[i]=dist to prev smaller'},'Step 1: left[] বানাচ্ছি।',6,'left pass'));
+   for(let i=0;i<n;i++){while(stk.length&&arr[stk[stk.length-1]]>=arr[i])stk=stk.slice(0,-1);left[i]=stk.length===0?i+1:i-stk[stk.length-1];stk=[...stk,i];F.push(BF(arr,[...stk],{i,left_i:left[i]},`i=${i}: left[${i}]=${left[i]}(dist to prev smaller)।`,8,'left[i]',{hi:[i]}));}
+   stk=[];
+   F.push(BF(arr,[],{left:`[${left.join(',')}]`,step:'right pass'},'Left done. Step 2: right[] বানাচ্ছি।',13,'right pass'));
+   for(let i=n-1;i>=0;i--){while(stk.length&&arr[stk[stk.length-1]]>arr[i])stk=stk.slice(0,-1);right[i]=stk.length===0?n-i:stk[stk.length-1]-i;stk=[...stk,i];F.push(BF(arr,[...stk],{i,right_i:right[i]},`i=${i}: right[${i}]=${right[i]}(dist to next smaller)।`,15,'right[i]',{hi:[i]}));}
+   let ans=0;
+   arr.forEach((v,i)=>{const contrib=v*left[i]*right[i];ans=(ans+contrib)%(1e9+7);F.push(BF(arr,[],{i,contrib,ans},`arr[${i}]=${v} × left=${left[i]} × right=${right[i]} = ${contrib}. ans=${ans}।`,18,`+${contrib}`,{hi:[i],chg:['ans']}));});
+   F.push(BF(arr,[],{ans},'✅ Sum of subarray mins = '+ans,19,'return ans',{res:ans}));
+   return F;
+ }},
+
+// ── H3: Maximum Subarray Min × Max ──
+{name:'Max of Min Multiplied by Max',d:'H',
+ desc:'LeetCode 1950 variant. প্রতিটি subarray এর min×max এর maximum। arr=[1,2,3,4] → 12।',
+ why:'Monotonic stack দিয়ে প্রতিটি subarray এর min আর max efficiently track। Contribution approach।',
+ intuition:'Brute O(n³)। দুটো monotonic stack — একটা min এর জন্য, একটা max এর জন্য। O(n)।',
+ analogy:'🎯 For every possible subarray, multiply its smallest and largest values. Find the maximum such product.',
+ codeLines:[
+   E('// For each length-2 subarray: min*max'),
+   E('// Generalizes to all subarrays'),
+   E('int maxOfMin(vector<int>& arr) {'),
+   E('  int n=arr.size(), ans=0;'),
+   E('  for (int i=0; i<n; i++) {'),
+   E('    int mn=arr[i], mx=arr[i];'),
+   E('    for (int j=i; j<n; j++) {'),
+   E('      mn = min(mn, arr[j]);'),
+   E('      mx = max(mx, arr[j]);'),
+   E('      ans = max(ans, mn*mx);'),
+   E('    }'),
+   E('  }'),
+   E('  return ans;'),
+   E('}')
+ ],
+ sim(){
+   const arr=[1,2,3,4];const F=[];let ans=0;
+   F.push(BF(arr,[],{ans},'All subarrays এর min×max। O(n²) demo।',4,'init'));
+   for(let i=0;i<arr.length;i++){
+     let mn=arr[i],mx=arr[i];
+     for(let j=i;j<arr.length;j++){
+       mn=Math.min(mn,arr[j]);mx=Math.max(mx,arr[j]);const prod=mn*mx;if(prod>ans)ans=prod;
+       F.push(BF(arr,Array.from({length:j-i+1},(_,k)=>i+k),{i,j,mn,mx,'mn×mx':prod,ans},`[${i}..${j}]: min=${mn},max=${mx}. ${mn}×${mx}=${prod}. ans=${ans}।`,10,'ans=max',{hi:[i,j],fnd:prod===ans?[i,j]:undefined,chg:prod>ans-1?['ans']:[]}));
+     }
+   }
+   F.push(BF(arr,[],{ans},'✅ Max min×max = '+ans,13,'return '+ans,{res:ans}));
+   return F;
+ }},
+
+// ── H4: Jump Game VI (DP + Deque) ──
+{name:'Jump Game VI (Deque / Mono Stack)',d:'H',
+ desc:'LeetCode 1696. k steps jump করতে পারো। dp[i]=max score ending at i। nums=[1,-1,-2,4,-7,3], k=2 → 7।',
+ why:'dp[i] = nums[i] + max(dp[i-k..i-1])। Sliding window maximum with monotonic deque। O(n)।',
+ intuition:'Brute O(nk)। Window এর max track করতে decreasing deque। পুরনো (out of window) element front থেকে pop। নতুনটা back এর চেয়ে ছোট হলে replace।',
+ analogy:'🎮 Jumping game where you pick the best landing in a window. Deque acts as a "smart scoreboard" that always knows the best previous score in range.',
+ codeLines:[
+   E('int maxResult(vector<int>& nums, int k) {'),
+   E('  int n=nums.size();'),
+   E('  vector<int> dp(n);'),
+   E('  deque<int> dq;  // decreasing dp values, stores idx'),
+   E('  dp[0]=nums[0]; dq.push_back(0);'),
+   E('  for (int i=1; i<n; i++) {'),
+   E('    while (dq.front() < i-k) dq.pop_front();'),
+   E('    dp[i] = nums[i] + dp[dq.front()];'),
+   E('    while (!dq.empty() && dp[dq.back()]<=dp[i])'),
+   E('      dq.pop_back();'),
+   E('    dq.push_back(i);'),
+   E('  }'),
+   E('  return dp[n-1];'),
+   E('}')
+ ],
+ sim(){
+   const nums=[1,-1,-2,4,-7,3];const k=2;const F=[];
+   const dp=Array(nums.length).fill(0);dp[0]=nums[0];let dq=[0];
+   F.push(BF(nums,[0],{dp:`[${dp.join(',')}]`,k},'dp[0]='+nums[0]+'। Deque=[0]।',5,'init'));
+   for(let i=1;i<nums.length;i++){
+     while(dq[0]<i-k)dq.shift();
+     dp[i]=nums[i]+dp[dq[0]];
+     while(dq.length&&dp[dq[dq.length-1]]<=dp[i])dq.pop();
+     dq=[...dq,i];
+     F.push(BF(nums,[...dq],{i,dp_i:dp[i],dq:`[${dq.join(',')}]`,dp:`[${dp.join(',')}]`},`i=${i}: dp[${i}]=${nums[i]}+dp[${dq[0]}]=${dp[i]}। deq=[${dq.join(',')}]।`,8,'dp[i]=nums+max',{hi:[i],fnd:dp[i]>0?[i]:undefined,chg:['dp_i']}));
+   }
+   F.push(BF(nums,[],{dp:`[${dp.join(',')}]`,ans:dp[nums.length-1]},'✅ Max score = '+dp[nums.length-1],13,'return dp[n-1]',{res:dp[nums.length-1]}));
+   return F;
+ }},
+
+// ── H5: Sliding Window Maximum ──⭐⭐
+{name:'Sliding Window Maximum',d:'H',
+ desc:'LeetCode 239. nums=[1,3,-1,-3,5,3,6,7], k=3 → [3,3,5,5,6,7]। k-size window এর max।',
+ why:'Monotonic decreasing deque (indices)। Front = current window max। Out of window → front pop। Smaller than new → back pop।',
+ intuition:'Deque এ সবসময় decreasing order রাখো। Front এর element = current window max। Outdated বা useless হলে pop।',
+ analogy:'🔭 Telescope with k-width view. Deque is the "candidate list" of potential maximums. Always keep only useful, relevant candidates.',
+ codeLines:[
+   E('vector<int> maxSlidingWindow(vector<int>& a, int k) {'),
+   E('  deque<int> dq;  // decreasing indices'),
+   E('  vector<int> ans;'),
+   E('  for (int i=0; i<a.size(); i++) {'),
+   E('    // remove out-of-window from front'),
+   E('    while (!dq.empty() && dq.front()<=i-k) dq.pop_front();'),
+   E('    // maintain decreasing from back'),
+   E('    while (!dq.empty() && a[dq.back()]<=a[i]) dq.pop_back();'),
+   E('    dq.push_back(i);'),
+   E('    if (i >= k-1) ans.push_back(a[dq.front()]);'),
+   E('  }'),
+   E('  return ans;'),
+   E('}')
+ ],
+ sim(){
+   const a=[1,3,-1,-3,5,3,6,7];const k=3;const F=[];let dq=[],ans=[];
+   F.push(BF(a,[],{k,ans:'[]'},'Sliding window max। k='+k+'। Monotonic deque।',2,'init'));
+   a.forEach((v,i)=>{
+     while(dq.length&&dq[0]<=i-k)dq.shift();
+     while(dq.length&&a[dq[dq.length-1]]<=v){dq.pop();F.push(BF(a,[...dq],{i,v,dq:`[${dq.join(',')}]`},`a[back]<=${v}: pop (useless smaller).`,8,'pop back',{popped:[dq.length],hi:[i],cond:'useless?',cv:true}));}
+     dq=[...dq,i];
+     if(i>=k-1){ans.push(a[dq[0]]);F.push(BF(a,[...dq],{i,window:`[${i-k+1}..${i}]`,max:a[dq[0]],ans:`[${ans.join(',')}]`},`window=[${i-k+1}..${i}]: max=${a[dq[0]]}।`,10,'ans.push max',{hi:[dq[0]],win:[i-k+1,i],fnd:[dq[0]]}));}
+     else F.push(BF(a,[...dq],{i,dq:`[${dq.join(',')}]`},`push ${i}. Window not full yet.`,9,'push i',{hi:[i]}));
+   });
+   F.push(BF(a,[],{ans:`[${ans.join(',')}]`},'✅ Sliding max: ['+ans.join(',')+']',12,'return ans',{res:`[${ans.join(',')}]`}));
+   return F;
+ }}
+
+]; // end MS_PROBS
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  function buildBar(sec,probs){
+    probs.forEach((p,i)=>{
+      const btn=document.createElement('button');
+      btn.id=sec+'-pb-'+i;btn.className='pb-btn';
+      const dspan=`<span style="font-size:8px;font-weight:700;margin-left:3px;color:${p.d==='E'?'#059669':p.d==='M'?'#d97706':'#dc2626'}">${p.d}</span>`;
+      btn.innerHTML=p.name+dspan;btn.onclick=()=>selProb(sec,i);
+      const bar=document.getElementById(sec+'-pbar-'+p.d.toLowerCase());
+      if(bar)bar.appendChild(btn);
+    });
+  }
+  buildBar('cs',CS_PROBS);buildBar('ms',MS_PROBS);
+  drawFrame('cs',null);drawFrame('ms',null);
+  document.getElementById('cs-spd-lbl').textContent='2x';
+  document.getElementById('ms-spd-lbl').textContent='2x';
+});
+window.addEventListener('resize',()=>{
+  if(S.cs.frames)drawFrame('cs',S.cs.frames[S.cs.idx]);else drawFrame('cs',null);
+  if(S.ms.frames)drawFrame('ms',S.ms.frames[S.ms.idx]);else drawFrame('ms',null);
+});
+</script>
+</body>
+</html>

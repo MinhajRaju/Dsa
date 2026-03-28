@@ -1,0 +1,2038 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DSA Master — Array Range & Intervals</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fafaf8;--bg2:#f3f1ec;--bg3:#e8e4da;--card:#fff;--bd:#e4e0d5;
+  --t:#1a1614;--t2:#6b6560;--t3:#a09890;
+  --blue:#2563eb;--green:#059669;--red:#dc2626;--purple:#7c3aed;
+  --teal:#0891b2;--orange:#d97706;
+  --sh:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:15px;}
+body{background:var(--bg);color:var(--t);font-family:'DM Sans',sans-serif;line-height:1.6;overflow-x:hidden;}
+.layout{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sb{width:236px;min-width:236px;position:sticky;top:0;height:100vh;background:var(--card);border-right:1px solid var(--bd);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--bd) transparent;flex-shrink:0;}
+.sb-logo{padding:14px 14px 10px;border-bottom:1px solid var(--bd);}
+.sb-logo-t{font-size:13px;font-weight:700;}
+.sb-logo-s{font-size:10px;color:var(--t3);margin-top:1px;}
+.ng{padding:3px 0;border-bottom:1px solid var(--bd);}
+.ng:last-child{border-bottom:none;}
+.ng-t{padding:5px 13px 2px;font-size:9px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--t3);}
+.nl{display:block;padding:4px 13px;font-size:11.5px;color:var(--t2);text-decoration:none;border-left:2px solid transparent;transition:all .1s;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.nl:hover{color:var(--blue);border-left-color:var(--blue);background:#eff6ff;}
+.nl.sub{padding-left:22px;font-size:11px;color:var(--t3);}
+.nl.sub:hover{color:var(--blue);}
+
+/* MAIN */
+.main{flex:1;min-width:0;}
+
+/* HERO */
+.hero{padding:46px 48px 38px;background:linear-gradient(150deg,#fafaf8 55%,#f0fdf4);border-bottom:1px solid var(--bd);}
+.hero-e{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:8px;}
+.hero h1{font-size:clamp(24px,3.5vw,46px);font-weight:700;letter-spacing:-1px;line-height:1.1;margin-bottom:8px;}
+.hero h1 em{font-style:normal;color:var(--green);}
+.hero p{font-size:13.5px;color:var(--t2);max-width:520px;line-height:1.75;margin-bottom:22px;}
+.stats-row{display:flex;gap:0;border:1px solid var(--bd);border-radius:8px;overflow:hidden;width:fit-content;background:var(--card);box-shadow:var(--sh);}
+.stat{padding:10px 17px;text-align:center;border-right:1px solid var(--bd);}
+.stat:last-child{border-right:none;}
+.stat-n{font-size:18px;font-weight:700;font-family:'DM Mono',monospace;}
+.stat-l{font-size:9px;color:var(--t3);margin-top:1px;}
+
+/* SECTION DIVIDER */
+.sec-divider{padding:28px 48px 0;background:var(--bg);}
+.sec-divider-inner{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--bd);padding-bottom:14px;}
+.sec-divider-icon{font-size:22px;}
+.sec-divider-title{font-size:20px;font-weight:700;letter-spacing:-.4px;}
+.sec-divider-sub{font-size:12px;color:var(--t3);margin-top:1px;}
+
+/* THEORY */
+.theory{padding:28px 48px 36px;border-bottom:1px solid var(--bd);background:var(--card);}
+.theory-h{font-size:15px;font-weight:700;letter-spacing:-.2px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.theory-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.tbox{background:var(--bg);border:1px solid var(--bd);border-radius:7px;padding:13px 15px;}
+.tbox-h{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:7px;display:flex;align-items:center;gap:5px;}
+.tbox p,.tbox li{font-size:12px;color:var(--t);line-height:1.8;}
+.tbox ul{padding-left:14px;}
+.tbox li{margin-bottom:1px;}
+.tbox li b,.tbox p b{color:var(--green);}
+.sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;}
+.sig{background:var(--card);border:1px solid var(--bd);border-radius:5px;padding:6px 9px;font-size:11px;color:var(--t2);display:flex;align-items:flex-start;gap:6px;line-height:1.55;}
+.ptrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px;}
+.ptcard{background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:9px 11px;}
+.ptcard-h{font-size:10px;font-weight:700;margin-bottom:5px;}
+.ptcard pre{font-family:'DM Mono';font-size:10px;color:var(--t2);background:var(--bg);padding:5px 7px;border-radius:4px;line-height:1.65;white-space:pre;}
+.ptcard p{font-size:10.5px;margin-top:5px;color:var(--t3);}
+
+/* PROBLEMS SECTION */
+.probs-sec{padding:28px 48px 40px;border-bottom:2px solid var(--bd);}
+.diff-bar{display:flex;align-items:center;gap:8px;margin-bottom:10px;margin-top:22px;}
+.diff-bar:first-of-type{margin-top:0;}
+.diff-dot{width:9px;height:9px;border-radius:50%;}
+.diff-lbl{font-size:12.5px;font-weight:700;}
+.diff-sub{font-size:11px;color:var(--t3);}
+.pbar{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;}
+.pb-btn{padding:4px 10px;border-radius:15px;border:1.5px solid var(--bd);font-family:inherit;font-size:11px;font-weight:500;cursor:pointer;background:var(--card);color:var(--t2);transition:all .12s;white-space:nowrap;}
+.pb-btn:hover{border-color:var(--blue);color:var(--blue);}
+.pb-btn.sel{color:#fff;border-color:transparent;}
+.pb-btn.sel.e{background:#059669;}
+.pb-btn.sel.m{background:#d97706;}
+.pb-btn.sel.h{background:#dc2626;}
+
+/* PROBLEM DESC */
+.pdesc{background:var(--card);border:1px solid var(--bd);border-radius:7px;padding:11px 14px;margin-bottom:11px;box-shadow:var(--sh);}
+.pdesc-h{font-size:13px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.pdesc-t{font-size:12px;color:var(--t2);line-height:1.7;}
+.pdesc-why{font-size:11.5px;color:var(--t);background:var(--bg);border-left:3px solid var(--green);padding:5px 10px;border-radius:0 5px 5px 0;margin-top:7px;line-height:1.6;}
+.pdesc-cards{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px;}
+.pdesc-card{border-radius:6px;padding:8px 11px;font-size:11.5px;line-height:1.65;}
+.pdesc-card-h{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:4px;}
+.pdesc-card.intuition{background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a5f;}
+.pdesc-card.intuition .pdesc-card-h{color:#2563eb;}
+.pdesc-card.analogy{background:#fdf4ff;border:1px solid #e9d5ff;color:#3b1f52;}
+.pdesc-card.analogy .pdesc-card-h{color:#7c3aed;}
+.diff{padding:1px 6px;border-radius:4px;font-size:9px;font-weight:700;}
+.diff-E{background:#dcfce7;color:#059669;}
+.diff-M{background:#fef3c7;color:#d97706;}
+.diff-H{background:#fee2e2;color:#dc2626;}
+
+/* 2-COL */
+.pcols{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.pcol{display:flex;flex-direction:column;gap:10px;}
+
+/* ANIM CARD */
+.acard{background:var(--card);border:1px solid var(--bd);border-radius:8px;overflow:hidden;box-shadow:var(--sh);}
+.ahead{display:flex;align-items:center;justify-content:space-between;padding:6px 11px;background:var(--bg2);border-bottom:1px solid var(--bd);gap:6px;flex-wrap:wrap;}
+.atit{font-size:9px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--t3);}
+.asi{font-size:9px;font-family:'DM Mono',monospace;color:var(--blue);white-space:nowrap;}
+.abtns{display:flex;gap:4px;align-items:center;}
+.ab{padding:3px 9px;border-radius:4px;border:1px solid var(--bd);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;transition:all .12s;background:var(--card);color:var(--t2);}
+.ab.run:hover{background:#059669;color:#fff;border-color:#059669;}
+.ab.stp:hover{background:#2563eb;color:#fff;border-color:#2563eb;}
+.ab.rst:hover{background:var(--bg3);}
+.spd{display:flex;align-items:center;gap:4px;border-left:1px solid var(--bd);padding-left:7px;margin-left:2px;}
+.spd-lbl{font-size:9px;color:var(--t3);}
+.spd-range{width:55px;height:3px;cursor:pointer;accent-color:var(--green);}
+canvas.acv{width:100%;display:block;background:#fafaf8;}
+.amsg{padding:5px 11px;font-size:11px;color:var(--green);border-top:1px solid var(--bd);font-family:'DM Mono',monospace;min-height:28px;background:var(--bg2);line-height:1.5;}
+
+/* CODE CARD */
+.ccard{background:var(--card);border:1px solid var(--bd);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--sh);}
+.chead{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:var(--bg2);border-bottom:1px solid var(--bd);}
+.clang{font-size:11px;font-weight:700;color:var(--t2);}
+.cpb{background:none;border:1px solid var(--bd);color:var(--t2);padding:2px 8px;border-radius:4px;font-size:10px;cursor:pointer;font-family:inherit;transition:all .12s;}
+.cpb:hover{background:var(--green);color:#fff;border-color:var(--green);}
+.clines{padding:6px 0;overflow:auto;font-family:'DM Mono',monospace;font-size:11.5px;line-height:1.75;max-height:500px;background:#fafafa;scrollbar-width:thin;scrollbar-color:var(--bd) transparent;}
+.cline{display:flex;align-items:stretch;transition:background .15s;padding:0 12px;min-height:24px;}
+.cline:hover{background:#f3f1ec;}
+.cline.hl{background:#d1fae5 !important;border-left:3px solid #059669;}
+.cline.hl .ln{color:#059669;}
+.ln{width:24px;flex-shrink:0;font-size:10px;color:#c0bab3;text-align:right;padding-right:12px;padding-top:2px;user-select:none;}
+.lc{color:#1a1614;white-space:pre;}
+.ex-bar{display:flex;align-items:center;gap:5px;padding:3px 11px;background:#f0fdf4;border-top:1px solid #bbf7d0;font-size:10px;font-family:'DM Mono',monospace;color:#059669;min-height:22px;}
+
+/* MISC */
+#prog{position:fixed;top:0;left:236px;right:0;height:2px;background:linear-gradient(90deg,#059669,#2563eb,#7c3aed);transform-origin:left;transform:scaleX(0);z-index:100;transition:transform .08s;}
+.footer{padding:28px 48px;text-align:center;border-top:1px solid var(--bd);background:var(--bg2);}
+@media(max-width:900px){.pcols{grid-template-columns:1fr;}.sb{display:none;}#prog{left:0;}.theory-grid,.ptrow,.sig-grid{grid-template-columns:1fr;}.probs-sec,.theory,.hero,.sec-divider{padding:20px 16px;}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<div class="layout">
+
+<!-- ════ SIDEBAR ════ -->
+<nav class="sb">
+  <div class="sb-logo">
+    <div class="sb-logo-t">DSA Pattern Master</div>
+    <div class="sb-logo-s">Array Range · Intervals · 30 Problems</div>
+  </div>
+
+  <div class="ng">
+    <div class="ng-t">📐 Array Range</div>
+    <a class="nl" onclick="goto('ar-theory')">📖 Theory & Patterns</a>
+    <a class="nl sub" onclick="pickAndGo('ar',0)">Summary Ranges ·E</a>
+    <a class="nl sub" onclick="pickAndGo('ar',1)">Count and Say ·E</a>
+    <a class="nl sub" onclick="pickAndGo('ar',2)">Missing Number ·E</a>
+    <a class="nl sub" onclick="pickAndGo('ar',3)">Find Disappeared ·E</a>
+    <a class="nl sub" onclick="pickAndGo('ar',4)">String Compression ·E</a>
+    <a class="nl sub" onclick="pickAndGo('ar',5)">Merge Intervals ·M</a>
+    <a class="nl sub" onclick="pickAndGo('ar',6)">Insert Interval ·M</a>
+    <a class="nl sub" onclick="pickAndGo('ar',7)">Jump Game ·M</a>
+    <a class="nl sub" onclick="pickAndGo('ar',8)">Product Except Self ·M</a>
+    <a class="nl sub" onclick="pickAndGo('ar',9)">Rotate Array ·M</a>
+    <a class="nl sub" onclick="pickAndGo('ar',10)">Jump Game II ·H</a>
+    <a class="nl sub" onclick="pickAndGo('ar',11)">First Missing Positive ·H</a>
+    <a class="nl sub" onclick="pickAndGo('ar',12)">Candy ·H</a>
+    <a class="nl sub" onclick="pickAndGo('ar',13)">Min Arrows Burst ·H</a>
+    <a class="nl sub" onclick="pickAndGo('ar',14)">Longest Consecutive ·H</a>
+  </div>
+
+  <div class="ng">
+    <div class="ng-t">🔗 Prefix & Sliding</div>
+    <a class="nl" onclick="goto('ps-theory')">📖 Theory & Patterns</a>
+    <a class="nl sub" onclick="pickAndGo('ps',0)">Running Sum ·E</a>
+    <a class="nl sub" onclick="pickAndGo('ps',1)">Pivot Index ·E</a>
+    <a class="nl sub" onclick="pickAndGo('ps',2)">Max Avg Subarray ·E</a>
+    <a class="nl sub" onclick="pickAndGo('ps',3)">Max Consecutive 1s ·E</a>
+    <a class="nl sub" onclick="pickAndGo('ps',4)">Find Pivot ·E</a>
+    <a class="nl sub" onclick="pickAndGo('ps',5)">Subarray Sum=K ·M</a>
+    <a class="nl sub" onclick="pickAndGo('ps',6)">Max Sum K Size ·M</a>
+    <a class="nl sub" onclick="pickAndGo('ps',7)">Longest Ones K ·M</a>
+    <a class="nl sub" onclick="pickAndGo('ps',8)">Fruit Baskets ·M</a>
+    <a class="nl sub" onclick="pickAndGo('ps',9)">Min Size Subarray ·M</a>
+    <a class="nl sub" onclick="pickAndGo('ps',10)">Min Window Substr ·H</a>
+    <a class="nl sub" onclick="pickAndGo('ps',11)">Sliding Max ·H</a>
+    <a class="nl sub" onclick="pickAndGo('ps',12)">Max Sum Two Arrays ·H</a>
+    <a class="nl sub" onclick="pickAndGo('ps',13)">Count Subarrays ·H</a>
+    <a class="nl sub" onclick="pickAndGo('ps',14)">Range Sum Query 2D ·H</a>
+  </div>
+</nav>
+
+<!-- ════ MAIN ════ -->
+<main class="main">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-e">Complete Guide · 30 Problems · Step-by-Step Code Trace · বাংলায়</div>
+  <h1>Array Range &amp;<br><em>Interval Master</em></h1>
+  <p>প্রতিটি step এ code এর line highlight হয়। Variable, pointer, range — সব live animate হয়। Summary Ranges থেকে শুরু করে Merge Intervals পর্যন্ত সব বাংলায় বোঝো।</p>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-n">30</div><div class="stat-l">Problems</div></div>
+    <div class="stat"><div class="stat-n">2</div><div class="stat-l">Patterns</div></div>
+    <div class="stat"><div class="stat-n">5+5+5</div><div class="stat-l">E · M · H each</div></div>
+    <div class="stat"><div class="stat-n">Live</div><div class="stat-l">Code Trace</div></div>
+  </div>
+</section>
+
+<!-- ══════════════════ ARRAY RANGE ══════════════════ -->
+<div class="sec-divider" id="ar-section">
+  <div class="sec-divider-inner">
+    <span class="sec-divider-icon">📐</span>
+    <div>
+      <div class="sec-divider-title">Array Range & Intervals</div>
+      <div class="sec-divider-sub">Summary Ranges · Merge · Jump Game · O(n) · 15 problems</div>
+    </div>
+  </div>
+</div>
+
+<!-- AR THEORY -->
+<section class="theory" id="ar-theory">
+  <div class="theory-h">📖 Array Range — কী, কেন, কখন?</div>
+  <div class="theory-grid">
+    <div class="tbox">
+      <div class="tbox-h">💡 মূল ধারণা</div>
+      <p><b>Range / Interval</b> মানে [start, end] — একটি শুরু এবং শেষ বিন্দু। Sorted array তে consecutive numbers গুলো একটা range তৈরি করে।</p><br>
+      <p>Key insight: <b>chain কখন ভাঙে?</b> যদি পরের সংখ্যাটি বর্তমানের চেয়ে ১ বেশি না হয়, তাহলে নতুন range শুরু।</p><br>
+      <p>Interval problems এ সাধারণত <b>sort by start</b> করে তারপর overlapping check করো।</p>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">🎯 কখন ব্যবহার করবো?</div>
+      <ul>
+        <li><b>Consecutive numbers</b> গ্রুপ করতে → Summary Ranges</li>
+        <li><b>Overlapping intervals</b> merge করতে → Merge Intervals</li>
+        <li><b>Greedy reach</b> — Jump Game pattern</li>
+        <li><b>Mark & Sweep</b> — Find missing/disappeared</li>
+        <li><b>Prefix Product</b> — left/right pass</li>
+        <li>Array এর <b>structure/pattern</b> বের করতে হলে</li>
+      </ul>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">🔍 এই signal দেখলে Range ভাবো</div>
+      <div class="sig-grid">
+        <div class="sig">📌 "sorted array" তে consecutive groups</div>
+        <div class="sig">📌 "merge/combine overlapping intervals"</div>
+        <div class="sig">📌 "missing number" in range [1..n]</div>
+        <div class="sig">📌 "can you reach end?" → greedy</div>
+        <div class="sig">📌 "compress" → write pointer + count</div>
+        <div class="sig">📌 Interval এ নতুন point insert করতে হবে</div>
+      </div>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">⚡ তিনটি Main Pattern</div>
+      <div class="ptrow">
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#059669">① Range Build</div>
+          <pre>start = arr[0]
+for i in arr:
+  if chain_break:
+    output range
+    start = next</pre>
+          <p>Summary Ranges</p>
+        </div>
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#2563eb">② Sort+Merge</div>
+          <pre>sort by start
+cur = intervals[0]
+for iv in rest:
+  if overlap:
+    merge
+  else: push cur</pre>
+          <p>Merge Intervals</p>
+        </div>
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#7c3aed">③ Greedy Reach</div>
+          <pre>reach = 0
+for i in arr:
+  if i > reach:
+    return false
+  reach=max(reach
+    ,i+arr[i])</pre>
+          <p>Jump Game</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AR PROBLEMS -->
+<section class="probs-sec" id="ar-problems">
+  <div class="diff-bar"><div class="diff-dot" style="background:#059669"></div><span class="diff-lbl">Easy</span><span class="diff-sub">— basic range logic, O(n)</span></div>
+  <div class="pbar" id="ar-pbar-e"></div>
+  <div class="diff-bar"><div class="diff-dot" style="background:#d97706"></div><span class="diff-lbl">Medium</span><span class="diff-sub">— sort + merge + greedy</span></div>
+  <div class="pbar" id="ar-pbar-m"></div>
+  <div class="diff-bar"><div class="diff-dot" style="background:#dc2626"></div><span class="diff-lbl">Hard</span><span class="diff-sub">— multi-pass, complex greedy</span></div>
+  <div class="pbar" id="ar-pbar-h"></div>
+
+  <div class="pdesc" id="ar-pdesc" style="margin-top:14px;">
+    <div class="pdesc-h">⬆️ উপর থেকে problem select করো</div>
+    <div class="pdesc-t">Click করলে description, কেন এই pattern, code এবং animation দেখাবে।</div>
+  </div>
+
+  <div class="pcols">
+    <div class="pcol">
+      <div class="acard">
+        <div class="ahead">
+          <span class="atit">⚡ VISUALIZATION</span>
+          <span class="asi" id="ar-si">—</span>
+          <div class="abtns">
+            <button class="ab run" onclick="run('ar')">▶ Run</button>
+            <button class="ab stp" onclick="step('ar')">⏭ Step</button>
+            <button class="ab rst" onclick="rst('ar')">↺</button>
+            <div class="spd">
+              <span class="spd-lbl">Speed</span>
+              <input type="range" class="spd-range" id="ar-spd" min="1" max="5" value="3" oninput="setSpd('ar',this.value)">
+              <span class="spd-lbl" id="ar-spd-lbl">2x</span>
+            </div>
+          </div>
+        </div>
+        <canvas id="ar-cv" class="acv" height="280"></canvas>
+        <div id="ar-msg" class="amsg">▶ Problem select করো</div>
+      </div>
+    </div>
+    <div class="pcol">
+      <div class="ccard">
+        <div class="chead">
+          <span class="clang" id="ar-ctit">C++ — Array Range</span>
+          <button class="cpb" onclick="cpCode('ar')">Copy</button>
+        </div>
+        <div id="ar-code" class="clines"><div class="cline"><span class="ln">1</span><span class="lc">// উপর থেকে problem select করো</span></div></div>
+        <div class="ex-bar" id="ar-ex"><span>▶</span><span id="ar-ex-t">—</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ PREFIX & SLIDING ══════════════════ -->
+<div class="sec-divider" id="ps-section">
+  <div class="sec-divider-inner">
+    <span class="sec-divider-icon">🔗</span>
+    <div>
+      <div class="sec-divider-title">Prefix Sum & Sliding Window</div>
+      <div class="sec-divider-sub">Prefix array · O(1) query · Subarray problems · 15 problems</div>
+    </div>
+  </div>
+</div>
+
+<!-- PS THEORY -->
+<section class="theory" id="ps-theory">
+  <div class="theory-h">📖 Prefix Sum & Sliding Window — কী, কেন, কখন?</div>
+  <div class="theory-grid">
+    <div class="tbox">
+      <div class="tbox-h">💡 Prefix Sum মূল ধারণা</div>
+      <p>Prefix array তে <b>pre[i] = arr[0]+arr[1]+...+arr[i]</b>। যেকোনো subarray [l..r] এর sum = <b>pre[r] - pre[l-1]</b>।</p><br>
+      <p>O(n) preprocessing → O(1) range query। Nested loop এর O(n²) → O(n) এ নামায়।</p>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">💡 Sliding Window মূল ধারণা</div>
+      <p><b>দুটো pointer l, r</b>। r বাড়িয়ে window বড় করো, l বাড়িয়ে ছোট করো। Fixed size বা variable size window।</p><br>
+      <p>Key: window এ কী track করছি? Sum? Distinct count? Max? — এর উপর l কখন বাড়াবো তা নির্ভর করে।</p>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">🔍 Signal দেখলে এই pattern</div>
+      <div class="sig-grid">
+        <div class="sig">📌 "subarray sum = K" → prefix+map</div>
+        <div class="sig">📌 "max sum of size k" → fixed window</div>
+        <div class="sig">📌 "longest subarray with..." → variable</div>
+        <div class="sig">📌 "range sum query" → prefix array</div>
+        <div class="sig">📌 "at most K distinct" → sliding</div>
+        <div class="sig">📌 O(n²) nested → O(n) sliding করো</div>
+      </div>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">⚡ Pattern Templates</div>
+      <div class="ptrow">
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#059669">① Fixed Window</div>
+          <pre>sum=sum(arr[:k])
+for i in k..n:
+  sum+=arr[i]
+  sum-=arr[i-k]
+  best=max(best,sum)</pre>
+          <p>Max avg, fixed K</p>
+        </div>
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#2563eb">② Variable Window</div>
+          <pre>l=0, cnt={}
+for r in arr:
+  add arr[r]
+  while invalid:
+    remove arr[l]; l++
+  best=max(r-l+1)</pre>
+          <p>Longest valid</p>
+        </div>
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#7c3aed">③ Prefix+Map</div>
+          <pre>mp={0:1}, pre=0
+for v in arr:
+  pre += v
+  ans+=mp[pre-k]
+  mp[pre]++</pre>
+          <p>Subarray sum=K</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PS PROBLEMS -->
+<section class="probs-sec" id="ps-problems">
+  <div class="diff-bar"><div class="diff-dot" style="background:#059669"></div><span class="diff-lbl">Easy</span><span class="diff-sub">— basic prefix/window</span></div>
+  <div class="pbar" id="ps-pbar-e"></div>
+  <div class="diff-bar"><div class="diff-dot" style="background:#d97706"></div><span class="diff-lbl">Medium</span><span class="diff-sub">— variable window + map</span></div>
+  <div class="pbar" id="ps-pbar-m"></div>
+  <div class="diff-bar"><div class="diff-dot" style="background:#dc2626"></div><span class="diff-lbl">Hard</span><span class="diff-sub">— complex window logic</span></div>
+  <div class="pbar" id="ps-pbar-h"></div>
+
+  <div class="pdesc" id="ps-pdesc" style="margin-top:14px;">
+    <div class="pdesc-h">⬆️ উপর থেকে problem select করো</div>
+    <div class="pdesc-t">Click করলে description, why Prefix/Sliding, code এবং animation দেখাবে।</div>
+  </div>
+
+  <div class="pcols">
+    <div class="pcol">
+      <div class="acard">
+        <div class="ahead">
+          <span class="atit">⚡ VISUALIZATION</span>
+          <span class="asi" id="ps-si">—</span>
+          <div class="abtns">
+            <button class="ab run" onclick="run('ps')">▶ Run</button>
+            <button class="ab stp" onclick="step('ps')">⏭ Step</button>
+            <button class="ab rst" onclick="rst('ps')">↺</button>
+            <div class="spd">
+              <span class="spd-lbl">Speed</span>
+              <input type="range" class="spd-range" id="ps-spd" min="1" max="5" value="3" oninput="setSpd('ps',this.value)">
+              <span class="spd-lbl" id="ps-spd-lbl">2x</span>
+            </div>
+          </div>
+        </div>
+        <canvas id="ps-cv" class="acv" height="280"></canvas>
+        <div id="ps-msg" class="amsg">▶ Problem select করো</div>
+      </div>
+    </div>
+    <div class="pcol">
+      <div class="ccard">
+        <div class="chead">
+          <span class="clang" id="ps-ctit">C++ — Prefix/Sliding</span>
+          <button class="cpb" onclick="cpCode('ps')">Copy</button>
+        </div>
+        <div id="ps-code" class="clines"><div class="cline"><span class="ln">1</span><span class="lc">// উপর থেকে problem select করো</span></div></div>
+        <div class="ex-bar" id="ps-ex"><span>▶</span><span id="ps-ex-t">—</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  <div style="font-size:14px;font-weight:700;margin-bottom:4px;">Happy Coding! 🚀</div>
+  <div style="font-size:11px;color:var(--t3);">DSA Master · Array Range + Prefix Sliding · 30 Problems · বাংলায়</div>
+</div>
+</main>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// NAV
+// ══════════════════════════════════════════
+window.addEventListener('scroll',()=>{
+  const p=document.getElementById('prog');
+  const r=window.scrollY/(document.body.scrollHeight-window.innerHeight)||0;
+  p.style.transform='scaleX('+Math.min(1,r)+')';
+});
+function goto(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'});}
+function pickAndGo(sec,idx){
+  selProb(sec,idx);
+  document.getElementById(sec+'-problems').scrollIntoView({behavior:'smooth'});
+}
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+const S={
+  ar:{frames:null,idx:0,timer:null,speed:800},
+  ps:{frames:null,idx:0,timer:null,speed:800}
+};
+
+function setSpd(sec,v){
+  const SPDS=[2000,1300,800,450,200];
+  const LBLS=['0.5x','1x','2x','3x','5x'];
+  S[sec].speed=SPDS[parseInt(v)-1];
+  document.getElementById(sec+'-spd-lbl').textContent=LBLS[parseInt(v)-1];
+  if(S[sec].timer){clearInterval(S[sec].timer);S[sec].timer=null;run(sec);}
+}
+function stopTimer(sec){if(S[sec].timer){clearInterval(S[sec].timer);S[sec].timer=null;}}
+
+// ══════════════════════════════════════════
+// CANVAS HELPERS
+// ══════════════════════════════════════════
+function getCtx(sec){
+  const c=document.getElementById(sec+'-cv');
+  const W=c.clientWidth||600,H=parseInt(c.getAttribute('height'))||280;
+  c.width=W;c.height=H;
+  return {ctx:c.getContext('2d'),W,H};
+}
+function rr(ctx,x,y,w,h,r,fill,stroke,lw){
+  r=Math.min(r||0,w/2,h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);
+  ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);
+  ctx.closePath();
+  if(fill){ctx.fillStyle=fill;ctx.fill();}
+  if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1.5;ctx.stroke();}
+}
+
+// ══════════════════════════════════════════
+// DRAW FRAME
+// ══════════════════════════════════════════
+function drawFrame(sec,frame){
+  const {ctx,W,H}=getCtx(sec);
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#fafaf8';ctx.fillRect(0,0,W,H);
+  if(!frame){
+    ctx.fillStyle='#a09890';ctx.font='12px DM Sans';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('⬆ Problem select করো, তারপর Run বা Step চাপো',W/2,H/2);
+    ctx.textBaseline='alphabetic';return;
+  }
+  if(frame.type==='interval') drawInterval(ctx,W,H,frame);
+  else if(frame.type==='prefix') drawPrefix(ctx,W,H,frame);
+  else drawArr(ctx,W,H,frame);
+  drawVars(ctx,W,H,frame);
+  drawCond(ctx,W,H,frame);
+}
+
+function drawArr(ctx,W,H,frame){
+  const arr=frame.arr||[];const n=arr.length;if(!n)return;
+  const bw=Math.min(52,Math.floor((W-32)/n)-5);
+  const bh=42;const gap=5;
+  const tot=n*(bw+gap)-gap;
+  const sx=Math.floor((W-tot)/2);const sy=22;
+
+  // window highlight
+  if(frame.win){
+    const[wl,wr]=frame.win;
+    if(wr>=wl&&wl>=0&&wr<n){
+      const wx=sx+wl*(bw+gap)-6,ww=(wr-wl+1)*(bw+gap)-gap+12;
+      rr(ctx,wx,sy-9,ww,bh+18,8,'#f0fdf4','#86efac',1.5);
+      ctx.fillStyle='#059669';ctx.font='bold 7px DM Mono';ctx.textAlign='left';
+      ctx.fillText('RANGE',wx+4,sy-12);
+    }
+  }
+
+  arr.forEach((v,i)=>{
+    const x=sx+i*(bw+gap);
+    let bg='#fff',bd='#e4e0d5',tc='#1a1614',lw=1.5;
+    if(frame.fnd&&frame.fnd.includes(i)){bg='#dcfce7';bd='#059669';tc='#059669';lw=2.5;}
+    else if(frame.hi&&frame.hi.includes(i)){bg='#dbeafe';bd='#2563eb';tc='#1e40af';lw=2.5;}
+    else if(frame.org&&frame.org.includes(i)){bg='#fef3c7';bd='#d97706';tc='#92400e';lw=2;}
+    else if(frame.red&&frame.red.includes(i)){bg='#fee2e2';bd='#dc2626';tc='#991b1b';lw=2;}
+    else if(frame.marked&&frame.marked.includes(i)){bg='#ede9fe';bd='#7c3aed';tc='#5b21b6';lw=2;}
+    rr(ctx,x,sy,bw,bh,6,bg,bd,lw);
+    ctx.fillStyle=tc;ctx.font=`bold ${bw>44?13:11}px DM Mono`;
+    ctx.textAlign='center';ctx.fillText(String(v),x+bw/2,sy+bh-11);
+    ctx.fillStyle='#a09890';ctx.font='8px DM Mono';
+    ctx.fillText(String(i),x+bw/2,sy+bh+12);
+  });
+
+  if(frame.ptrs){
+    const PC={i:'#2563eb',start:'#059669',end_:'#dc2626',l:'#2563eb',r:'#dc2626',w:'#059669',reach:'#7c3aed',cur:'#d97706',j:'#0891b2'};
+    const SEEN={};
+    Object.entries(frame.ptrs).forEach(([nm,pos])=>{
+      if(pos===undefined||pos<0||pos>=n)return;
+      const x=sx+pos*(bw+gap)+bw/2;const c=PC[nm]||'#475569';
+      const off=(SEEN[pos]||0)*13;SEEN[pos]=(SEEN[pos]||0)+1;
+      const by=sy+bh+14+off;
+      ctx.fillStyle=c;ctx.font='bold 9px DM Mono';ctx.textAlign='center';
+      ctx.fillText(nm==='end_'?'END':nm.toUpperCase(),x,by+9);
+      ctx.beginPath();ctx.moveTo(x-4,by+11);ctx.lineTo(x+4,by+11);ctx.lineTo(x,by+17);
+      ctx.fillStyle=c;ctx.fill();
+    });
+  }
+
+  // result strings display
+  if(frame.ranges&&frame.ranges.length>0){
+    const ry=H-38;
+    ctx.fillStyle='#a09890';ctx.font='bold 7px DM Mono';ctx.textAlign='left';
+    ctx.fillText('RESULT:',sx,ry-4);
+    let rx2=sx+46;
+    frame.ranges.forEach(r=>{
+      const tw=ctx.measureText('"'+r+'"').width+14;
+      rr(ctx,rx2,ry,Math.max(tw,40),22,5,'#dcfce7','#059669',1.5);
+      ctx.fillStyle='#059669';ctx.font='bold 10px DM Mono';ctx.textAlign='center';
+      ctx.fillText('"'+r+'"',rx2+Math.max(tw,40)/2,ry+15);
+      rx2+=Math.max(tw,40)+5;
+    });
+  }
+
+  if(frame.res!==undefined&&frame.ranges===undefined){
+    const rw=200,rh=27,rx=Math.floor((W-rw)/2),ry=H-rh-8;
+    rr(ctx,rx,ry,rw,rh,6,'#dcfce7','#059669',1.5);
+    ctx.fillStyle='#059669';ctx.font='bold 12px DM Mono';ctx.textAlign='center';
+    ctx.fillText('✅  ans = '+String(frame.res),rx+rw/2,ry+rh-8);
+  }
+}
+
+function drawInterval(ctx,W,H,frame){
+  const ivs=frame.ivs||[];
+  const merged=frame.merged||[];
+  const active=frame.active;
+
+  ctx.fillStyle='#a09890';ctx.font='bold 7px DM Mono';ctx.textAlign='left';
+  ctx.fillText('INTERVALS:',12,18);
+
+  // scale: find min/max
+  let mn=Infinity,mx=-Infinity;
+  ivs.forEach(([a,b])=>{mn=Math.min(mn,a);mx=Math.max(mx,b);});
+  merged.forEach(([a,b])=>{mn=Math.min(mn,a);mx=Math.max(mx,b);});
+  const pad=40,barH=18,gap=6;
+  const scale=v=>(v-mn)/(mx-mn+1)*(W-pad*2)+pad;
+
+  ivs.forEach(([a,b],i)=>{
+    const x=scale(a),x2=scale(b+1),y=28+i*(barH+gap);
+    const isActive=active===i;
+    const isMerged=frame.mergedIdx!==undefined&&frame.mergedIdx===i;
+    const bg=isMerged?'#dcfce7':isActive?'#dbeafe':'#f3f1ec';
+    const bd=isMerged?'#059669':isActive?'#2563eb':'#e4e0d5';
+    rr(ctx,x,y,Math.max(x2-x,4),barH,3,bg,bd,1.5);
+    ctx.fillStyle=isMerged?'#059669':isActive?'#1e40af':'#6b6560';
+    ctx.font='bold 9px DM Mono';ctx.textAlign='center';
+    ctx.fillText(`[${a},${b}]`,x+(x2-x)/2,y+barH-4);
+    ctx.fillStyle='#a09890';ctx.font='7px DM Mono';ctx.textAlign='left';
+    ctx.fillText(''+i,12,y+barH-4);
+  });
+
+  const my=28+ivs.length*(barH+gap)+8;
+  if(merged.length>0){
+    ctx.fillStyle='#059669';ctx.font='bold 7px DM Mono';ctx.textAlign='left';
+    ctx.fillText('MERGED:',12,my+12);
+    merged.forEach(([a,b],i)=>{
+      const x=scale(a),x2=scale(b+1),y=my+18+i*(barH+gap);
+      rr(ctx,x,y,Math.max(x2-x,4),barH,3,'#dcfce7','#059669',2);
+      ctx.fillStyle='#059669';ctx.font='bold 9px DM Mono';ctx.textAlign='center';
+      ctx.fillText(`[${a},${b}]`,x+(x2-x)/2,y+barH-4);
+    });
+  }
+
+  if(frame.res!==undefined){
+    const rw=220,rh=27,rx=Math.floor((W-rw)/2),ry=H-rh-8;
+    rr(ctx,rx,ry,rw,rh,6,'#dcfce7','#059669',1.5);
+    ctx.fillStyle='#059669';ctx.font='bold 11px DM Mono';ctx.textAlign='center';
+    ctx.fillText('✅  '+String(frame.res),rx+rw/2,ry+rh-8);
+  }
+}
+
+function drawPrefix(ctx,W,H,frame){
+  const arr=frame.arr||[];const pre=frame.pre||[];
+  const n=arr.length;if(!n)return;
+  const bw=Math.min(48,Math.floor((W-32)/n)-5);
+  const bh=38;const gap=5;
+  const tot=n*(bw+gap)-gap;const sx=Math.floor((W-tot)/2);
+
+  // original array
+  ctx.fillStyle='#a09890';ctx.font='bold 7px DM Mono';ctx.textAlign='left';
+  ctx.fillText('ARR:',sx-34,32);
+  arr.forEach((v,i)=>{
+    const x=sx+i*(bw+gap),sy=16;
+    let bg='#fff',bd='#e4e0d5',tc='#1a1614',lw=1;
+    if(frame.hi&&frame.hi.includes(i)){bg='#dbeafe';bd='#2563eb';tc='#1e40af';lw=2;}
+    else if(frame.win&&i>=frame.win[0]&&i<=frame.win[1]){bg='#f0fdf4';bd='#86efac';lw=1.5;}
+    rr(ctx,x,sy,bw,bh,5,bg,bd,lw);
+    ctx.fillStyle=tc;ctx.font=`bold ${bw>42?12:10}px DM Mono`;ctx.textAlign='center';
+    ctx.fillText(String(v),x+bw/2,sy+bh-10);
+    ctx.fillStyle='#a09890';ctx.font='7px DM Mono';
+    ctx.fillText(String(i),x+bw/2,sy+bh+10);
+  });
+
+  // prefix array
+  if(pre.length>0){
+    ctx.fillStyle='#a09890';ctx.font='bold 7px DM Mono';ctx.textAlign='left';
+    ctx.fillText('PRE:',sx-34,80);
+    pre.forEach((v,i)=>{
+      const x=sx+i*(bw+gap),sy=64;
+      const isNew=frame.newPre===i;
+      rr(ctx,x,sy,bw,bh,5,isNew?'#fef3c7':'#f3f1ec',isNew?'#d97706':'#e4e0d5',isNew?2:1);
+      ctx.fillStyle=isNew?'#d97706':'#6b6560';ctx.font=`bold ${bw>42?11:9}px DM Mono`;ctx.textAlign='center';
+      ctx.fillText(String(v),x+bw/2,sy+bh-10);
+    });
+  }
+
+  // window or result
+  if(frame.wsum!==undefined){
+    const rw=200,rh=24,rx=Math.floor((W-rw)/2),ry=H-rh-8;
+    rr(ctx,rx,ry,rw,rh,5,'#fef3c7','#d97706',1.5);
+    ctx.fillStyle='#d97706';ctx.font='bold 11px DM Mono';ctx.textAlign='center';
+    ctx.fillText(`window sum = ${frame.wsum}`,rx+rw/2,ry+rh-6);
+  }
+  if(frame.res!==undefined){
+    const rw=200,rh=27,rx=Math.floor((W-rw)/2),ry=H-rh-8;
+    rr(ctx,rx,ry,rw,rh,6,'#dcfce7','#059669',1.5);
+    ctx.fillStyle='#059669';ctx.font='bold 12px DM Mono';ctx.textAlign='center';
+    ctx.fillText('✅  ans = '+String(frame.res),rx+rw/2,ry+rh-8);
+  }
+}
+
+function drawVars(ctx,W,H,frame){
+  if(!frame.vars)return;
+  const entries=Object.entries(frame.vars);if(!entries.length)return;
+  const CW=70,RH=32,cols=Math.min(entries.length,Math.floor((W-12)/CW));
+  const rows=Math.ceil(entries.length/cols);
+  const pW=cols*CW,pH=rows*RH+14,px=5,py=H-pH-5;
+  if(frame.ranges&&frame.ranges.length>0)return; // skip if ranges shown
+  rr(ctx,px,py,pW,pH,5,'rgba(243,241,236,.97)','#e4e0d5',1);
+  ctx.fillStyle='#a09890';ctx.font='bold 7px DM Mono';ctx.textAlign='left';
+  ctx.fillText('VARS',px+4,py+10);
+  entries.forEach(([k,v],idx)=>{
+    const col=idx%cols,row=Math.floor(idx/cols);
+    const ex=px+col*CW,ey=py+14+row*RH;
+    if(col>0){ctx.strokeStyle='#e4e0d5';ctx.lineWidth=0.4;ctx.beginPath();ctx.moveTo(ex,py+14);ctx.lineTo(ex,py+pH);ctx.stroke();}
+    const chg=frame.chg&&frame.chg.includes(k);
+    ctx.fillStyle=chg?'#1d4ed8':'#6b6560';ctx.font='7px DM Mono';ctx.textAlign='center';
+    ctx.fillText(String(k),ex+CW/2,ey+10);
+    ctx.fillStyle=chg?'#2563eb':'#1a1614';
+    const vstr=String(v);ctx.font=`bold ${vstr.length>7?'9':'11'}px DM Mono`;ctx.textAlign='center';
+    ctx.fillText(vstr.length>9?vstr.slice(0,9)+'…':vstr,ex+CW/2,ey+RH-2);
+  });
+}
+
+function drawCond(ctx,W,H,frame){
+  if(frame.cond===undefined||frame.cond===null)return;
+  const cond=String(frame.cond),cv=frame.cv;
+  const pw=Math.min(190,W*.36),ph=42,px=W-pw-5,py=H-ph-5;
+  if(frame.ranges&&frame.ranges.length>0){return;}
+  const bg=cv===true?'#dcfce7':cv===false?'#fee2e2':'#f3f1ec';
+  const bd=cv===true?'#059669':cv===false?'#dc2626':'#e4e0d5';
+  const tc=cv===true?'#059669':cv===false?'#dc2626':'#6b6560';
+  rr(ctx,px,py,pw,ph,7,bg,bd,1.5);
+  ctx.fillStyle=tc;ctx.font='10px DM Mono';ctx.textAlign='center';
+  const d=cond.length>24?cond.slice(0,24)+'…':cond;
+  ctx.fillText(d,px+pw/2,py+14);
+  if(cv!==undefined&&cv!==null){
+    ctx.font='bold 12px DM Mono';
+    ctx.fillText(cv===true?'✓  TRUE':'✗  FALSE',px+pw/2,py+32);
+  }
+}
+
+// ══════════════════════════════════════════
+// CONTROLLER
+// ══════════════════════════════════════════
+function setMsg(sec,t){document.getElementById(sec+'-msg').textContent=t||'';}
+function setSI(sec,i,n){document.getElementById(sec+'-si').textContent='Step '+(i+1)+'/'+n;}
+function setEx(sec,t){document.getElementById(sec+'-ex-t').textContent=t||'—';}
+function hlLine(sec,ln){
+  document.querySelectorAll('#'+sec+'-code .cline').forEach(el=>el.classList.remove('hl'));
+  if(ln>0){
+    const el=document.getElementById(sec+'-cl-'+ln);
+    if(el){el.classList.add('hl');el.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  }
+}
+function renderCode(sec,lines){
+  const c=document.getElementById(sec+'-code');c.innerHTML='';
+  lines.forEach((ln,i)=>{
+    const d=document.createElement('div');d.className='cline';d.id=sec+'-cl-'+(i+1);
+    d.innerHTML=`<span class="ln">${i+1}</span><span class="lc">${ln}</span>`;
+    c.appendChild(d);
+  });
+}
+function applyFrame(sec){
+  const s=S[sec];if(!s.frames)return;
+  const fr=s.frames[s.idx];
+  drawFrame(sec,fr);
+  setMsg(sec,fr.msg);
+  setSI(sec,s.idx,s.frames.length);
+  hlLine(sec,fr.line||0);
+  setEx(sec,fr.exec||'—');
+}
+
+function selProb(sec,idx){
+  stopTimer(sec);
+  const p=(sec==='ar'?AR_PROBS:PS_PROBS)[idx];
+  document.querySelectorAll('#'+sec+'-pbar-e .pb-btn,#'+sec+'-pbar-m .pb-btn,#'+sec+'-pbar-h .pb-btn').forEach(b=>b.classList.remove('sel'));
+  const btn=document.getElementById(sec+'-pb-'+idx);if(btn){btn.classList.add('sel');const dc=p.d;btn.classList.add(dc.toLowerCase());}
+  const dc=p.d==='E'?'E':p.d==='M'?'M':'H';
+  document.getElementById(sec+'-pdesc').innerHTML=
+    `<div class="pdesc-h">${p.name}&nbsp;<span class="diff diff-${dc}">${dc==='E'?'Easy':dc==='M'?'Medium':'Hard'}</span></div>`+
+    `<div class="pdesc-t">${p.desc}</div>`+
+    `<div class="pdesc-why">🧠 <b>কেন এই Pattern?</b> ${p.why}</div>`+
+    `<div class="pdesc-cards">`+
+    `<div class="pdesc-card intuition"><div class="pdesc-card-h">💡 Intuition</div>${p.intuition||''}</div>`+
+    `<div class="pdesc-card analogy"><div class="pdesc-card-h">🌍 Real-Life Analogy</div>${p.analogy||''}</div>`+
+    `</div>`;
+  document.getElementById(sec+'-ctit').textContent='C++ — '+p.name;
+  renderCode(sec,p.codeLines);
+  S[sec].frames=p.sim();S[sec].idx=0;
+  applyFrame(sec);
+}
+
+function run(sec){
+  stopTimer(sec);
+  if(!S[sec].frames){setMsg(sec,'⚠️ আগে problem select করো!');return;}
+  S[sec].timer=setInterval(()=>{
+    const s=S[sec];
+    if(s.idx>=s.frames.length-1){stopTimer(sec);return;}
+    s.idx++;applyFrame(sec);
+  },S[sec].speed);
+}
+function step(sec){
+  stopTimer(sec);
+  if(!S[sec].frames){setMsg(sec,'⚠️ আগে problem select করো!');return;}
+  const s=S[sec];if(s.idx<s.frames.length-1)s.idx++;
+  applyFrame(sec);
+}
+function rst(sec){
+  stopTimer(sec);S[sec].idx=0;
+  if(S[sec].frames){applyFrame(sec);setMsg(sec,'↺ Reset — Run বা Step চাপো');}
+  else drawFrame(sec,null);
+}
+function cpCode(sec){
+  const lines=document.querySelectorAll('#'+sec+'-code .lc');
+  navigator.clipboard.writeText([...lines].map(l=>l.textContent).join('\n')).then(()=>{
+    const b=document.querySelector('#'+sec+'-problems .cpb');
+    if(b){b.textContent='✓ Copied';b.style.background='#059669';b.style.color='#fff';
+    setTimeout(()=>{b.textContent='Copy';b.style.background='';b.style.color='';},1800);}
+  });
+}
+
+// ══════════════════════════════════════════
+// FRAME BUILDERS
+// ══════════════════════════════════════════
+function AF(arr,ptrs,vars,msg,line,exec,ex){
+  return Object.assign({type:'arr',arr:[...arr],ptrs:ptrs||{},vars:vars||{},msg:msg||'',line:line||0,exec:exec||''},ex||{});
+}
+function IF(ivs,merged,vars,msg,line,exec,ex){
+  return Object.assign({type:'interval',ivs:ivs.map(x=>[...x]),merged:merged.map(x=>[...x]),vars:vars||{},msg:msg||'',line:line||0,exec:exec||''},ex||{});
+}
+function PF(arr,pre,vars,msg,line,exec,ex){
+  return Object.assign({type:'prefix',arr:[...arr],pre:[...pre],vars:vars||{},msg:msg||'',line:line||0,exec:exec||''},ex||{});
+}
+function E(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ══════════════════════════════════════════════════════
+// ARRAY RANGE PROBLEMS (15: 5E 5M 5H)
+// ══════════════════════════════════════════════════════
+const AR_PROBS=[
+
+// ── E1: Summary Ranges ── ⭐ MAIN PROBLEM
+{name:'Summary Ranges',d:'E',
+ desc:'LeetCode 228. Sorted unique integer array তে consecutive ranges বের করো। nums=[0,1,2,4,5,7] → ["0->2","4->5","7"]।',
+ why:'Single pass: start pointer রাখো। Chain break হলে (পরেরটা current+1 না হলে) range output দাও, নতুন start সেট করো। O(n), O(1)।',
+ intuition:'একটা chain ততক্ষণ চলে যতক্ষণ প্রতিটি link আগেরটার সাথে connected। Chain break মানে নতুন group শুরু। তাই শুধু "কোথায় chain ভাঙে" সেটা detect করলেই হবে — বাকিটা automatic।',
+ analogy:'🚂 Train এর compartment গুলো ভাবো। 1-2-3 compartment connected, তারপর gap, তারপর 5-6। Gap গুলোই range এর boundary। Train driver শুধু gap গুলো note করে।',
+ codeLines:[
+   E('vector<string> summaryRanges(vector<int>& nums) {'),
+   E('  vector<string> result;'),
+   E('  int n = nums.size();'),
+   E('  if (n == 0) return result;'),
+   E('  int start = nums[0];  // current range এর শুরু'),
+   E('  for (int i = 0; i < n; i++) {'),
+   E('    // chain শেষ: last element বা পরেরটা consecutive নয়'),
+   E('    if (i == n-1 || nums[i+1] != nums[i]+1) {'),
+   E('      if (start != nums[i])'),
+   E('        result.push_back(to_string(start)+"->"+to_string(nums[i]));'),
+   E('      else'),
+   E('        result.push_back(to_string(start));'),
+   E('      if (i != n-1) start = nums[i+1]; // নতুন range'),
+   E('    }'),
+   E('  }'),
+   E('  return result;'),
+   E('}')
+ ],
+ sim(){
+   const nums=[0,1,2,4,5,7];const F=[];
+   let startIdx=0;const result=[];
+   F.push(AF(nums,{start:0,i:0},{start:nums[0],i:0},'শুরু: start=0, i=0। Range tracking শুরু!',5,'start=nums[0]=0',{org:[0]}));
+
+   for(let i=0;i<nums.length;i++){
+     const isLast=i===nums.length-1;
+     const chainBreak=isLast||(nums[i+1]!==nums[i]+1);
+     const nextVal=isLast?'—':nums[i+1];
+
+     F.push(AF(nums,{start:startIdx,i},{start:nums[startIdx],i,cur:nums[i]},
+       `i=${i}, nums[i]=${nums[i]}. পরেরটা ${nextVal}. Chain break? ${chainBreak}`,8,
+       isLast?`i==n-1 (শেষ)`:`${nextVal}!=${nums[i]+1}?`,
+       {hi:[i],org:[startIdx],cond:isLast?'last element?':`${nextVal}!=${nums[i]+1}?`,cv:chainBreak}));
+
+     if(chainBreak){
+       const range=nums[startIdx]!==nums[i]?`${nums[startIdx]}->${nums[i]}`:`${nums[startIdx]}`;
+       result.push(range);
+       const rangeIdxs=[];for(let k=startIdx;k<=i;k++)rangeIdxs.push(k);
+       F.push(AF(nums,{start:startIdx,i},{start:nums[startIdx],i,range:`"${range}"`},
+         `"${range}" → result এ যোগ হলো!`,nums[startIdx]!==nums[i]?10:12,
+         `push_back("${range}")`,{fnd:rangeIdxs,ranges:[...result]}));
+
+       if(!isLast){
+         startIdx=i+1;
+         F.push(AF(nums,{start:i+1,i:i+1},{start:nums[i+1],i:i+1},
+           `নতুন range শুরু: start=${nums[i+1]}`,13,'start=nums[i+1]',
+           {org:[i+1],ranges:[...result],chg:['start']}));
+       }
+     }
+   }
+   F.push(AF(nums,{},{},`✅ Output: [${result.map(r=>'"'+r+'"').join(', ')}]`,16,'return result',
+     {fnd:[...Array(nums.length).keys()],ranges:[...result]}));
+   return F;
+ }},
+
+// ── E2: Count and Say ──
+{name:'Count and Say',d:'E',
+ desc:'n=4 দিলে "1211" return করো। 1→"1", 11→"11", 21→"21", 1211→"1211"।',
+ why:'String simulation: আগের string এর character গুলো count করে নতুন string বানাও। Two pointer দিয়ে consecutive count।',
+ intuition:'প্রতিটি round এ তুমি আগের round টা "পড়ে শোনাও"। একই character কতবার পরপর আছে সেটা count করো, তারপর "count+char" বলো। Simulation — step by step নিজেই করো।',
+ analogy:'📻 Radio announcer ভাবো যে একটা sequence দেখে বলে: "তিনটা এক, দুটো দুই"। সে শুধু consecutive groups count করে পড়ে যায়। তুমিও ঠিক তাই করছো।',
+ codeLines:[
+   E('string countAndSay(int n) {'),
+   E('  string s = "1";'),
+   E('  for (int k = 1; k < n; k++) {'),
+   E('    string next = "";'),
+   E('    int i = 0;'),
+   E('    while (i < s.size()) {'),
+   E('      char c = s[i]; int cnt = 0;'),
+   E('      while (i < s.size() && s[i] == c)'),
+   E('        { cnt++; i++; }'),
+   E('      next += to_string(cnt) + c;'),
+   E('    }'),
+   E('    s = next;'),
+   E('  }'),
+   E('  return s;'),
+   E('}')
+ ],
+ sim(){
+   const F=[];
+   let s=[...'1'];
+   F.push(AF(s,{},{n:4,k:1,s:'"1"'},'শুরু: s="1". n=4 পর্যন্ত iterate করবো।',2,'s="1"',{fnd:[0]}));
+
+   for(let k=1;k<4;k++){
+     const str=s.join('');
+     F.push(AF(s,{},{k,s:`"${str}"`,step:`round ${k}`},`Round ${k}: "${str}" থেকে নতুন string বানাই`,3,'next=""',{org:[...Array(s.length).keys()]}));
+     let next=[];let i=0;
+     while(i<s.length){
+       const c=s[i];let cnt=0;const start=i;
+       while(i<s.length&&s[i]===c){cnt++;i++;}
+       const newPart=[cnt+'',c];
+       F.push(AF(s,{i:Math.min(i,s.length-1)},{k,c:`'${c}'`,cnt,next:next.join('')},
+         `'${c}' ${cnt}বার → "${cnt}${c}" যোগ করো`,10,`next+="${cnt}${c}"`,
+         {hi:[...Array(cnt).keys()].map(x=>x+start),org:[i>0?i-1:0]}));
+       next.push(...newPart);
+     }
+     s=[...next];
+     F.push(AF(s,{},{k,s:`"${s.join('')}"`,next:`"${s.join('')}"`},`Round ${k} শেষ: s="${s.join('')}"`,12,`s=next="${s.join('')}"`,{fnd:[...Array(s.length).keys()]}));
+   }
+   F.push(AF(s,{},{},`✅ n=4 এর ans: "${s.join('')}"`,14,'return s',{fnd:[...Array(s.length).keys()],res:`"${s.join('')}"`}));
+   return F;
+ }},
+
+// ── E3: Missing Number ──
+{name:'Missing Number',d:'E',
+ desc:'[0..n] এর মধ্যে একটা missing। arr=[3,0,1] → 2।',
+ why:'Expected sum (0+1+...+n) = n*(n+1)/2। Actual sum বাদ দিলে missing পাই। O(n), O(1)।',
+ intuition:'যদি সবাই উপস্থিত থাকতো, total একটা নির্দিষ্ট সংখ্যা হতো। Actual total যদি কম হয়, সেই পার্থক্যটাই missing। Arithmetic অনুযায়ী expected − actual = missing।',
+ analogy:'🏫 ক্লাসে ৩০ জন পড়ার কথা। Roll number ১-৩০। Attendance sheet এ সব roll এর sum করো। Expected sum থেকে actual sum বাদ দিলেই absent ছাত্রের roll পাবে।',
+ codeLines:[
+   E('int missingNumber(vector<int>& nums) {'),
+   E('  int n = nums.size();'),
+   E('  int expected = n * (n + 1) / 2;'),
+   E('  int actual = 0;'),
+   E('  for (int x : nums)'),
+   E('    actual += x;'),
+   E('  return expected - actual;'),
+   E('}')
+ ],
+ sim(){
+   const nums=[3,0,1];const F=[];
+   const n=nums.length;const expected=n*(n+1)/2;let actual=0;
+   F.push(AF(nums,{},{n,expected,actual},`n=${n}, expected sum=${expected}, actual=0`,3,'expected=n*(n+1)/2'));
+   nums.forEach((x,i)=>{
+     actual+=x;
+     F.push(AF(nums,{i},{expected,actual,x},`x=${x} যোগ হলো। actual=${actual}`,6,'actual+=x',{hi:[i],chg:['actual'],cond:`sum so far`,cv:true}));
+   });
+   F.push(AF(nums,{},{expected,actual,missing:expected-actual},`missing = ${expected}-${actual} = ${expected-actual}`,7,`return ${expected}-${actual}`,{fnd:[...Array(nums.length).keys()],res:expected-actual}));
+   return F;
+ }},
+
+// ── E4: Find All Disappeared ──
+{name:'Find Disappeared Numbers',d:'E',
+ desc:'1..n range তে কোন সংখ্যাগুলো নেই। arr=[4,3,2,7,8,2,3,1] → [5,6]।',
+ why:'Mark & Sweep: nums[abs(nums[i])-1] কে negative করো (visited mark)। তারপর positive index+1 গুলো missing।',
+ intuition:'Array কে নিজেই একটা "visited" boolean array হিসেবে ব্যবহার করো। Negative sign মানে "এই index visit হয়েছে"। Extra space লাগে না — array তেই sign দিয়ে mark করো।',
+ analogy:'📚 Library এ ১-N নম্বর বই আছে। কেউ বই নিলে সেই shelf এ একটা লাল tag লাগাও। শেষে যেসব shelf এ লাল tag নেই, সেগুলোর বই কেউ নেয়নি — মানে সেই numbers missing।',
+ codeLines:[
+   E('vector<int> findDisappeared(vector<int>& nums) {'),
+   E('  // Pass 1: mark visited by negating'),
+   E('  for (int x : nums) {'),
+   E('    int idx = abs(x) - 1;'),
+   E('    if (nums[idx] > 0) nums[idx] *= -1;'),
+   E('  }'),
+   E('  // Pass 2: find unmarked (positive) indices'),
+   E('  vector<int> res;'),
+   E('  for (int i = 0; i < nums.size(); i++)'),
+   E('    if (nums[i] > 0) res.push_back(i + 1);'),
+   E('  return res;'),
+   E('}')
+ ],
+ sim(){
+   let nums=[4,3,2,7,8,2,3,1];const F=[];
+   F.push(AF([...nums],{},{pass:1},'Pass 1: visited index গুলো negative করো।',3,'mark pass',{org:[...Array(nums.length).keys()]}));
+   nums.forEach((x,ci)=>{
+     const idx=Math.abs(x)-1;
+     if(nums[idx]>0){nums[idx]*=-1;}
+     F.push(AF([...nums],{i:ci},{x,idx,'nums[idx]':nums[idx]},`x=${x}→idx=${idx}. nums[${idx}] mark ✓`,5,'nums[idx]*=-1',{hi:[ci],marked:[idx]}));
+   });
+   F.push(AF([...nums],{},{pass:2},'Pass 2: positive index+1 = missing numbers!',9,'find positive',{marked:[...Array(nums.length).keys()].filter(i=>nums[i]<0)}));
+   const res=[];
+   nums.forEach((v,i)=>{
+     if(v>0){res.push(i+1);}
+     F.push(AF([...nums],{i},{i,val:v,missing:v>0?i+1:'—'},`nums[${i}]=${v} → ${v>0?`missing: ${i+1}`:'visited OK'}`,10,v>0?`res.push(${i+1})`:'skip',{hi:v>0?[i]:[],red:v<0?[i]:[]}));
+   });
+   F.push(AF([...nums],{},{},`✅ Missing: [${res}]`,11,'return res',{fnd:[],res:`[${res}]`}));
+   return F;
+ }},
+
+// ── E5: String Compression ──
+{name:'String Compression',d:'E',
+ desc:'আলাদা characters count করে in-place compress করো। ["a","a","b","b","c","c","c"] → 6 (a2b2c3)।',
+ why:'Write pointer w + read pointer i। Same character count করো, w তে লেখো। O(n), O(1)।',
+ intuition:'Read pointer এগিয়ে যাচ্ছে, write pointer শুধু unique groups দেখলেই লেখে। দুটো pointer এর গতির পার্থক্যটাই compression তৈরি করে।',
+ analogy:'📦 পাকিং করার সময় একই জিনিস একসাথে রাখো। "৩টা আপেল" লিখলে আলাদা আলাদা না লিখে একটা label এ লেখো। Warehouse worker ঠিক এভাবে inventory compress করে।',
+ codeLines:[
+   E('int compress(vector<char>& c) {'),
+   E('  int w = 0, i = 0;'),
+   E('  while (i < c.size()) {'),
+   E('    char ch = c[i]; int cnt = 0;'),
+   E('    while (i < c.size() && c[i] == ch)'),
+   E('      { cnt++; i++; }'),
+   E('    c[w++] = ch;'),
+   E('    if (cnt > 1) {'),
+   E('      for (char d : to_string(cnt))'),
+   E('        c[w++] = d;'),
+   E('    }'),
+   E('  }'),
+   E('  return w;'),
+   E('}')
+ ],
+ sim(){
+   let arr=[...'aabbccc'];const F=[];let w=0,i=0;
+   F.push(AF([...arr],{w,i},{w,i},'শুরু: w=0 (write), i=0 (read)',2,'w=0, i=0'));
+   while(i<arr.length){
+     const ch=arr[i];let cnt=0;const start=i;
+     while(i<arr.length&&arr[i]===ch){cnt++;i++;}
+     F.push(AF([...arr],{w,i:i-1},{w,i:i-1,ch:`'${ch}'`,cnt},`'${ch}' ${cnt}বার পেলাম`,5,'count same chars',{hi:[...Array(cnt).keys()].map(x=>x+start)}));
+     arr[w]=ch;
+     F.push(AF([...arr],{w,i:Math.min(i,arr.length-1)},{w,ch:`'${ch}'`},`arr[w=${w}]='${ch}', w++`,7,'c[w++]=ch',{fnd:[w],chg:['w']}));w++;
+     if(cnt>1){
+       for(const d of String(cnt)){arr[w]=d;w++;}
+       F.push(AF([...arr],{w:w-1,i:Math.min(i,arr.length-1)},{w,cnt},`count "${cnt}" লিখলাম, w=${w}`,9,'write count digits',{fnd:[...Array(String(cnt).length).keys()].map(x=>x+w-String(cnt).length)}));
+     }
+   }
+   F.push(AF([...arr],{},{w},`✅ Compressed length = ${w}`,13,'return w',{fnd:[...Array(w).keys()],res:w}));
+   return F;
+ }},
+
+// ── M1: Merge Intervals ──
+{name:'Merge Intervals',d:'M',
+ desc:'Overlapping intervals merge করো। [[1,3],[2,6],[8,10],[15,18]] → [[1,6],[8,10],[15,18]]।',
+ why:'Sort by start time। Current interval কে পরেরটার সাথে overlap check করো। Overlap হলে merge।',
+ intuition:'Sort করলে overlapping intervals গুলো কাছাকাছি আসে। তারপর শুধু check: "পরেরটা কি আমার ভেতরে শুরু হয়?" হলে extend করো। না হলে নতুন interval রাখো।',
+ analogy:'📅 Google Calendar এ meetings merge ভাবো। 2-4pm এবং 3-6pm থাকলে দেখাবে 2-6pm। Calendar app ঠিক এই কাজটাই করে — sort করে, overlap দেখলে একটাতে মেশায়।',
+ codeLines:[
+   E('vector<vector<int>> merge(vector<vector<int>>& iv) {'),
+   E('  sort(iv.begin(), iv.end()); // sort by start'),
+   E('  vector<vector<int>> res;'),
+   E('  res.push_back(iv[0]);'),
+   E('  for (int i = 1; i < iv.size(); i++) {'),
+   E('    auto& cur = res.back();'),
+   E('    if (iv[i][0] <= cur[1]) {'),
+   E('      // overlap: extend end'),
+   E('      cur[1] = max(cur[1], iv[i][1]);'),
+   E('    } else {'),
+   E('      // no overlap: push new'),
+   E('      res.push_back(iv[i]);'),
+   E('    }'),
+   E('  }'),
+   E('  return res;'),
+   E('}')
+ ],
+ sim(){
+   const ivs=[[1,3],[2,6],[8,10],[15,18]];const F=[];const merged=[];
+   F.push(IF(ivs,[],{},'Sort by start। [[1,3],[2,6],[8,10],[15,18]]',2,'sort()',{active:0}));
+   merged.push([...ivs[0]]);
+   F.push(IF(ivs,[[...merged[0]]],{cur:`[${merged[0]}]`},`শুরু: result তে [${ivs[0]}] যোগ`,4,'res.push(iv[0])',{active:0}));
+   for(let i=1;i<ivs.length;i++){
+     const cur=merged[merged.length-1];
+     const overlap=ivs[i][0]<=cur[1];
+     F.push(IF(ivs,[...merged.map(x=>[...x])],{cur:`[${cur}]`,next:`[${ivs[i]}]`},
+       `iv[${i}]=[${ivs[i]}] vs cur end=${cur[1]}. Overlap? ${overlap}`,7,
+       `${ivs[i][0]}<=${cur[1]}?`,{active:i,cond:`${ivs[i][0]}<=${cur[1]}?`,cv:overlap}));
+     if(overlap){
+       cur[1]=Math.max(cur[1],ivs[i][1]);
+       F.push(IF(ivs,[...merged.map(x=>[...x])],{cur:`[${cur}]`,action:'MERGE'},
+         `Overlap! merge → [${cur}]`,9,`cur[1]=max(${cur[1]},${ivs[i][1]})`,{active:i,mergedIdx:merged.length-1}));
+     }else{
+       merged.push([...ivs[i]]);
+       F.push(IF(ivs,[...merged.map(x=>[...x])],{cur:`[${ivs[i]}]`,action:'NEW'},
+         `No overlap! [${ivs[i]}] নতুন range`,12,'res.push_back(iv[i])',{active:i}));
+     }
+   }
+   F.push(IF(ivs,[...merged.map(x=>[...x])],{},`✅ Merged: ${merged.map(x=>'['+x+']').join(', ')}`,15,'return res',{res:merged.map(x=>'['+x+']').join(', ')}));
+   return F;
+ }},
+
+// ── M2: Insert Interval ──
+{name:'Insert Interval',d:'M',
+ desc:'Sorted non-overlapping intervals তে নতুন insert করো। [[1,3],[6,9]] + [2,5] → [[1,5],[6,9]]।',
+ why:'তিন ভাগ: (1) new এর আগে, (2) overlap হলে merge, (3) new এর পরে। O(n) single pass।',
+ intuition:'নতুন interval টার সাথে কারা overlap করে সেটা তিন ভাগে ভাগ করো। আগে যা শেষ, পরে যা শুরু, আর মাঝে যারা ধাক্কা খায় — মাঝেরগুলো সব merge হয়।',
+ analogy:'🗓️ একটা ব্যস্ত meeting schedule এ নতুন ৩ঘণ্টার meeting ঢোকাও। আগে ending meetings রেখে দাও, পরে starting meetings রেখে দাও, মাঝে overlap করা সবকিছু একটা বড় block এ merge করো।',
+ codeLines:[
+   E('vector<vector<int>> insert(vector<vector<int>>& iv,'),
+   E('                           vector<int>& nw) {'),
+   E('  vector<vector<int>> res;'),
+   E('  int i = 0, n = iv.size();'),
+   E('  // 1. new এর আগে যা আছে'),
+   E('  while (i < n && iv[i][1] < nw[0])'),
+   E('    res.push_back(iv[i++]);'),
+   E('  // 2. overlap হলে merge'),
+   E('  while (i < n && iv[i][0] <= nw[1]) {'),
+   E('    nw[0] = min(nw[0], iv[i][0]);'),
+   E('    nw[1] = max(nw[1], iv[i][1]);'),
+   E('    i++;'),
+   E('  }'),
+   E('  res.push_back(nw);'),
+   E('  // 3. new এর পরে'),
+   E('  while (i < n) res.push_back(iv[i++]);'),
+   E('  return res;'),
+   E('}')
+ ],
+ sim(){
+   const iv=[[1,3],[6,9]];let nw=[2,5];const F=[];const res=[];
+   F.push(IF(iv,[],{nw:`[${nw}]`},'শুরু: new=[2,5] insert করবো।',4,'init'));
+   let i=0;
+   // phase 1
+   F.push(IF(iv,[],{i,nw:`[${nw}]`,phase:'before'},`Phase 1: iv[i][1] < ${nw[0]} → add before`,6,'iv[i][1]<nw[0]',{cond:`iv[0][1]=${iv[0][1]} < ${nw[0]}?`,cv:iv[0][1]<nw[0]}));
+   while(i<iv.length&&iv[i][1]<nw[0]){res.push([...iv[i]]);i++;}
+   // phase 2
+   F.push(IF(iv,[...res.map(x=>[...x])],{i,nw:`[${nw}]`,phase:'merge'},`Phase 2: Overlap check → merge`,9,'merge loop',{active:i}));
+   while(i<iv.length&&iv[i][0]<=nw[1]){
+     nw[0]=Math.min(nw[0],iv[i][0]);nw[1]=Math.max(nw[1],iv[i][1]);
+     F.push(IF(iv,[...res.map(x=>[...x])],{nw:`[${nw}]`,merged:`[${iv[i]}]`},`Overlap! merge → nw=[${nw}]`,11,'nw merge',{active:i,mergedIdx:res.length}));
+     i++;
+   }
+   res.push([...nw]);
+   F.push(IF(iv,[...res.map(x=>[...x])],{nw:`[${nw}]`},'Merged nw push করলাম',14,'res.push(nw)',{mergedIdx:res.length-1}));
+   while(i<iv.length){res.push([...iv[i]]);i++;}
+   F.push(IF(iv,[...res.map(x=>[...x])],{},`✅ Result: ${res.map(x=>'['+x+']').join(', ')}`,17,'return res',{res:res.map(x=>'['+x+']').join(', ')}));
+   return F;
+ }},
+
+// ── M3: Jump Game ──
+{name:'Jump Game',d:'M',
+ desc:'প্রতিটি index এ সর্বোচ্চ কত jump দেওয়া যায়। শেষ index এ পৌঁছানো যাবে? [2,3,1,1,4] → true।',
+ why:'Greedy: max_reach track করো। যদি i > max_reach হয়, আটকে গেছি। O(n), O(1)।',
+ intuition:'প্রতিটি position এ দাঁড়িয়ে তুমি সবচেয়ে দূরে কোথায় যেতে পারবে সেটা update করো। যদি কোনো position এ পৌঁছানোই না যায়, game over। কোনো backtracking দরকার নেই।',
+ analogy:'🐸 পুকুরে পাথরের উপর দিয়ে ব্যাঙের লাফ ভাবো। প্রতিটি পাথর থেকে সে নির্দিষ্ট দূরত্ব লাফ দিতে পারে। সে সবসময় নিজের "সর্বোচ্চ reach" মনে রাখে। যদি একটা পাথরে reach করতে না পারে, পানিতে পড়বে।',
+ codeLines:[
+   E('bool canJump(vector<int>& nums) {'),
+   E('  int reach = 0;'),
+   E('  for (int i = 0; i < nums.size(); i++) {'),
+   E('    if (i > reach) return false; // আটকে গেছি'),
+   E('    reach = max(reach, i + nums[i]);'),
+   E('    if (reach >= nums.size()-1) return true;'),
+   E('  }'),
+   E('  return true;'),
+   E('}')
+ ],
+ sim(){
+   const nums=[2,3,1,1,4];const F=[];let reach=0;
+   F.push(AF(nums,{i:0,reach:0},{reach,i:0},'শুরু: reach=0। সবচেয়ে দূর কোথায় যেতে পারি?',2,'reach=0'));
+   for(let i=0;i<nums.length;i++){
+     const canReach=i<=reach;
+     F.push(AF(nums,{i,reach},{i,reach,'i+jump':i+nums[i]},`i=${i}, nums[i]=${nums[i]}. Reachable? ${canReach}`,4,`i(${i})>reach(${reach})? → ${!canReach}`,
+       {hi:[i],org:[Math.min(reach,nums.length-1)],cond:`i>reach?`,cv:!canReach}));
+     if(!canReach){F.push(AF(nums,{i},{},`❌ i=${i} reach করতে পারিনি!`,4,'return false',{red:[i],res:'false'}));return F;}
+     const newReach=Math.max(reach,i+nums[i]);
+     if(newReach>reach){reach=newReach;F.push(AF(nums,{i,reach:Math.min(reach,nums.length-1)},{i,reach,jump:nums[i]},`reach update: max(${reach-nums[i]+Math.max(0,reach-nums[i]-i)},${i+nums[i]}) = ${reach}`,5,'reach=max(reach,i+jump)',{fnd:[i],chg:['reach']}));}
+     if(reach>=nums.length-1){F.push(AF(nums,{i},{reach},`✅ reach=${reach} ≥ ${nums.length-1}!`,6,'return true',{fnd:[...Array(nums.length).keys()],res:'true'}));return F;}
+   }
+   F.push(AF(nums,{},{},`✅ Can Jump!`,8,'return true',{fnd:[...Array(nums.length).keys()],res:'true'}));
+   return F;
+ }},
+
+// ── M4: Product Except Self ──
+{name:'Product Except Self',d:'M',
+ desc:'প্রতিটি position এ বাকি সবার product। [1,2,3,4] → [24,12,8,6]। Division নিষিদ্ধ।',
+ why:'Left prefix product + Right suffix product। দুটো pass, O(n), O(1) extra space।',
+ intuition:'Division ছাড়া একটাই trick: i-এর বাম দিকের সব product আলাদা রাখো, ডান দিকের সব product আলাদা রাখো। তাদের গুণ করলেই "নিজ ছাড়া সবার product" পাওয়া যায়।',
+ analogy:'🏭 একটা assembly line এ ৫টা মেশিন আছে। প্রতিটির efficiency জানতে চাও বাকি সব মেশিন বাদ দিয়ে। বাম থেকে একবার চালাও, ডান থেকে একবার চালাও — দুটো মিলিয়ে উত্তর।',
+ codeLines:[
+   E('vector<int> productExceptSelf(vector<int>& nums) {'),
+   E('  int n = nums.size();'),
+   E('  vector<int> res(n, 1);'),
+   E('  // Left pass: res[i] = product of nums[0..i-1]'),
+   E('  int left = 1;'),
+   E('  for (int i = 0; i < n; i++) {'),
+   E('    res[i] = left;'),
+   E('    left *= nums[i];'),
+   E('  }'),
+   E('  // Right pass: multiply product of nums[i+1..n-1]'),
+   E('  int right = 1;'),
+   E('  for (int i = n-1; i >= 0; i--) {'),
+   E('    res[i] *= right;'),
+   E('    right *= nums[i];'),
+   E('  }'),
+   E('  return res;'),
+   E('}')
+ ],
+ sim(){
+   const nums=[1,2,3,4];const F=[];const res=new Array(nums.length).fill(1);
+   F.push(AF([...res],{i:0},{left:1,pass:'Left'},'Pass 1: Left prefix product বানাই।',5,'left=1',{org:[...Array(nums.length).keys()]}));
+   let left=1;
+   for(let i=0;i<nums.length;i++){
+     res[i]=left;left*=nums[i];
+     F.push(AF([...res],{i},{i,left,'res[i]':res[i]},`res[${i}]=${res[i]} (left prefix), left=${left}`,7,'res[i]=left; left*=nums[i]',{hi:[i],chg:['left']}));
+   }
+   F.push(AF([...res],{},{pass:'Right',right:1},'Pass 2: Right suffix multiply करो।',11,'right=1',{org:[...Array(nums.length).keys()]}));
+   let right=1;
+   for(let i=nums.length-1;i>=0;i--){
+     res[i]*=right;right*=nums[i];
+     F.push(AF([...res],{i},{i,right,'res[i]':res[i]},`res[${i}]*=${right/nums[i]}→${res[i]}, right=${right}`,13,'res[i]*=right',{fnd:[i],chg:['right']}));
+   }
+   F.push(AF([...res],{},{},`✅ [${res}]`,16,'return res',{fnd:[...Array(nums.length).keys()],res:`[${res}]`}));
+   return F;
+ }},
+
+// ── M5: Rotate Array ──
+{name:'Rotate Array',d:'M',
+ desc:'Array k step right rotate করো। [1,2,3,4,5,6,7], k=3 → [5,6,7,1,2,3,4]।',
+ why:'Reverse trick: (1) সব reverse, (2) first k reverse, (3) rest reverse। O(n), O(1)।',
+ intuition:'সব উল্টালে শেষেরগুলো সামনে আসে। তারপর দুই অংশ আলাদা করে আবার উল্টালে সঠিক order পাওয়া যায়। তিনটা reverse — extra space শূন্য।',
+ analogy:'🎡 একটা circular conveyor belt rotate করার মতো। Belt সব উল্টে ফেলো, তারপর প্রথম অংশ ঠিক করো, বাকি অংশ ঠিক করো। Physical product ঘোরানো ছাড়া order change।',
+ codeLines:[
+   E('void rotate(vector<int>& nums, int k) {'),
+   E('  int n = nums.size();'),
+   E('  k %= n;  // k > n হলে mod'),
+   E('  // Step 1: সব উল্টাও'),
+   E('  reverse(nums.begin(), nums.end());'),
+   E('  // Step 2: প্রথম k উল্টাও'),
+   E('  reverse(nums.begin(), nums.begin()+k);'),
+   E('  // Step 3: বাকি উল্টাও'),
+   E('  reverse(nums.begin()+k, nums.end());'),
+   E('}')
+ ],
+ sim(){
+   let nums=[1,2,3,4,5,6,7];const k=3;const F=[];
+   F.push(AF([...nums],{},{k,n:nums.length},'শুরু: k=3। Reverse trick দিয়ে O(1) space এ rotate।',3,'k%=n'));
+   nums.reverse();
+   F.push(AF([...nums],{},{step:1,k},`Step 1: সব reverse → [${nums}]`,5,'reverse all',{org:[...Array(nums.length).keys()]}));
+   const part1=[...nums.slice(0,k)].reverse();
+   nums=[...part1,...nums.slice(k)];
+   F.push(AF([...nums],{},{step:2,k},`Step 2: first ${k} reverse → [${nums}]`,7,`reverse(0..${k-1})`,{fnd:[...Array(k).keys()]}));
+   const part2=[...nums.slice(k)].reverse();
+   nums=[...nums.slice(0,k),...part2];
+   F.push(AF([...nums],{},{step:3,k},`Step 3: rest reverse → [${nums}]`,9,`reverse(${k}..n-1)`,{fnd:[...Array(nums.length-k).keys()].map(x=>x+k)}));
+   F.push(AF([...nums],{},{},`✅ Rotated: [${nums}]`,9,'done',{fnd:[...Array(nums.length).keys()],res:`[${nums}]`}));
+   return F;
+ }},
+
+// ── H1: Jump Game II ──
+{name:'Jump Game II',d:'H',
+ desc:'Minimum jumps দিয়ে শেষে পৌঁছাও। [2,3,1,1,4] → 2 jumps।',
+ why:'Greedy BFS: current level এর max reach পর্যন্ত যাও, তারপর jump count বাড়াও। O(n), O(1)।',
+ intuition:'BFS level এর মতো ভাবো। এক jump এ কতদূর যেতে পারো সেটা একটা "level"। Level শেষ হলেই jump count বাড়ে। Greedy — সবসময় সর্বোচ্চ reach টা ধরো।',
+ analogy:'🚌 Bus route এ minimum stops এ গন্তব্যে পৌঁছাও। প্রতিটি bus stop থেকে আরো কতটা যাওয়া যায় দেখো। Current route এর শেষে পৌঁছালে পরের bus নাও। Bus count = jump count।',
+ codeLines:[
+   E('int jump(vector<int>& nums) {'),
+   E('  int jumps=0, curEnd=0, farthest=0;'),
+   E('  for (int i=0; i<nums.size()-1; i++) {'),
+   E('    farthest = max(farthest, i + nums[i]);'),
+   E('    if (i == curEnd) {  // current level শেষ'),
+   E('      jumps++;'),
+   E('      curEnd = farthest;'),
+   E('    }'),
+   E('  }'),
+   E('  return jumps;'),
+   E('}')
+ ],
+ sim(){
+   const nums=[2,3,1,1,4];const F=[];let jumps=0,curEnd=0,farthest=0;
+   F.push(AF(nums,{i:0},{jumps,curEnd,farthest},'শুরু: jumps=0, curEnd=0, farthest=0',2,'init'));
+   for(let i=0;i<nums.length-1;i++){
+     farthest=Math.max(farthest,i+nums[i]);
+     const needJump=i===curEnd;
+     F.push(AF(nums,{i,reach:Math.min(farthest,nums.length-1)},{i,jumps,curEnd,farthest,jump:nums[i]},
+       `i=${i}, reach=${i+nums[i]}. farthest=${farthest}. i==curEnd? ${needJump}`,4,`farthest=max(${farthest},${i+nums[i]})`,
+       {hi:[i],org:[Math.min(farthest,nums.length-1)],cond:`i==curEnd?`,cv:needJump}));
+     if(needJump){
+       jumps++;curEnd=farthest;
+       F.push(AF(nums,{i,reach:Math.min(curEnd,nums.length-1)},{i,jumps,curEnd,farthest},`Jump! jumps=${jumps}, curEnd=${curEnd}`,6,'jumps++; curEnd=farthest',{fnd:[i],chg:['jumps','curEnd']}));
+     }
+   }
+   F.push(AF(nums,{},{jumps},`✅ Minimum jumps = ${jumps}`,10,'return jumps',{fnd:[...Array(nums.length).keys()],res:jumps}));
+   return F;
+ }},
+
+// ── H2: First Missing Positive ──
+{name:'First Missing Positive',d:'H',
+ desc:'Unsorted array তে সবচেয়ে ছোট missing positive। [3,4,-1,1] → 2।',
+ why:'Cycle sort: nums[i] কে nums[nums[i]-1] position এ রাখো। তারপর nums[i]!=i+1 হলে সেটাই missing।',
+ intuition:'Array কে নিজেই hashmap হিসেবে ব্যবহার করো। ১ index 0 এ, ২ index 1 এ — সঠিক জায়গায় রাখো। যেটা নেই, সেটাই missing। Extra space শূন্য।',
+ analogy:'🏠 Apartment building এ flat number ১-N। প্রতিটি resident সঠিক flat এ যাও বলো (cycle sort)। যে flat খালি থাকে সেটার নম্বরই answer। Property manager এই কাজ করে।',
+ codeLines:[
+   E('int firstMissingPositive(vector<int>& nums) {'),
+   E('  int n = nums.size();'),
+   E('  // Cycle sort: 1..n কে সঠিক জায়গায় রাখো'),
+   E('  for (int i = 0; i < n; i++) {'),
+   E('    while (nums[i]>0 && nums[i]<=n &&'),
+   E('           nums[nums[i]-1] != nums[i])'),
+   E('      swap(nums[i], nums[nums[i]-1]);'),
+   E('  }'),
+   E('  // find first wrong position'),
+   E('  for (int i = 0; i < n; i++)'),
+   E('    if (nums[i] != i+1) return i+1;'),
+   E('  return n+1;'),
+   E('}')
+ ],
+ sim(){
+   let nums=[3,4,-1,1];const F=[];
+   F.push(AF([...nums],{},{pass:1},'Cycle sort: প্রতিটি number তার সঠিক index এ পাঠাও।',4,'cycle sort',{org:[...Array(nums.length).keys()]}));
+   for(let i=0;i<nums.length;i++){
+     while(nums[i]>0&&nums[i]<=nums.length&&nums[nums[i]-1]!==nums[i]){
+       const j=nums[i]-1;
+       F.push(AF([...nums],{i,j},{i,j,val:nums[i]},`nums[${i}]=${nums[i]} → swap to index ${j}`,7,'swap',{hi:[i],org:[j],cond:`nums[${j}]!=${nums[i]}?`,cv:nums[j]!==nums[i]}));
+       [nums[i],nums[j]]=[nums[j],nums[i]];
+     }
+     F.push(AF([...nums],{i},{i,val:nums[i]},`i=${i}: nums[i]=${nums[i]} placed.`,4,'place ok',{fnd:[i]}));
+   }
+   F.push(AF([...nums],{},{pass:2},'Pass 2: nums[i]!=i+1 হলে সেটাই missing!',10,'find missing',{org:[...Array(nums.length).keys()]}));
+   for(let i=0;i<nums.length;i++){
+     const wrong=nums[i]!==i+1;
+     F.push(AF([...nums],{i},{i,val:nums[i],expected:i+1},`nums[${i}]=${nums[i]}, expected=${i+1}. Wrong? ${wrong}`,11,`${nums[i]}!=${i+1}?`,{hi:wrong?[i]:[],cond:`nums[${i}]!=${i+1}?`,cv:wrong}));
+     if(wrong){F.push(AF([...nums],{},{missing:i+1},`✅ First missing positive = ${i+1}`,11,'return i+1',{red:[i],res:i+1}));return F;}
+   }
+   F.push(AF([...nums],{},{},`✅ All 1..n present, missing = ${nums.length+1}`,12,'return n+1',{res:nums.length+1}));
+   return F;
+ }},
+
+// ── H3: Candy ──
+{name:'Candy',d:'H',
+ desc:'N children ratings অনুযায়ী candy দাও। More rating → more candy than neighbors। [1,0,2] → 5।',
+ why:'Two-pass greedy: Left→Right (বড় হলে +1), Right→Left (বড় হলে max)। O(n), O(n)।',
+ intuition:'একবারে দুই দিক handle করা কঠিন। তাই দুটো simple pass করো: প্রথমে বাম neighbor এর তুলনায় ঠিক করো, তারপর ডান neighbor এর। দুটো pass এ সব constraint পূরণ।',
+ analogy:'🍬 স্কুলে teacher marks অনুযায়ী candy দেয়। প্রথমে বাম থেকে ডানে: যার mark বেশি সে আগের চেয়ে ১টা বেশি পায়। তারপর ডান থেকে বামে আবার check করে। দুই round এ সবাই খুশি।',
+ codeLines:[
+   E('int candy(vector<int>& r) {'),
+   E('  int n = r.size();'),
+   E('  vector<int> c(n, 1);'),
+   E('  // Left→Right pass'),
+   E('  for (int i=1; i<n; i++)'),
+   E('    if (r[i] > r[i-1]) c[i] = c[i-1]+1;'),
+   E('  // Right→Left pass'),
+   E('  for (int i=n-2; i>=0; i--)'),
+   E('    if (r[i] > r[i+1]) c[i] = max(c[i], c[i+1]+1);'),
+   E('  return accumulate(c.begin(),c.end(),0);'),
+   E('}')
+ ],
+ sim(){
+   const r=[1,0,2];const F=[];const c=new Array(r.length).fill(1);
+   F.push(AF([...r],{},{pass:'ratings',total:'?'},'Ratings: [1,0,2]। সবাইকে ন্যূনতম 1 candy।',3,'c={1,1,1}'));
+   // Left pass
+   F.push(AF([...c],{},{pass:'Left→Right'},'Pass 1: বাম থেকে ডানে। Rating বড় হলে +1।',5,'left pass',{org:[...Array(r.length).keys()]}));
+   for(let i=1;i<r.length;i++){
+     const inc=r[i]>r[i-1];if(inc)c[i]=c[i-1]+1;
+     F.push(AF([...c],{i},{i,'r[i]':r[i],'r[i-1]':r[i-1],'c[i]':c[i]},`r[${i}]=${r[i]} vs r[${i-1}]=${r[i-1]}. c[${i}]=${c[i]}`,6,`r[i]>r[i-1]? → c[${i}]=${c[i]}`,{hi:[i],org:[i-1],cond:`${r[i]}>${r[i-1]}?`,cv:inc,chg:inc?['c[i]']:[]}));
+   }
+   // Right pass
+   F.push(AF([...c],{},{pass:'Right→Left'},'Pass 2: ডান থেকে বামে। Rating বড় হলে max নাও।',8,'right pass',{org:[...Array(r.length).keys()]}));
+   for(let i=r.length-2;i>=0;i--){
+     const inc=r[i]>r[i+1];const old=c[i];if(inc)c[i]=Math.max(c[i],c[i+1]+1);
+     F.push(AF([...c],{i},{i,'r[i]':r[i],'c[i]':c[i]},`r[${i}]=${r[i]} vs r[${i+1}]=${r[i+1]}. c[${i}]=${c[i]}`,9,`max(${old},${c[i+1]+1})=${c[i]}`,{hi:[i],org:[i+1],cond:`${r[i]}>${r[i+1]}?`,cv:inc,chg:inc&&c[i]!==old?['c[i]']:[]}));
+   }
+   const total=c.reduce((a,b)=>a+b,0);
+   F.push(AF([...c],{},{total,candies:`[${c}]`},`✅ Total candy = ${total} [${c}]`,10,'sum',{fnd:[...Array(c.length).keys()],res:total}));
+   return F;
+ }},
+
+// ── H4: Minimum Arrows ──
+{name:'Min Arrows to Burst Balloons',d:'H',
+ desc:'Minimum arrows দিয়ে সব balloon ফাটাও। [[10,16],[2,8],[1,6],[7,12]] → 2।',
+ why:'Sort by end। একটা arrow শেষ পয়েন্টে মারো। পরের balloon যদি overlap না করে, নতুন arrow।',
+ intuition:'End point দিয়ে sort করলে, প্রথম balloon এর end এ একটা arrow মারো — ওই arrow যতজনকে cover করে সব clear। Next uncovered balloon এ নতুন arrow।',
+ analogy:'🎯 Shooting gallery তে overlapping balloons line এ ঝুলছে। যে balloon সবচেয়ে আগে শেষ হয় সেখানে একটা গুলি মারো। সেই গুলিতে যতগুলো overlap করছে সব ফাটবে। পরে যে বাকি আছে সেখানে মারো।',
+ codeLines:[
+   E('int findMinArrowShots(vector<vector<int>>& p) {'),
+   E('  sort(p.begin(), p.end(),'),
+   E('    [](auto& a, auto& b){ return a[1] < b[1]; });'),
+   E('  int arrows=1, end=p[0][1];'),
+   E('  for (int i=1; i<p.size(); i++) {'),
+   E('    if (p[i][0] > end) {  // no overlap'),
+   E('      arrows++;'),
+   E('      end = p[i][1];'),
+   E('    }'),
+   E('    // else: same arrow covers it'),
+   E('  }'),
+   E('  return arrows;'),
+   E('}')
+ ],
+ sim(){
+   const ivs=[[10,16],[2,8],[1,6],[7,12]];const F=[];
+   const sorted=[...ivs].sort((a,b)=>a[1]-b[1]);
+   F.push(IF(ivs,[],{},`Sort by end: ${sorted.map(x=>'['+x+']').join(',')}`,3,'sort by end',{active:0}));
+   let arrows=1,end_=sorted[0][1];
+   F.push(IF(sorted,[[sorted[0][0],end_]],{arrows,end_},`Arrow 1 at x=${end_}. Covers [${sorted[0]}].`,4,`arrows=1, end=${end_}`,{active:0}));
+   for(let i=1;i<sorted.length;i++){
+     const noOverlap=sorted[i][0]>end_;
+     F.push(IF(sorted,[[...sorted[0]].slice(0,2)].concat(noOverlap?[]:[[sorted[i][0],end_]]),{arrows,end_,next:`[${sorted[i]}]`},
+       `[${sorted[i]}]: start=${sorted[i][0]} > end=${end_}? ${noOverlap}`,6,`${sorted[i][0]}>${end_}?`,
+       {active:i,cond:`${sorted[i][0]}>${end_}?`,cv:noOverlap}));
+     if(noOverlap){arrows++;end_=sorted[i][1];
+       F.push(IF(sorted,[],{arrows,end_,action:'NEW ARROW'},`New arrow! arrows=${arrows}, end=${end_}`,8,`arrows++; end=${end_}`,{active:i,cond:'new arrow',cv:true}));
+     }
+   }
+   F.push(IF(sorted,[],{arrows},`✅ Minimum arrows = ${arrows}`,12,'return arrows',{res:`${arrows} arrows`}));
+   return F;
+ }},
+
+// ── H5: Longest Consecutive ──
+{name:'Longest Consecutive Sequence',d:'H',
+ desc:'Unsorted array তে longest consecutive sequence। [100,4,200,1,3,2] → 4 (1,2,3,4)।',
+ why:'HashSet তে সব রাখো। Sequence শুরু: x-1 নেই। শুরু থেকে যতদূর যাওয়া যায় count করো। O(n)।',
+ intuition:'Sorting না করেও O(n) সম্ভব। Key insight: শুধু sequence এর "শুরু" থেকে count করো। x-1 আছে মানে x শুরু নয়। শুধু শুরু থেকে count করলে প্রতিটি element একবারই process হয়।',
+ analogy:'🏘️ একটা শহরে বিভিন্ন এলাকায় বাড়ি নম্বর। তুমি সবচেয়ে লম্বা consecutive street খুঁজছো। শুধু যে বাড়ির আগে কোনো বাড়ি নেই সেখান থেকে গুনতে শুরু করো। সে শুরু না হলে skip।',
+ codeLines:[
+   E('int longestConsecutive(vector<int>& nums) {'),
+   E('  unordered_set<int> s(nums.begin(), nums.end());'),
+   E('  int best = 0;'),
+   E('  for (int n : s) {'),
+   E('    if (!s.count(n-1)) {  // sequence শুরু'),
+   E('      int cur = n, len = 1;'),
+   E('      while (s.count(cur+1))'),
+   E('        { cur++; len++; }'),
+   E('      best = max(best, len);'),
+   E('    }'),
+   E('  }'),
+   E('  return best;'),
+   E('}')
+ ],
+ sim(){
+   const nums=[100,4,200,1,3,2];const F=[];
+   const s=new Set(nums);
+   F.push(AF([...nums],{},{set:`{${[...s].join(',')}}`,best:0},'HashSet এ সব রাখলাম। O(1) lookup।',2,'build set',{org:[...Array(nums.length).keys()]}));
+   let best=0;
+   for(const n of[1,2,3,4,100,200]){
+     if(!s.has(n-1)){
+       F.push(AF([...nums],{},{n,'n-1':n-1,isStart:true},`n=${n}: n-1=${n-1} নেই → sequence শুরু!`,5,'!s.count(n-1)',{fnd:[nums.indexOf(n)],cond:`${n-1} in set?`,cv:false}));
+       let cur=n,len=1;
+       while(s.has(cur+1)){cur++;len++;
+         F.push(AF([...nums],{},{cur,len,best},`${cur} found! len=${len}`,8,'while s.count(cur+1)',{hi:[nums.indexOf(cur)]}));
+       }
+       best=Math.max(best,len);
+       F.push(AF([...nums],{},{n,len,best},`Sequence end. len=${len}, best=${best}`,9,'best=max',{fnd:[...Array(len).keys()].map(k=>nums.indexOf(n+k)),chg:['best']}));
+     }else{
+       F.push(AF([...nums],{},{n,'n-1':n-1},`n=${n}: n-1=${n-1} আছে → skip (middle)`,5,'skip',{org:[nums.indexOf(n)],cond:`${n-1} in set?`,cv:true}));
+     }
+   }
+   F.push(AF([...nums],{},{best},`✅ Longest consecutive = ${best}`,12,'return best',{fnd:[0,1,3,4].map(v=>nums.indexOf(v+1)),res:best}));
+   return F;
+ }}
+
+]; // end AR_PROBS
+
+// ══════════════════════════════════════════════════════
+// PREFIX & SLIDING WINDOW PROBLEMS (15: 5E 5M 5H)
+// ══════════════════════════════════════════════════════
+const PS_PROBS=[
+
+// ── PE1: Running Sum ──
+{name:'Running Sum of 1D Array',d:'E',
+ desc:'প্রতিটি index এ cumulative sum। [1,2,3,4] → [1,3,6,10]।',
+ why:'Prefix sum: প্রতিটি element এ আগের sum যোগ করো। O(n), O(1) extra।',
+ intuition:'সবচেয়ে সহজ prefix sum। প্রতিটি position এ আগ পর্যন্ত কত মিলেছে সেটাই রাখো। In-place করলে extra space শূন্য।',
+ analogy:'🏦 Bank passbook এ running balance ভাবো। প্রতিটি transaction এর পর total balance = আগের balance + এই transaction। Statement generate করা exactly এই কাজ।',
+ codeLines:[
+   E('vector<int> runningSum(vector<int>& nums) {'),
+   E('  for (int i = 1; i < nums.size(); i++)'),
+   E('    nums[i] += nums[i-1];'),
+   E('  return nums;'),
+   E('}')
+ ],
+ sim(){
+   let nums=[1,2,3,4];const pre=[...nums];const F=[];
+   F.push(PF([...nums],[...pre],{},'শুরু: [1,2,3,4]. প্রতিটি i তে nums[i]+=nums[i-1]।',2,'prefix loop',{}));
+   for(let i=1;i<nums.length;i++){
+     pre[i]+=pre[i-1];
+     F.push(PF([...nums],[...pre],{i,'pre[i]':pre[i],'pre[i-1]':pre[i-1]},`pre[${i}]=${pre[i-1]-nums[i]}+${nums[i]}=${pre[i]}`,3,'nums[i]+=nums[i-1]',{newPre:i,hi:[i]}));
+   }
+   F.push(PF([...nums],[...pre],{},`✅ Running sum: [${pre}]`,4,'return nums',{res:`[${pre}]`}));
+   return F;
+ }},
+
+// ── PE2: Find Pivot Index ──
+{name:'Find Pivot Index',d:'E',
+ desc:'Left sum = Right sum এমন index বের করো। [1,7,3,6,5,6] → 3।',
+ why:'Total sum আগে বের করো। Left prefix বাড়াও। left == total - left - nums[i] হলেই pivot।',
+ intuition:'প্রতিটি position এ left sum জানো, right sum = total - left - current। O(1) এ right sum বের হয়। দুটো variable এ পুরো সমস্যা সমাধান।',
+ analogy:'⚖️ Seesaw বা দাঁড়িপাল্লার ভারসাম্য বিন্দু খোঁজো। বাম দিকের ওজন = ডান দিকের ওজন এমন position কোনটা? Total weight জানা থাকলে যেকোনো position এ check করা যায়।',
+ codeLines:[
+   E('int pivotIndex(vector<int>& nums) {'),
+   E('  int total = 0;'),
+   E('  for (int x : nums) total += x;'),
+   E('  int left = 0;'),
+   E('  for (int i = 0; i < nums.size(); i++) {'),
+   E('    // right = total - left - nums[i]'),
+   E('    if (left == total - left - nums[i])'),
+   E('      return i;'),
+   E('    left += nums[i];'),
+   E('  }'),
+   E('  return -1;'),
+   E('}')
+ ],
+ sim(){
+   const nums=[1,7,3,6,5,6];const F=[];
+   const total=nums.reduce((a,b)=>a+b,0);let left=0;
+   F.push(PF([...nums],[],{total,left},'Total sum = '+total+'. left=0 দিয়ে শুরু।',3,'total sum',{hi:[...Array(nums.length).keys()]}));
+   for(let i=0;i<nums.length;i++){
+     const right=total-left-nums[i];
+     const isPivot=left===right;
+     F.push(PF([...nums],[...Array(i+1).fill(0).map((_,k)=>nums.slice(0,k).reduce((a,b)=>a+b,0))],
+       {i,left,right,'nums[i]':nums[i]},`i=${i}: left=${left}, right=${right}. Pivot? ${isPivot}`,7,`${left}==${right}?`,
+       {hi:[i],cond:`left==right?`,cv:isPivot}));
+     if(isPivot){F.push(PF([...nums],[],{pivot:i,left,right},`✅ Pivot index = ${i}!`,8,'return i',{res:i}));return F;}
+     left+=nums[i];
+   }
+   F.push(PF([...nums],[],{},`No pivot found → -1`,11,'return -1',{res:-1}));
+   return F;
+ }},
+
+// ── PE3: Maximum Average Subarray I ──
+{name:'Max Avg Subarray I',d:'E',
+ desc:'Size k এর subarray এর সর্বোচ্চ average। [1,12,-5,-6,50,3], k=4 → 12.75।',
+ why:'Fixed sliding window: প্রথম k এর sum নাও, তারপর slide করো। O(n)।',
+ intuition:'Window move করার সময় পুরো sum recalculate করতে হবে না। শুধু নতুন element যোগ করো, পুরনো element বাদ দাও। O(1) প্রতিটি step এ।',
+ analogy:'🚂 Train এর k-সংখ্যক bogey এর average weight বের করো। Train এগোলে সামনের bogey যোগ হয়, পেছনের বাদ যায়। পুরো train আবার measure করতে হয় না।',
+ codeLines:[
+   E('double findMaxAverage(vector<int>& nums, int k) {'),
+   E('  double sum = 0;'),
+   E('  for (int i = 0; i < k; i++) sum += nums[i];'),
+   E('  double best = sum;'),
+   E('  for (int i = k; i < nums.size(); i++) {'),
+   E('    sum += nums[i] - nums[i-k]; // slide'),
+   E('    best = max(best, sum);'),
+   E('  }'),
+   E('  return best / k;'),
+   E('}')
+ ],
+ sim(){
+   const nums=[1,12,-5,-6,50,3];const k=4;const F=[];
+   let sum=nums.slice(0,k).reduce((a,b)=>a+b,0);let best=sum;
+   F.push(PF([...nums],[],{sum,best,k},`First window [0..${k-1}]: sum=${sum}`,3,'initial window',{win:[0,k-1]}));
+   for(let i=k;i<nums.length;i++){
+     const old=nums[i-k];sum+=nums[i]-old;best=Math.max(best,sum);
+     F.push(PF([...nums],[],{i,sum:sum.toFixed(1),best:best.toFixed(1)},`Slide: +${nums[i]}-${old}=sum ${sum}`,6,'sum+=nums[i]-nums[i-k]',
+       {hi:[i],red:[i-k],win:[i-k+1,i],wsum:sum,chg:sum===best?['best']:[]}));
+   }
+   F.push(PF([...nums],[],{best:`${best/k}`},`✅ Max avg = ${(best/k).toFixed(2)}`,9,'return best/k',{res:(best/k).toFixed(2)}));
+   return F;
+ }},
+
+// ── PE4: Max Consecutive Ones ──
+{name:'Max Consecutive Ones',d:'E',
+ desc:'Array তে সবচেয়ে লম্বা consecutive 1s sequence। [1,1,0,1,1,1] → 3।',
+ why:'Simple scan: 1 দেখলে count বাড়াও, 0 দেখলে reset। O(n), O(1)।',
+ intuition:'এটা running max এর সমস্যা। 0 দেখলে streak শেষ, counter reset। 1 দেখলে streak বাড়ে। সবচেয়ে বড় streak মনে রাখো।',
+ analogy:'🏋️ gym এ streak tracker। প্রতিদিন exercise করলে streak বাড়ে, একদিন miss করলে reset। Year শেষে সবচেয়ে বড় streak কতদিন ছিল? ঠিক এই problem।',
+ codeLines:[
+   E('int findMaxConsecutiveOnes(vector<int>& nums) {'),
+   E('  int cnt = 0, best = 0;'),
+   E('  for (int x : nums) {'),
+   E('    if (x == 1) { cnt++; best = max(best, cnt); }'),
+   E('    else cnt = 0;'),
+   E('  }'),
+   E('  return best;'),
+   E('}')
+ ],
+ sim(){
+   const nums=[1,1,0,1,1,1];const F=[];let cnt=0,best=0;
+   F.push(AF([...nums],{i:0},{cnt,best},'শুরু: cnt=0, best=0।',2,'init'));
+   nums.forEach((x,i)=>{
+     const is1=x===1;
+     if(is1){cnt++;best=Math.max(best,cnt);}else{cnt=0;}
+     F.push(AF([...nums],{i},{cnt,best,x},`x=${x}. cnt=${cnt}, best=${best}`,4,is1?'cnt++; best=max':'cnt=0',
+       {hi:is1?[i]:[],red:!is1?[i]:[],cond:`x==1?`,cv:is1,chg:is1&&cnt===best?['best']:[]}));
+   });
+   F.push(AF([...nums],{},{best},`✅ Max consecutive = ${best}`,7,'return best',{fnd:[3,4,5],res:best}));
+   return F;
+ }},
+
+// ── PE5: Find Pivot (Search) ──
+{name:'Find Pivot in Sorted Array',d:'E',
+ desc:'Sorted rotated array তে minimum element এর index। [4,5,6,7,0,1,2] → index 4।',
+ why:'Binary search: mid এর left বা right side কোনটায় minimum আছে সেটা check করো। O(log n)।',
+ intuition:'Rotated array এর একটা অংশ সবসময় sorted। mid > right মানে pivot ডানে। Linear search O(n) কিন্তু binary search O(log n) — always eliminate half।',
+ analogy:'📖 Dictionary এর পাতা কেউ ঘুরিয়ে দিয়েছে — "m" এর পরে "a" শুরু হয়েছে। মাঝের পাতা দেখো: যদি শেষের চেয়ে বড় হয়, ঘোরানো অংশ ডানে। নইলে বামে। Half half করে খোঁজো।',
+ codeLines:[
+   E('int findMin(vector<int>& nums) {'),
+   E('  int l = 0, r = nums.size()-1;'),
+   E('  while (l < r) {'),
+   E('    int mid = (l + r) / 2;'),
+   E('    if (nums[mid] > nums[r])'),
+   E('      l = mid + 1;  // pivot right এ'),
+   E('    else'),
+   E('      r = mid;  // pivot left এ বা mid এ'),
+   E('  }'),
+   E('  return nums[l];'),
+   E('}')
+ ],
+ sim(){
+   const nums=[4,5,6,7,0,1,2];const F=[];let l=0,r=nums.length-1;
+   F.push(AF([...nums],{l,r},{l,r},'Binary search: minimum খুঁজি।',3,'l=0, r=6',{hi:[l,r]}));
+   while(l<r){
+     const mid=Math.floor((l+r)/2);
+     const goRight=nums[mid]>nums[r];
+     F.push(AF([...nums],{l,r,mid},{l,r,mid,'mid val':nums[mid],'r val':nums[r]},
+       `mid=${mid}(${nums[mid]}) vs r=${r}(${nums[r]}). Pivot right? ${goRight}`,5,`${nums[mid]}>${nums[r]}?`,
+       {hi:[mid],org:[l,r],cond:`${nums[mid]}>${nums[r]}?`,cv:goRight}));
+     if(goRight){l=mid+1;F.push(AF([...nums],{l,r},{l,r},'Pivot right এ → l=mid+1',6,'l=mid+1',{chg:['l']}));}
+     else{r=mid;F.push(AF([...nums],{l,r},{l,r},'Pivot left/mid → r=mid',8,'r=mid',{chg:['r']}));}
+   }
+   F.push(AF([...nums],{l,r:l},{},`✅ Min = nums[${l}] = ${nums[l]}`,10,'return nums[l]',{fnd:[l],res:nums[l]}));
+   return F;
+ }},
+
+// ── PM1: Subarray Sum Equals K ──
+{name:'Subarray Sum Equals K',d:'M',
+ desc:'Sum=k হওয়া subarray এর count। [1,1,1], k=2 → 2।',
+ why:'Prefix sum + HashMap: pre[j]-pre[i]=k → pre[i]=pre[j]-k। Map এ pre[j]-k count দেখো। O(n)।',
+ intuition:'Subarray sum = difference of two prefix sums। তাই প্রতিটি prefix sum দেখে জিজ্ঞেস করো: "আগে কখনো (current - k) prefix sum দেখেছি?" দেখলে সেগুলো valid subarray।',
+ analogy:'💰 তোমার দোকানে প্রতিদিনের cumulative revenue লেখো। যদি দুটো দিনের cumulative এর পার্থক্য ঠিক k হয়, মানে ওই range এ k টাকা উপার্জন হয়েছে। HashMap দিয়ে পুরনো cumulative খোঁজো।',
+ codeLines:[
+   E('int subarraySum(vector<int>& nums, int k) {'),
+   E('  unordered_map<int,int> mp = {{0,1}};'),
+   E('  int pre = 0, cnt = 0;'),
+   E('  for (int x : nums) {'),
+   E('    pre += x;'),
+   E('    cnt += mp[pre - k];  // complement আছে?'),
+   E('    mp[pre]++;'),
+   E('  }'),
+   E('  return cnt;'),
+   E('}')
+ ],
+ sim(){
+   const nums=[1,1,1];const k=2;const F=[];
+   const mp={0:1};let pre=0,cnt=0;
+   F.push(PF([...nums],[],{pre,cnt,k},'শুরু: mp={0:1}, pre=0. Prefix + complement trick!',2,'mp={0:1}',{}));
+   nums.forEach((x,i)=>{
+     pre+=x;
+     const comp=pre-k;const found=mp[comp]||0;
+     cnt+=found;mp[pre]=(mp[pre]||0)+1;
+     F.push(PF([...nums],[...Array(i+1).fill(0).map((_,j)=>nums.slice(0,j+1).reduce((a,b)=>a+b,0))],
+       {i,pre,'pre-k':comp,'mp[pre-k]':found,cnt},
+       `pre=${pre}. Need mp[${comp}]=${found}. cnt=${cnt}`,6,`mp[${comp}]=${found}`,
+       {newPre:i,hi:[i],cond:`mp[${comp}] exists?`,cv:found>0,chg:found>0?['cnt']:[]}));
+   });
+   F.push(PF([...nums],[],{cnt},`✅ Subarrays with sum=${k}: ${cnt}`,9,'return cnt',{res:cnt}));
+   return F;
+ }},
+
+// ── PM2: Max Sum Subarray of Size K ──
+{name:'Max Sum K-Size Subarray',d:'M',
+ desc:'Exactly size k এর subarray এর সর্বোচ্চ sum। [2,1,5,1,3,2], k=3 → 9।',
+ why:'Fixed sliding window। O(n), O(1)।',
+ intuition:'Window এর size fixed, তাই শুধু এক element বাদ দিয়ে নতুন একটা যোগ করলেই পরের window এর sum পাই। পুরোটা recalculate করা বোকামি।',
+ analogy:'🪟 বাড়ির জানালা দিয়ে রাস্তার দোকান দেখছো। জানালার size fix। জানালা একটু সরালে একটা দোকান বাইরে যায়, একটা আসে। সবচেয়ে বেশি দোকান দেখা যায় কোন position এ?',
+ codeLines:[
+   E('int maxSumSubarray(vector<int>& a, int k) {'),
+   E('  int sum = 0;'),
+   E('  for (int i = 0; i < k; i++) sum += a[i];'),
+   E('  int best = sum;'),
+   E('  for (int i = k; i < a.size(); i++) {'),
+   E('    sum += a[i] - a[i-k];'),
+   E('    best = max(best, sum);'),
+   E('  }'),
+   E('  return best;'),
+   E('}')
+ ],
+ sim(){
+   const a=[2,1,5,1,3,2];const k=3;const F=[];
+   let sum=a.slice(0,k).reduce((s,x)=>s+x,0);let best=sum;
+   F.push(PF([...a],[],{sum,best,k},`First window [0..${k-1}]: sum=${sum}`,3,'initial window',{win:[0,k-1]}));
+   for(let i=k;i<a.length;i++){
+     const removed=a[i-k],added=a[i];sum+=added-removed;best=Math.max(best,sum);
+     F.push(PF([...a],[],{i,sum,best,'+':added,'-':removed},`Slide: +${added}-${removed}=sum ${sum}, best=${best}`,6,'slide',{hi:[i],red:[i-k],win:[i-k+1,i],wsum:sum,chg:sum===best?['best']:[]}));
+   }
+   F.push(PF([...a],[],{best},`✅ Max sum = ${best}`,9,'return best',{res:best}));
+   return F;
+ }},
+
+// ── PM3: Longest Ones with K flips ──
+{name:'Longest Ones with K Flips',d:'M',
+ desc:'K টা 0 flip করতে পারলে সবচেয়ে লম্বা 1s। [1,1,1,0,0,0,1,1,1,1,0], k=2 → 6।',
+ why:'Sliding window: 0 এর count > k হলে l বাড়াও। O(n), O(1)।',
+ intuition:'Window এ সর্বোচ্চ k টা 0 থাকতে পারবে। বেশি হলে বাম দিক shrink করো। Window এর size maximize করো — এটাই answer।',
+ analogy:'🛣️ Highway এ k টা broken road patch করা যাবে। Continuous এর longest দূরত্ব কত যেখানে পথ ভালো (1) অথবা repair করা যাবে (0, max k টা)? Repair crew সবসময় window বজায় রাখে।',
+ codeLines:[
+   E('int longestOnes(vector<int>& nums, int k) {'),
+   E('  int l = 0, zeros = 0, best = 0;'),
+   E('  for (int r = 0; r < nums.size(); r++) {'),
+   E('    if (nums[r] == 0) zeros++;'),
+   E('    while (zeros > k)'),
+   E('      if (nums[l++] == 0) zeros--;'),
+   E('    best = max(best, r-l+1);'),
+   E('  }'),
+   E('  return best;'),
+   E('}')
+ ],
+ sim(){
+   const nums=[1,1,1,0,0,0,1,1,1,1,0];const k=2;const F=[];
+   let l=0,zeros=0,best=0;
+   F.push(AF([...nums],{l:0,r:0},{l,zeros,best,k},'শুরু: l=0, zeros=0। K=2 zeros flip করা যাবে।',2,'init'));
+   for(let r=0;r<nums.length;r++){
+     if(nums[r]===0)zeros++;
+     while(zeros>k){if(nums[l]===0)zeros--;l++;}
+     best=Math.max(best,r-l+1);
+     if(r%2===0||r===nums.length-1){
+       F.push(AF([...nums],{l,r},{l,r,zeros,best,len:r-l+1},`r=${r}. window [${l}..${r}] len=${r-l+1}. zeros=${zeros}`,7,'best=max',{win:[l,r],hi:nums[r]===0?[r]:[],chg:r-l+1===best?['best']:[]}));
+     }
+   }
+   F.push(AF([...nums],{},{best},`✅ Longest = ${best}`,9,'return best',{fnd:[...Array(best).keys()].map(x=>x+nums.length-best),res:best}));
+   return F;
+ }},
+
+// ── PM4: Fruit Into Baskets ──
+{name:'Fruit Into Baskets',d:'M',
+ desc:'At most 2 distinct fruits এর longest subarray। [1,2,1,2,3] → 4।',
+ why:'Variable sliding window: 2 এর বেশি distinct হলে l বাড়াও। HashMap দিয়ে count track।',
+ intuition:'Window এ at most 2 distinct type allow। তৃতীয় type ঢুকলে বাম দিক থেকে কাটো যতক্ষণ না আবার valid হয়। Valid window এর সর্বোচ্চ length মনে রাখো।',
+ analogy:'🧺 দুটো ঝুড়ি আছে, প্রতিটিতে একধরনের ফল রাখা যাবে। গাছের row এ হাঁটছো — পাশাপাশি কতটা দূর যাওয়া যায় শুধু দুই ধরনের ফল নিয়ে? তৃতীয় ধরন এলে পিছন থেকে ছাড়তে হবে।',
+ codeLines:[
+   E('int totalFruit(vector<int>& f) {'),
+   E('  map<int,int> cnt;'),
+   E('  int l=0, best=0;'),
+   E('  for (int r=0; r<f.size(); r++) {'),
+   E('    cnt[f[r]]++;'),
+   E('    while (cnt.size() > 2) {'),
+   E('      cnt[f[l]]--;'),
+   E('      if (!cnt[f[l]]) cnt.erase(f[l]);'),
+   E('      l++;'),
+   E('    }'),
+   E('    best = max(best, r-l+1);'),
+   E('  }'),
+   E('  return best;'),
+   E('}')
+ ],
+ sim(){
+   const f=[1,2,1,2,3];const F=[];const cnt={};let l=0,best=0;
+   F.push(AF([...f],{l:0,r:0},{l,best,distinct:0},'শুরু: At most 2 distinct fruits।',3,'init'));
+   for(let r=0;r<f.length;r++){
+     cnt[f[r]]=(cnt[f[r]]||0)+1;
+     while(Object.keys(cnt).length>2){cnt[f[l]]--;if(!cnt[f[l]])delete cnt[f[l]];l++;}
+     best=Math.max(best,r-l+1);
+     F.push(AF([...f],{l,r},{l,r,distinct:Object.keys(cnt).length,best,len:r-l+1},
+       `r=${r}(${f[r]}). distinct=${Object.keys(cnt).length}. window [${l}..${r}] len=${r-l+1}`,11,'best=max',
+       {win:[l,r],hi:[r],chg:r-l+1===best?['best']:[]}));
+   }
+   F.push(AF([...f],{},{best},`✅ Max fruits = ${best}`,13,'return best',{fnd:[0,1,2,3],res:best}));
+   return F;
+ }},
+
+// ── PM5: Minimum Size Subarray Sum ──
+{name:'Minimum Size Subarray Sum',d:'M',
+ desc:'Sum ≥ target এর minimum length subarray। [2,3,1,2,4,3], target=7 → 2।',
+ why:'Variable window: sum >= target হলে l বাড়িয়ে shrink করো। O(n)।',
+ intuition:'Expand করো যতক্ষণ না condition পূরণ হয়। পূরণ হলে shrink করো যতক্ষণ valid থাকে — minimum length update করো। Expand করতে থাকো আবার। Two pointer চলমান।',
+ analogy:'🛒 Supermarket এ কমপক্ষে ৭০০ টাকার জিনিস কিনতে হবে। Cart এ item নাও, ৭০০ হলে সবচেয়ে কম item এ কীভাবে হয় দেখো (কম দামের বাদ দাও)। Minimum item count = answer।',
+ codeLines:[
+   E('int minSubArrayLen(int t, vector<int>& a) {'),
+   E('  int l=0, sum=0, best=INT_MAX;'),
+   E('  for (int r=0; r<a.size(); r++) {'),
+   E('    sum += a[r];'),
+   E('    while (sum >= t) {'),
+   E('      best = min(best, r-l+1);'),
+   E('      sum -= a[l++];'),
+   E('    }'),
+   E('  }'),
+   E('  return best == INT_MAX ? 0 : best;'),
+   E('}')
+ ],
+ sim(){
+   const a=[2,3,1,2,4,3];const t=7;const F=[];let l=0,sum=0,best=Infinity;
+   F.push(AF([...a],{l:0,r:0},{l,sum,best:'∞',target:t},'শুরু: sum=0. Target=7।',2,'init'));
+   for(let r=0;r<a.length;r++){
+     sum+=a[r];
+     while(sum>=t){best=Math.min(best,r-l+1);
+       F.push(AF([...a],{l,r},{l,r,sum,best:best===Infinity?'∞':best,len:r-l+1},`sum=${sum}≥${t}! len=${r-l+1}, shrink`,6,'best=min',{win:[l,r],chg:r-l+1===best?['best']:[]}));
+       sum-=a[l];l++;
+     }
+     if(sum<t){F.push(AF([...a],{l,r},{l,r,sum,best:best===Infinity?'∞':best},`sum=${sum}<${t}. Expand r.`,3,'sum+=a[r]',{hi:[r]}));}
+   }
+   F.push(AF([...a],{},{best:best===Infinity?0:best},`✅ Min length = ${best===Infinity?0:best}`,10,'return best',{fnd:best===Infinity?[]:[0,5],res:best===Infinity?0:best}));
+   return F;
+ }},
+
+// ── PH1: Minimum Window Substring ──
+{name:'Minimum Window Substring',d:'H',
+ desc:'s="ADOBECODEBANC", t="ABC" তে minimum window → "BANC"।',
+ why:'Sliding window with two maps। formed count track করো। O(n+m)।',
+ intuition:'Expand করতে থাকো যতক্ষণ না সব required characters window এ আছে। তখন shrink করো minimum খুঁজতে। Formed counter দিয়ে O(1) এ valid check।',
+ analogy:'🔍 Newspaper এ একটা specific word list খুঁজছো। Page এর একটা ছোট section দিয়ে শুরু করো। সব word পেলে section ছোট করো। সবচেয়ে ছোট section যেখানে সব আছে — সেটাই answer।',
+ codeLines:[
+   E('string minWindow(string s, string t) {'),
+   E('  map<char,int> need, have;'),
+   E('  for (char c:t) need[c]++;'),
+   E('  int formed=0, req=need.size();'),
+   E('  int l=0,best=-1,bl=0,br=0;'),
+   E('  for (int r=0; r<s.size(); r++) {'),
+   E('    have[s[r]]++;'),
+   E('    if (need.count(s[r]) &&'),
+   E('        have[s[r]]==need[s[r]]) formed++;'),
+   E('    while (formed==req) {'),
+   E('      if (best<0||r-l+1<best){best=r-l+1;bl=l;br=r;}'),
+   E('      have[s[l]]--;'),
+   E('      if (need.count(s[l])&&have[s[l]]<need[s[l]])formed--;'),
+   E('      l++;'),
+   E('    }'),
+   E('  }'),
+   E('  return best<0?"":s.substr(bl,best);'),
+   E('}')
+ ],
+ sim(){
+   const s=[...'ADOBECODEBANC'];const t='ABC';const F=[];
+   const need={A:1,B:1,C:1};const have={};let formed=0,req=3,l=0,best=-1,bl=0,br=0;
+   F.push(AF([...s],{l:0,r:0},{formed,req,need:`{A:1,B:1,C:1}`},'শুরু: need={A,B,C}। Window expand করো।',4,'need build'));
+   for(let r=0;r<s.length;r++){
+     have[s[r]]=(have[s[r]]||0)+1;
+     if(need[s[r]]&&have[s[r]]===need[s[r]])formed++;
+     F.push(AF([...s],{l,r},{r,formed,req,'s[r]':`'${s[r]}'`},`r=${r}('${s[r]}'). formed=${formed}/${req}`,7,'have[s[r]]++',{hi:[r],cond:`formed==${req}?`,cv:formed===req}));
+     while(formed===req){
+       if(best<0||r-l+1<best){best=r-l+1;bl=l;br=r;}
+       F.push(AF([...s],{l,r},{l,r,best:''+best,window:s.slice(l,r+1).join('')},`Valid window! "${s.slice(l,r+1).join('')}" len=${best}. Shrink.`,11,'update best; shrink',{win:[l,r],fnd:[...Array(r-l+1).keys()].map(k=>k+l)}));
+       have[s[l]]--;if(need[s[l]]&&have[s[l]]<need[s[l]])formed--;l++;
+     }
+   }
+   F.push(AF([...s],{},{best:s.slice(bl,br+1).join('')},`✅ Min Window = "${s.slice(bl,br+1).join('')}"`,17,'return window',{fnd:[bl,bl+1,bl+2,bl+3],res:`"${s.slice(bl,br+1).join('')}"`}));
+   return F;
+ }},
+
+// ── PH2: Sliding Window Maximum ──
+{name:'Sliding Window Maximum',d:'H',
+ desc:'Size k এর প্রতিটি window এর maximum। [1,3,-1,-3,5,3,6,7], k=3 → [3,3,5,5,6,7]।',
+ why:'Deque (monotonic decreasing) দিয়ে O(n)। Front সবসময় current window এর max।',
+ intuition:'Deque এ সবসময় decreasing order রাখো — ছোট element আসলে পেছন থেকে বের করে দাও (তারা কখনো max হবে না)। Window এর বাইরে চলে যাওয়া element সামনে থেকে বের করো।',
+ analogy:'🏆 Sports tournament এ sliding window এর মধ্যে সেরা player কে? Queue তে দুর্বল players রাখার দরকার নেই — তারা কখনো winner হবে না। শুধু potential winner দের রাখো decreasing order এ।',
+ codeLines:[
+   E('vector<int> maxSlidingWindow(vector<int>& n, int k) {'),
+   E('  deque<int> dq; // stores indices'),
+   E('  vector<int> res;'),
+   E('  for (int r=0; r<n.size(); r++) {'),
+   E('    // pop out of window elements'),
+   E('    while (!dq.empty() && dq.front()<r-k+1)'),
+   E('      dq.pop_front();'),
+   E('    // pop smaller elements'),
+   E('    while (!dq.empty() && n[dq.back()]<n[r])'),
+   E('      dq.pop_back();'),
+   E('    dq.push_back(r);'),
+   E('    if (r >= k-1) res.push_back(n[dq.front()]);'),
+   E('  }'),
+   E('  return res;'),
+   E('}')
+ ],
+ sim(){
+   const nums=[1,3,-1,-3,5,3,6,7];const k=3;const F=[];
+   const dq=[];const res=[];
+   F.push(AF([...nums],{r:0},{k,dq:'[]'},'Monotonic deque: decreasing order of values।',2,'deque init'));
+   for(let r=0;r<nums.length;r++){
+     while(dq.length&&dq[0]<r-k+1)dq.shift();
+     while(dq.length&&nums[dq[dq.length-1]]<nums[r])dq.pop();
+     dq.push(r);
+     const max=nums[dq[0]];
+     if(r>=k-1){res.push(max);
+       F.push(AF([...nums],{l:r-k+1,r},{r,max,dq:`[${dq}]`,win:r-k+1+'..'+r},`Window [${r-k+1}..${r}]: max=${max}`,12,'res.push',{win:[r-k+1,r],hi:[dq[0]],fnd:res.length>0?[dq[0]]:[]}));
+     }else{
+       F.push(AF([...nums],{r},{r,dq:`[${dq}]`},`r=${r}: building window. dq=[${dq}]`,11,'dq.push_back(r)',{hi:[r]}));
+     }
+   }
+   F.push(AF([...nums],{},{result:`[${res}]`},`✅ Max windows: [${res}]`,14,'return res',{fnd:[3,4,5,6,7],res:`[${res}]`}));
+   return F;
+ }},
+
+// ── PH3: Count Subarrays with Score < K ──
+{name:'Count Good Subarrays',d:'H',
+ desc:'Product < k হওয়া subarrays count করো। [10,5,2,6], k=100 → 8।',
+ why:'Sliding window: product >= k হলে l সরাও। [l..r] valid হলে r-l+1 subarrays যোগ। O(n)।',
+ intuition:'r তে ending সব valid subarray [l..r], [l+1..r], ..., [r..r] — মোট r-l+1 টা। Window valid থাকলে সব automatically count। Invalid হলে l বাড়াও।',
+ analogy:'🛍️ Budget এ shopping: product গুলোর গুণফল budget এর মধ্যে রাখতে হবে। র নতুন item যোগ করলে budget exceed হলে সবচেয়ে আগের item বাদ দাও। Valid combinations এর count রাখো।',
+ codeLines:[
+   E('int numSubarrayProductLessThanK(vector<int>& a, int k) {'),
+   E('  if (k <= 1) return 0;'),
+   E('  int l=0, prod=1, cnt=0;'),
+   E('  for (int r=0; r<a.size(); r++) {'),
+   E('    prod *= a[r];'),
+   E('    while (prod >= k) prod /= a[l++];'),
+   E('    cnt += r-l+1;  // সব subarray ending at r'),
+   E('  }'),
+   E('  return cnt;'),
+   E('}')
+ ],
+ sim(){
+   const a=[10,5,2,6];const k=100;const F=[];let l=0,prod=1,cnt=0;
+   F.push(AF([...a],{l:0,r:0},{l,prod,cnt,k},'শুরু: prod=1, k=100।',3,'init'));
+   for(let r=0;r<a.length;r++){
+     prod*=a[r];
+     while(prod>=k){prod=Math.floor(prod/a[l]);l++;}
+     cnt+=r-l+1;
+     F.push(AF([...a],{l,r},{l,r,prod,cnt,new_:r-l+1},`r=${r}: prod=${prod}. +${r-l+1} subarrays. cnt=${cnt}`,7,'cnt+=r-l+1',
+       {win:[l,r],hi:[r],cond:`prod<k?`,cv:prod<k,chg:['cnt']}));
+   }
+   F.push(AF([...a],{},{cnt},`✅ Product < ${k} subarrays: ${cnt}`,9,'return cnt',{fnd:[...Array(a.length).keys()],res:cnt}));
+   return F;
+ }},
+
+// ── PH4: Count Subarrays with K Odd Numbers ──
+{name:'Count Subarrays with K Odds',d:'H',
+ desc:'Exactly k odd numbers আছে এমন subarrays count। [1,1,2,1,1], k=3 → 2।',
+ why:'atMost(k) - atMost(k-1) = exactly k। Two sliding window calls। O(n)।',
+ intuition:'"Exactly k" directly করা কঠিন। কিন্তু "at most k" minus "at most k-1" = "exactly k"। এই mathematical trick অনেক counting problem এ কাজ করে।',
+ analogy:'🎲 Dice roll এ exactly ৩টা even number এর sequences count করো। "At most ৩টা even" এর count থেকে "at most ২টা even" বাদ দাও — exactly ৩টার count পাবে।',
+ codeLines:[
+   E('int atMost(vector<int>& a, int k) {'),
+   E('  int l=0, cnt=0, res=0;'),
+   E('  for (int r=0; r<a.size(); r++) {'),
+   E('    if (a[r]%2==1) cnt++;'),
+   E('    while (cnt>k) if(a[l++]%2==1) cnt--;'),
+   E('    res += r-l+1;'),
+   E('  }'),
+   E('  return res;'),
+   E('}'),
+   E('int numberOfSubarrays(vector<int>& a, int k) {'),
+   E('  return atMost(a,k) - atMost(a,k-1);'),
+   E('}')
+ ],
+ sim(){
+   const a=[1,1,2,1,1];const k=3;const F=[];
+   function atMost(kk){
+     let l=0,cnt=0,res=0;
+     a.forEach((v,r)=>{if(v%2===1)cnt++;while(cnt>kk){if(a[l]%2===1)cnt--;l++;}res+=r-l+1;});
+     return res;
+   }
+   const r1=atMost(k),r2=atMost(k-1);
+   F.push(AF([...a],{},{k,formula:'exactlyK = atMostK - atMost(K-1)'},`Formula: atMost(${k}) - atMost(${k-1}) = exactly ${k} odds.`,11,'formula',{org:[...Array(a.length).keys()]}));
+   let l=0,cnt=0,res=0;
+   a.forEach((v,r)=>{
+     if(v%2===1)cnt++;
+     while(cnt>k){if(a[l]%2===1)cnt--;l++;}
+     res+=r-l+1;
+     F.push(AF([...a],{l,r},{l,r,cnt,res,'+':r-l+1},`r=${r}: odds=${cnt}, +${r-l+1}. atMost(${k})=${res}`,6,'res+=r-l+1',{win:[l,r],hi:v%2===1?[r]:[]}));
+   });
+   F.push(AF([...a],{},{atMostK:r1,'atMost(k-1)':r2,exactK:r1-r2},`atMost(${k})=${r1}, atMost(${k-1})=${r2}. Exactly ${k}=${r1-r2}`,11,`${r1}-${r2}=${r1-r2}`,{res:r1-r2}));
+   return F;
+ }},
+
+// ── PH5: Range Sum Query 2D ──
+{name:'Range Sum Query 2D',d:'H',
+ desc:'2D matrix তে region sum query। matrix=[[3,0,1,4,2],[5,6,3,2,1],...], query(2,1,4,3)।',
+ why:'2D prefix sum: pre[i][j] = sum of top-left submatrix। Query O(1) with precomputation O(mn)।',
+ intuition:'1D prefix sum কে 2D তে extend করো। pre[i][j] = top-left corner থেকে (i,j) পর্যন্ত সব এর sum। Inclusion-exclusion: বড় থেকে overlapping বাদ দিয়ে missing যোগ করো।',
+ analogy:'🗺️ শহরের heat map এ যেকোনো rectangular zone এর total pollution বের করো। প্রথমে সব sub-region এর cumulative sum বানাও (একবার O(mn))। তারপর যেকোনো query O(1) এ — corner values দিয়ে বাদ-যোগ করলেই হয়।',
+ codeLines:[
+   E('// NumMatrix constructor'),
+   E('void buildPrefix(vector<vector<int>>& m) {'),
+   E('  int R=m.size(), C=m[0].size();'),
+   E('  pre.assign(R+1, vector<int>(C+1,0));'),
+   E('  for (int i=1;i<=R;i++)'),
+   E('    for (int j=1;j<=C;j++)'),
+   E('      pre[i][j] = m[i-1][j-1]'),
+   E('        + pre[i-1][j] + pre[i][j-1]'),
+   E('        - pre[i-1][j-1];'),
+   E('}'),
+   E('// sumRegion(r1,c1,r2,c2)'),
+   E('int query(int r1,int c1,int r2,int c2){'),
+   E('  return pre[r2+1][c2+1] - pre[r1][c2+1]'),
+   E('       - pre[r2+1][c1] + pre[r1][c1];'),
+   E('}')
+ ],
+ sim(){
+   const m=[[1,2,3],[4,5,6],[7,8,9]];const F=[];
+   const R=m.length,C=m[0].length;
+   const pre=Array(R+1).fill(null).map(()=>Array(C+1).fill(0));
+   const flat=m.flat();
+   F.push(PF(flat,[],{R,C,build:'pre[i][j]'},'3x3 matrix। 2D prefix বানাই।',5,'build prefix'));
+   for(let i=1;i<=R;i++){
+     for(let j=1;j<=C;j++){
+       pre[i][j]=m[i-1][j-1]+pre[i-1][j]+pre[i][j-1]-pre[i-1][j-1];
+     }
+     F.push(PF(flat,pre[i].slice(1),{i,row:`pre[${i}]=[${pre[i].slice(1).join(',')}]`},`Row ${i} prefix done.`,8,`pre[${i}][j] built`,{newPre:i-1}));
+   }
+   // query (0,0) to (1,1)
+   const r1=0,c1=0,r2=1,c2=1;
+   const ans=pre[r2+1][c2+1]-pre[r1][c2+1]-pre[r2+1][c1]+pre[r1][c1];
+   F.push(PF(flat,pre[R].slice(1),{query:`(${r1},${c1})→(${r2},${c2})`,ans},`Query [0..1][0..1] = ${ans}`,13,'sumRegion',{res:ans}));
+   return F;
+ }}
+
+]; // end PS_PROBS
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  function buildBar(sec,probs){
+    probs.forEach((p,i)=>{
+      const btn=document.createElement('button');
+      btn.id=sec+'-pb-'+i;btn.className='pb-btn';
+      const dspan=`<span style="font-size:8px;font-weight:700;margin-left:3px;color:${p.d==='E'?'#059669':p.d==='M'?'#d97706':'#dc2626'}">${p.d}</span>`;
+      btn.innerHTML=p.name+dspan;
+      btn.onclick=()=>selProb(sec,i);
+      const bar=document.getElementById(sec+'-pbar-'+p.d.toLowerCase());
+      if(bar)bar.appendChild(btn);
+    });
+  }
+  buildBar('ar',AR_PROBS);
+  buildBar('ps',PS_PROBS);
+  drawFrame('ar',null);
+  drawFrame('ps',null);
+  document.getElementById('ar-spd-lbl').textContent='2x';
+  document.getElementById('ps-spd-lbl').textContent='2x';
+});
+
+window.addEventListener('resize',()=>{
+  if(S.ar.frames)drawFrame('ar',S.ar.frames[S.ar.idx]);else drawFrame('ar',null);
+  if(S.ps.frames)drawFrame('ps',S.ps.frames[S.ps.idx]);else drawFrame('ps',null);
+});
+</script>
+</body>
+</html>

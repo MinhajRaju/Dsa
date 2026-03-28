@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DSA Master — Two Pointers & HashMap</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fafaf8;--bg2:#f3f1ec;--bg3:#e8e4da;--card:#fff;--bd:#e4e0d5;
+  --t:#1a1614;--t2:#6b6560;--t3:#a09890;
+  --blue:#2563eb;--green:#059669;--red:#dc2626;--purple:#7c3aed;
+  --teal:#0891b2;--orange:#d97706;
+  --sh:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:15px;}
+body{background:var(--bg);color:var(--t);font-family:'DM Sans',sans-serif;line-height:1.6;overflow-x:hidden;}
+.layout{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sb{width:236px;min-width:236px;position:sticky;top:0;height:100vh;background:var(--card);border-right:1px solid var(--bd);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--bd) transparent;flex-shrink:0;}
+.sb-logo{padding:14px 14px 10px;border-bottom:1px solid var(--bd);}
+.sb-logo-t{font-size:13px;font-weight:700;}
+.sb-logo-s{font-size:10px;color:var(--t3);margin-top:1px;}
+.ng{padding:3px 0;border-bottom:1px solid var(--bd);}
+.ng:last-child{border-bottom:none;}
+.ng-t{padding:5px 13px 2px;font-size:9px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--t3);}
+.nl{display:block;padding:4px 13px;font-size:11.5px;color:var(--t2);text-decoration:none;border-left:2px solid transparent;transition:all .1s;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.nl:hover{color:var(--blue);border-left-color:var(--blue);background:#eff6ff;}
+.nl.sub{padding-left:22px;font-size:11px;color:var(--t3);}
+.nl.sub:hover{color:var(--blue);}
+.nl.sec-title{font-weight:700;color:var(--t);font-size:12px;padding:6px 13px 2px;}
+.nl.sec-title:hover{background:none;border-left-color:transparent;cursor:default;}
+
+/* MAIN */
+.main{flex:1;min-width:0;}
+
+/* HERO */
+.hero{padding:46px 48px 38px;background:linear-gradient(150deg,#fafaf8 55%,#eff6ff);border-bottom:1px solid var(--bd);}
+.hero-e{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:8px;}
+.hero h1{font-size:clamp(24px,3.5vw,46px);font-weight:700;letter-spacing:-1px;line-height:1.1;margin-bottom:8px;}
+.hero h1 em{font-style:normal;color:var(--blue);}
+.hero p{font-size:13.5px;color:var(--t2);max-width:520px;line-height:1.75;margin-bottom:22px;}
+.stats-row{display:flex;gap:0;border:1px solid var(--bd);border-radius:8px;overflow:hidden;width:fit-content;background:var(--card);box-shadow:var(--sh);}
+.stat{padding:10px 17px;text-align:center;border-right:1px solid var(--bd);}
+.stat:last-child{border-right:none;}
+.stat-n{font-size:18px;font-weight:700;font-family:'DM Mono',monospace;}
+.stat-l{font-size:9px;color:var(--t3);margin-top:1px;}
+
+/* SECTION DIVIDER */
+.sec-divider{padding:28px 48px 0;background:var(--bg);}
+.sec-divider-inner{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--bd);padding-bottom:14px;}
+.sec-divider-icon{font-size:22px;}
+.sec-divider-title{font-size:20px;font-weight:700;letter-spacing:-.4px;}
+.sec-divider-sub{font-size:12px;color:var(--t3);margin-top:1px;}
+
+/* THEORY */
+.theory{padding:28px 48px 36px;border-bottom:1px solid var(--bd);background:var(--card);}
+.theory-h{font-size:15px;font-weight:700;letter-spacing:-.2px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.theory-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.tbox{background:var(--bg);border:1px solid var(--bd);border-radius:7px;padding:13px 15px;}
+.tbox-h{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:7px;display:flex;align-items:center;gap:5px;}
+.tbox p,.tbox li{font-size:12px;color:var(--t);line-height:1.8;}
+.tbox ul{padding-left:14px;}
+.tbox li{margin-bottom:1px;}
+.tbox li b,.tbox p b{color:var(--blue);}
+.sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;}
+.sig{background:var(--card);border:1px solid var(--bd);border-radius:5px;padding:6px 9px;font-size:11px;color:var(--t2);display:flex;align-items:flex-start;gap:6px;line-height:1.55;}
+.ptrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px;}
+.ptcard{background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:9px 11px;}
+.ptcard-h{font-size:10px;font-weight:700;margin-bottom:5px;}
+.ptcard pre{font-family:'DM Mono';font-size:10px;color:var(--t2);background:var(--bg);padding:5px 7px;border-radius:4px;line-height:1.65;white-space:pre;}
+.ptcard p{font-size:10.5px;margin-top:5px;color:var(--t3);}
+.cx-table{width:100%;border-collapse:collapse;font-size:11.5px;}
+.cx-table th{background:var(--bg3);padding:5px 9px;text-align:left;font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--t3);}
+.cx-table td{padding:6px 9px;border-top:1px solid var(--bd);}
+.cx-table tr:hover td{background:var(--bg2);}
+
+/* PROBLEMS SECTION */
+.probs-sec{padding:28px 48px 40px;border-bottom:2px solid var(--bd);}
+.diff-bar{display:flex;align-items:center;gap:8px;margin-bottom:10px;margin-top:22px;}
+.diff-bar:first-of-type{margin-top:0;}
+.diff-dot{width:9px;height:9px;border-radius:50%;}
+.diff-lbl{font-size:12.5px;font-weight:700;}
+.diff-sub{font-size:11px;color:var(--t3);}
+.pbar{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;}
+.pb-btn{padding:4px 10px;border-radius:15px;border:1.5px solid var(--bd);font-family:inherit;font-size:11px;font-weight:500;cursor:pointer;background:var(--card);color:var(--t2);transition:all .12s;white-space:nowrap;}
+.pb-btn:hover{border-color:var(--blue);color:var(--blue);}
+.pb-btn.sel{color:#fff;border-color:transparent;}
+.pb-btn.sel.e{background:#059669;}
+.pb-btn.sel.m{background:#d97706;}
+.pb-btn.sel.h{background:#dc2626;}
+
+/* PROBLEM DESC */
+.pdesc{background:var(--card);border:1px solid var(--bd);border-radius:7px;padding:11px 14px;margin-bottom:11px;box-shadow:var(--sh);}
+.pdesc-h{font-size:13px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.pdesc-t{font-size:12px;color:var(--t2);line-height:1.7;}
+.pdesc-why{font-size:11.5px;color:var(--t);background:var(--bg);border-left:3px solid var(--blue);padding:5px 10px;border-radius:0 5px 5px 0;margin-top:7px;line-height:1.6;}
+.diff{padding:1px 6px;border-radius:4px;font-size:9px;font-weight:700;}
+.diff-E{background:#dcfce7;color:#059669;}
+.diff-M{background:#fef3c7;color:#d97706;}
+.diff-H{background:#fee2e2;color:#dc2626;}
+
+/* 2-COL */
+.pcols{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.pcol{display:flex;flex-direction:column;gap:10px;}
+
+/* ANIM CARD */
+.acard{background:var(--card);border:1px solid var(--bd);border-radius:8px;overflow:hidden;box-shadow:var(--sh);}
+.ahead{display:flex;align-items:center;justify-content:space-between;padding:6px 11px;background:var(--bg2);border-bottom:1px solid var(--bd);gap:6px;flex-wrap:wrap;}
+.atit{font-size:9px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--t3);}
+.asi{font-size:9px;font-family:'DM Mono',monospace;color:var(--blue);white-space:nowrap;}
+.abtns{display:flex;gap:4px;align-items:center;}
+.ab{padding:3px 9px;border-radius:4px;border:1px solid var(--bd);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;transition:all .12s;background:var(--card);color:var(--t2);}
+.ab.run:hover{background:#2563eb;color:#fff;border-color:#2563eb;}
+.ab.stp:hover{background:#059669;color:#fff;border-color:#059669;}
+.ab.rst:hover{background:var(--bg3);}
+.spd{display:flex;align-items:center;gap:4px;border-left:1px solid var(--bd);padding-left:7px;margin-left:2px;}
+.spd-lbl{font-size:9px;color:var(--t3);}
+.spd-range{width:55px;height:3px;cursor:pointer;accent-color:var(--blue);}
+canvas.acv{width:100%;display:block;background:#fafaf8;}
+.amsg{padding:5px 11px;font-size:11px;color:var(--blue);border-top:1px solid var(--bd);font-family:'DM Mono',monospace;min-height:28px;background:var(--bg2);line-height:1.5;}
+
+/* CODE CARD */
+.ccard{background:var(--card);border:1px solid var(--bd);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--sh);}
+.chead{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:var(--bg2);border-bottom:1px solid var(--bd);}
+.clang{font-size:11px;font-weight:700;color:var(--t2);}
+.cpb{background:none;border:1px solid var(--bd);color:var(--t2);padding:2px 8px;border-radius:4px;font-size:10px;cursor:pointer;font-family:inherit;transition:all .12s;}
+.cpb:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.clines{padding:6px 0;overflow:auto;font-family:'DM Mono',monospace;font-size:11.5px;line-height:1.75;max-height:500px;background:#fafafa;scrollbar-width:thin;scrollbar-color:var(--bd) transparent;}
+.cline{display:flex;align-items:stretch;transition:background .15s;padding:0 12px;min-height:24px;}
+.cline:hover{background:#f3f1ec;}
+.cline.hl{background:#dbeafe !important;border-left:3px solid #2563eb;}
+.cline.hl .ln{color:#2563eb;}
+.ln{width:24px;flex-shrink:0;font-size:10px;color:#c0bab3;text-align:right;padding-right:12px;padding-top:2px;user-select:none;}
+.lc{color:#1a1614;white-space:pre;}
+.ex-bar{display:flex;align-items:center;gap:5px;padding:3px 11px;background:#eff6ff;border-top:1px solid #dbeafe;font-size:10px;font-family:'DM Mono',monospace;color:#2563eb;min-height:22px;}
+
+/* MISC */
+#prog{position:fixed;top:0;left:236px;right:0;height:2px;background:linear-gradient(90deg,#2563eb,#7c3aed,#dc2626);transform-origin:left;transform:scaleX(0);z-index:100;transition:transform .08s;}
+.footer{padding:28px 48px;text-align:center;border-top:1px solid var(--bd);background:var(--bg2);}
+@media(max-width:900px){.pcols{grid-template-columns:1fr;}.sb{display:none;}#prog{left:0;}.theory-grid,.ptrow,.sig-grid{grid-template-columns:1fr;}.probs-sec,.theory,.hero,.sec-divider{padding:20px 16px;}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<div class="layout">
+
+<!-- ════ SIDEBAR ════ -->
+<nav class="sb">
+  <div class="sb-logo">
+    <div class="sb-logo-t">DSA Pattern Master</div>
+    <div class="sb-logo-s">Two Pointers · HashMap · 30 Problems</div>
+  </div>
+
+  <div class="ng">
+    <div class="ng-t">👆 Two Pointers</div>
+    <a class="nl" onclick="goto('tp-theory')">📖 Theory & Patterns</a>
+    <a class="nl sub" onclick="pickAndGo('tp',0)">Two Sum II ·E</a>
+    <a class="nl sub" onclick="pickAndGo('tp',1)">Valid Palindrome ·E</a>
+    <a class="nl sub" onclick="pickAndGo('tp',2)">Remove Duplicates ·E</a>
+    <a class="nl sub" onclick="pickAndGo('tp',3)">Move Zeroes ·E</a>
+    <a class="nl sub" onclick="pickAndGo('tp',4)">Squares Sorted ·E</a>
+    <a class="nl sub" onclick="pickAndGo('tp',5)">3Sum ·M</a>
+    <a class="nl sub" onclick="pickAndGo('tp',6)">Container Water ·M</a>
+    <a class="nl sub" onclick="pickAndGo('tp',7)">Sort Colors ·M</a>
+    <a class="nl sub" onclick="pickAndGo('tp',8)">Boats to Save ·M</a>
+    <a class="nl sub" onclick="pickAndGo('tp',9)">3Sum Closest ·M</a>
+    <a class="nl sub" onclick="pickAndGo('tp',10)">Trapping Rain ·H</a>
+    <a class="nl sub" onclick="pickAndGo('tp',11)">4Sum ·H</a>
+    <a class="nl sub" onclick="pickAndGo('tp',12)">Min Ops to 0 ·H</a>
+    <a class="nl sub" onclick="pickAndGo('tp',13)">Longest Mountain ·H</a>
+    <a class="nl sub" onclick="pickAndGo('tp',14)">Interval Intersect ·H</a>
+  </div>
+
+  <div class="ng">
+    <div class="ng-t">🗺️ HashMap</div>
+    <a class="nl" onclick="goto('hm-theory')">📖 Theory & Patterns</a>
+    <a class="nl sub" onclick="pickAndGo('hm',0)">Two Sum ·E</a>
+    <a class="nl sub" onclick="pickAndGo('hm',1)">Contains Duplicate ·E</a>
+    <a class="nl sub" onclick="pickAndGo('hm',2)">Valid Anagram ·E</a>
+    <a class="nl sub" onclick="pickAndGo('hm',3)">First Unique Char ·E</a>
+    <a class="nl sub" onclick="pickAndGo('hm',4)">Ransom Note ·E</a>
+    <a class="nl sub" onclick="pickAndGo('hm',5)">Group Anagrams ·M</a>
+    <a class="nl sub" onclick="pickAndGo('hm',6)">Top K Frequent ·M</a>
+    <a class="nl sub" onclick="pickAndGo('hm',7)">Subarray Sum=K ·M</a>
+    <a class="nl sub" onclick="pickAndGo('hm',8)">Longest Consecutive ·M</a>
+    <a class="nl sub" onclick="pickAndGo('hm',9)">Word Pattern ·M</a>
+    <a class="nl sub" onclick="pickAndGo('hm',10)">Min Window Substr ·H</a>
+    <a class="nl sub" onclick="pickAndGo('hm',11)">K Distinct Substr ·H</a>
+    <a class="nl sub" onclick="pickAndGo('hm',12)">Subarrays K Diff ·H</a>
+    <a class="nl sub" onclick="pickAndGo('hm',13)">LRU Cache ·H</a>
+    <a class="nl sub" onclick="pickAndGo('hm',14)">4Sum Count ·H</a>
+  </div>
+</nav>
+
+<!-- ════ MAIN ════ -->
+<main class="main">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-e">Complete Guide · 30 Problems · Step-by-Step Code Trace · বাংলায়</div>
+  <h1>Two Pointers &amp;<br><em>HashMap Master</em></h1>
+  <p>প্রতিটি step-এ code এর line highlight হয়। Variable, condition, pointer — সব live animate হয়। Speed control দিয়ে ধীরে বা দ্রুত দেখো।</p>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-n">30</div><div class="stat-l">Problems</div></div>
+    <div class="stat"><div class="stat-n">2</div><div class="stat-l">Patterns</div></div>
+    <div class="stat"><div class="stat-n">5+5+5</div><div class="stat-l">E · M · H each</div></div>
+    <div class="stat"><div class="stat-n">Live</div><div class="stat-l">Code Trace</div></div>
+  </div>
+</section>
+
+<!-- ══════════════════ TWO POINTERS ══════════════════ -->
+<div class="sec-divider" id="tp-section">
+  <div class="sec-divider-inner">
+    <span class="sec-divider-icon">👆</span>
+    <div>
+      <div class="sec-divider-title">Two Pointers</div>
+      <div class="sec-divider-sub">Sorted array · O(n) · O(1) space · 15 problems</div>
+    </div>
+  </div>
+</div>
+
+<!-- TP THEORY -->
+<section class="theory" id="tp-theory">
+  <div class="theory-h">📖 Two Pointers — কী, কেন, কখন?</div>
+  <div class="theory-grid">
+    <div class="tbox">
+      <div class="tbox-h">💡 মূল ধারণা</div>
+      <p><b>দুটো index (l, r)</b> রাখো। একটা বামে, একটা ডানে। প্রতিটি step এ একটা সরে — মোট O(n)।</p><br>
+      <p>Brute force → দুটো nested loop → O(n²)।<br>Two pointer → একটাই loop, দুই দিক → <b>O(n)</b>।</p><br>
+      <p>Key insight: sorted array তে l+r sum ছোট হলে l বাড়াও (বড় চাই), বড় হলে r কমাও (ছোট চাই)।</p>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">🎯 কখন ব্যবহার করবো?</div>
+      <ul>
+        <li><b>Sorted array</b> তে pair/triplet/sum খুঁজতে</li>
+        <li><b>In-place modify</b> করতে (write pointer)</li>
+        <li><b>Palindrome</b> check — দুই প্রান্ত থেকে</li>
+        <li><b>Partition</b> করতে (DNF sort)</li>
+        <li>Array তে <b>দুই পাশ থেকে</b> কোনো calculation</li>
+        <li>O(n²) → O(n) করতে হবে মনে হলে</li>
+      </ul>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">🔍 এই signal দেখলে Two Pointers ভাবো</div>
+      <div class="sig-grid">
+        <div class="sig">📌 "sorted array" বা "sort করো" বলছে</div>
+        <div class="sig">📌 "two/three numbers with sum = X"</div>
+        <div class="sig">📌 "in-place", extra space O(1) চাই</div>
+        <div class="sig">📌 Palindrome, symmetric check</div>
+        <div class="sig">📌 Array এর দুই প্রান্ত থেকে calculation</div>
+        <div class="sig">📌 Brute force O(n²), O(n) সম্ভব মনে হচ্ছে</div>
+      </div>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">⚡ তিনটি Main Pattern</div>
+      <div class="ptrow">
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#2563eb">① Opposite Ends</div>
+          <pre>l = 0, r = n-1
+while l &lt; r:
+  check a[l],a[r]
+  move l or r</pre>
+          <p>Two Sum, Rain Water</p>
+        </div>
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#059669">② Same Direction</div>
+          <pre>w = 0  // write
+for r in range(n):
+  if condition:
+    a[w]=a[r]; w++</pre>
+          <p>Remove Dups, Zeroes</p>
+        </div>
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#7c3aed">③ 3-Pointer</div>
+          <pre>i fix → l=i+1
+         r=n-1
+while l &lt; r:
+  check sum</pre>
+          <p>3Sum, 4Sum, DNF</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TP PROBLEMS -->
+<section class="probs-sec" id="tp-problems">
+  <div class="diff-bar"><div class="diff-dot" style="background:#059669"></div><span class="diff-lbl">Easy</span><span class="diff-sub">— basic pattern, O(n)</span></div>
+  <div class="pbar" id="tp-pbar-e"></div>
+  <div class="diff-bar"><div class="diff-dot" style="background:#d97706"></div><span class="diff-lbl">Medium</span><span class="diff-sub">— combined logic</span></div>
+  <div class="pbar" id="tp-pbar-m"></div>
+  <div class="diff-bar"><div class="diff-dot" style="background:#dc2626"></div><span class="diff-lbl">Hard</span><span class="diff-sub">— multi-pointer, complex</span></div>
+  <div class="pbar" id="tp-pbar-h"></div>
+
+  <div class="pdesc" id="tp-pdesc" style="margin-top:14px;">
+    <div class="pdesc-h">⬆️ উপর থেকে problem select করো</div>
+    <div class="pdesc-t">Click করলে description, why Two Pointers, code এবং animation দেখাবে।</div>
+  </div>
+
+  <div class="pcols">
+    <div class="pcol">
+      <div class="acard">
+        <div class="ahead">
+          <span class="atit">⚡ VISUALIZATION</span>
+          <span class="asi" id="tp-si">—</span>
+          <div class="abtns">
+            <button class="ab run" onclick="run('tp')">▶ Run</button>
+            <button class="ab stp" onclick="step('tp')">⏭ Step</button>
+            <button class="ab rst" onclick="rst('tp')">↺</button>
+            <div class="spd">
+              <span class="spd-lbl">Speed</span>
+              <input type="range" class="spd-range" id="tp-spd" min="1" max="5" value="3" oninput="setSpd('tp',this.value)">
+              <span class="spd-lbl" id="tp-spd-lbl">2x</span>
+            </div>
+          </div>
+        </div>
+        <canvas id="tp-cv" class="acv" height="265"></canvas>
+        <div id="tp-msg" class="amsg">▶ Problem select করো</div>
+      </div>
+    </div>
+    <div class="pcol">
+      <div class="ccard">
+        <div class="chead">
+          <span class="clang" id="tp-ctit">C++ — Two Pointers</span>
+          <button class="cpb" onclick="cpCode('tp')">Copy</button>
+        </div>
+        <div id="tp-code" class="clines"><div class="cline"><span class="ln">1</span><span class="lc">// উপর থেকে problem select করো</span></div></div>
+        <div class="ex-bar" id="tp-ex"><span>▶</span><span id="tp-ex-t">—</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ HASHMAP ══════════════════ -->
+<div class="sec-divider" id="hm-section">
+  <div class="sec-divider-inner">
+    <span class="sec-divider-icon">🗺️</span>
+    <div>
+      <div class="sec-divider-title">HashMap</div>
+      <div class="sec-divider-sub">O(1) lookup · Frequency count · Complement search · 15 problems</div>
+    </div>
+  </div>
+</div>
+
+<!-- HM THEORY -->
+<section class="theory" id="hm-theory">
+  <div class="theory-h">📖 HashMap — কী, কেন, কখন?</div>
+  <div class="theory-grid">
+    <div class="tbox">
+      <div class="tbox-h">💡 মূল ধারণা</div>
+      <p>HashMap = <b>key → value</b> mapping। Hash function দিয়ে key কে array index এ convert করে।</p><br>
+      <p>Average case: <b>O(1) insert, O(1) lookup, O(1) delete</b>। Array এ O(n) লাগে — HashMap এ O(1)।</p><br>
+      <p>চিন্তা করো: "আগে দেখেছি?" — O(1) এ check। "কতবার এসেছে?" — frequency count। "complement আছে?" — instant lookup।</p>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">🎯 কখন ব্যবহার করবো?</div>
+      <ul>
+        <li><b>Frequency count</b> — কোনটা কতবার এসেছে</li>
+        <li><b>Seen before</b> check — duplicate, cycle</li>
+        <li><b>Complement search</b> — target - current আছে?</li>
+        <li><b>Grouping</b> — anagram, same key এর সব value</li>
+        <li><b>Prefix sum</b> + HashMap — subarray sum problems</li>
+        <li>O(n²) nested lookup → O(n) করতে হলে</li>
+      </ul>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">🔍 এই signal দেখলে HashMap ভাবো</div>
+      <div class="sig-grid">
+        <div class="sig">📌 "duplicate exists?" বা "seen before?"</div>
+        <div class="sig">📌 "two numbers sum = target"</div>
+        <div class="sig">📌 "frequency", "count", "most common"</div>
+        <div class="sig">📌 "anagram", "permutation" check</div>
+        <div class="sig">📌 Subarray sum = K (prefix + map)</div>
+        <div class="sig">📌 Nested loop → single pass এ করতে হবে</div>
+      </div>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">⚡ তিনটি Main Pattern</div>
+      <div class="ptrow">
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#dc2626">① Complement</div>
+          <pre>mp = {}
+for i,v in arr:
+  comp=target-v
+  if comp in mp:
+    return ans
+  mp[v]=i</pre>
+          <p>Two Sum</p>
+        </div>
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#d97706">② Frequency</div>
+          <pre>cnt = {}
+for c in s:
+  cnt[c]++
+// use cnt for
+// comparison</pre>
+          <p>Anagram, Top-K</p>
+        </div>
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#7c3aed">③ Prefix+Map</div>
+          <pre>mp={0:1}, pre=0
+for v in arr:
+  pre += v
+  ans+=mp[pre-k]
+  mp[pre]++</pre>
+          <p>Subarray Sum=K</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HM PROBLEMS -->
+<section class="probs-sec" id="hm-problems">
+  <div class="diff-bar"><div class="diff-dot" style="background:#059669"></div><span class="diff-lbl">Easy</span><span class="diff-sub">— basic lookup, O(n)</span></div>
+  <div class="pbar" id="hm-pbar-e"></div>
+  <div class="diff-bar"><div class="diff-dot" style="background:#d97706"></div><span class="diff-lbl">Medium</span><span class="diff-sub">— combined patterns</span></div>
+  <div class="pbar" id="hm-pbar-m"></div>
+  <div class="diff-bar"><div class="diff-dot" style="background:#dc2626"></div><span class="diff-lbl">Hard</span><span class="diff-sub">— multi-map, complex logic</span></div>
+  <div class="pbar" id="hm-pbar-h"></div>
+
+  <div class="pdesc" id="hm-pdesc" style="margin-top:14px;">
+    <div class="pdesc-h">⬆️ উপর থেকে problem select করো</div>
+    <div class="pdesc-t">Click করলে description, why HashMap, code এবং animation দেখাবে।</div>
+  </div>
+
+  <div class="pcols">
+    <div class="pcol">
+      <div class="acard">
+        <div class="ahead">
+          <span class="atit">⚡ VISUALIZATION</span>
+          <span class="asi" id="hm-si">—</span>
+          <div class="abtns">
+            <button class="ab run" onclick="run('hm')">▶ Run</button>
+            <button class="ab stp" onclick="step('hm')">⏭ Step</button>
+            <button class="ab rst" onclick="rst('hm')">↺</button>
+            <div class="spd">
+              <span class="spd-lbl">Speed</span>
+              <input type="range" class="spd-range" id="hm-spd" min="1" max="5" value="3" oninput="setSpd('hm',this.value)">
+              <span class="spd-lbl" id="hm-spd-lbl">2x</span>
+            </div>
+          </div>
+        </div>
+        <canvas id="hm-cv" class="acv" height="280"></canvas>
+        <div id="hm-msg" class="amsg">▶ Problem select করো</div>
+      </div>
+    </div>
+    <div class="pcol">
+      <div class="ccard">
+        <div class="chead">
+          <span class="clang" id="hm-ctit">C++ — HashMap</span>
+          <button class="cpb" onclick="cpCode('hm')">Copy</button>
+        </div>
+        <div id="hm-code" class="clines"><div class="cline"><span class="ln">1</span><span class="lc">// উপর থেকে problem select করো</span></div></div>
+        <div class="ex-bar" id="hm-ex"><span>▶</span><span id="hm-ex-t">—</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  <div style="font-size:14px;font-weight:700;margin-bottom:4px;">Happy Coding! 🚀</div>
+  <div style="font-size:11px;color:var(--t3);">DSA Master · Two Pointers + HashMap · 30 Problems · 5E+5M+5H each</div>
+</div>
+</main>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// NAV
+// ══════════════════════════════════════════
+window.addEventListener('scroll',()=>{
+  const p=document.getElementById('prog');
+  const r=window.scrollY/(document.body.scrollHeight-window.innerHeight)||0;
+  p.style.transform='scaleX('+Math.min(1,r)+')';
+});
+function goto(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'});}
+function pickAndGo(sec,idx){
+  selProb(sec,idx);
+  document.getElementById(sec+'-problems').scrollIntoView({behavior:'smooth'});
+}
+
+// ══════════════════════════════════════════
+// SECTION STATE  (tp / hm independent)
+// ══════════════════════════════════════════
+const S={
+  tp:{frames:null,idx:0,timer:null,speed:800},
+  hm:{frames:null,idx:0,timer:null,speed:800}
+};
+
+function setSpd(sec,v){
+  const SPDS=[2000,1300,800,450,200];
+  const LBLS=['0.5x','1x','2x','3x','5x'];
+  S[sec].speed=SPDS[parseInt(v)-1];
+  document.getElementById(sec+'-spd-lbl').textContent=LBLS[parseInt(v)-1];
+  if(S[sec].timer){clearInterval(S[sec].timer);S[sec].timer=null;run(sec);}
+}
+function stopTimer(sec){if(S[sec].timer){clearInterval(S[sec].timer);S[sec].timer=null;}}
+
+// ══════════════════════════════════════════
+// CANVAS HELPERS
+// ══════════════════════════════════════════
+function getCtx(sec){
+  const c=document.getElementById(sec+'-cv');
+  const W=c.clientWidth||600,H=parseInt(c.getAttribute('height'))||265;
+  c.width=W;c.height=H;
+  return {ctx:c.getContext('2d'),W,H};
+}
+function rr(ctx,x,y,w,h,r,fill,stroke,lw){
+  r=Math.min(r||0,w/2,h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);
+  ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);
+  ctx.closePath();
+  if(fill){ctx.fillStyle=fill;ctx.fill();}
+  if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1.5;ctx.stroke();}
+}
+
+// ══════════════════════════════════════════
+// DRAW FRAME  — handles type: 'arr' or 'hmap'
+// ══════════════════════════════════════════
+function drawFrame(sec,frame){
+  const {ctx,W,H}=getCtx(sec);
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#fafaf8';ctx.fillRect(0,0,W,H);
+  if(!frame){
+    ctx.fillStyle='#a09890';ctx.font='12px DM Sans';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('⬆ Problem select করো, তারপর Run বা Step চাপো',W/2,H/2);
+    ctx.textBaseline='alphabetic';return;
+  }
+  if(frame.type==='hmap') drawHmap(ctx,W,H,frame);
+  else drawArr(ctx,W,H,frame);
+  drawVars(ctx,W,H,frame);
+  drawCond(ctx,W,H,frame);
+}
+
+function drawArr(ctx,W,H,frame){
+  const arr=frame.arr||[];const n=arr.length;if(!n)return;
+  const bw=Math.min(54,Math.floor((W-32)/n)-5);
+  const bh=42;const gap=5;
+  const tot=n*(bw+gap)-gap;
+  const sx=Math.floor((W-tot)/2);const sy=24;
+  if(frame.win){
+    const[wl,wr]=frame.win;
+    if(wr>=wl&&wl>=0&&wr<n){
+      const wx=sx+wl*(bw+gap)-6,ww=(wr-wl+1)*(bw+gap)-gap+12;
+      rr(ctx,wx,sy-9,ww,bh+18,8,'#eff6ff','#93c5fd',1.5);
+      ctx.fillStyle='#3b82f6';ctx.font='bold 7px DM Mono';ctx.textAlign='left';
+      ctx.fillText('WIN',wx+4,sy-12);
+    }
+  }
+  arr.forEach((v,i)=>{
+    const x=sx+i*(bw+gap);
+    let bg='#fff',bd='#e4e0d5',tc='#1a1614',lw=1.5;
+    if(frame.fnd&&frame.fnd.includes(i)){bg='#dcfce7';bd='#059669';tc='#059669';lw=2.5;}
+    else if(frame.hi&&frame.hi.includes(i)){bg='#dbeafe';bd='#2563eb';tc='#1e40af';lw=2.5;}
+    else if(frame.org&&frame.org.includes(i)){bg='#fef3c7';bd='#d97706';tc='#92400e';lw=2;}
+    else if(frame.red&&frame.red.includes(i)){bg='#fee2e2';bd='#dc2626';tc='#991b1b';lw=2;}
+    rr(ctx,x,sy,bw,bh,6,bg,bd,lw);
+    ctx.fillStyle=tc;ctx.font=`bold ${bw>44?13:11}px DM Mono`;
+    ctx.textAlign='center';ctx.fillText(String(v),x+bw/2,sy+bh-11);
+    ctx.fillStyle='#a09890';ctx.font='8px DM Mono';
+    ctx.fillText(String(i),x+bw/2,sy+bh+12);
+  });
+  if(frame.ptrs){
+    const PC={l:'#2563eb',r:'#dc2626',i:'#7c3aed',j:'#d97706',slow:'#059669',fast:'#0891b2',mid:'#7c3aed',w:'#059669',lo:'#059669',cur:'#64748b'};
+    const SEEN={};
+    Object.entries(frame.ptrs).forEach(([nm,pos])=>{
+      if(pos===undefined||pos<0||pos>=n)return;
+      const x=sx+pos*(bw+gap)+bw/2;const c=PC[nm]||'#475569';
+      const off=(SEEN[pos]||0)*13;SEEN[pos]=(SEEN[pos]||0)+1;
+      const by=sy+bh+14+off;
+      ctx.fillStyle=c;ctx.font='bold 9px DM Mono';ctx.textAlign='center';
+      ctx.fillText(nm.toUpperCase(),x,by+9);
+      ctx.beginPath();ctx.moveTo(x-4,by+11);ctx.lineTo(x+4,by+11);ctx.lineTo(x,by+17);
+      ctx.fillStyle=c;ctx.fill();
+    });
+  }
+  if(frame.res!==undefined){
+    const rw=185,rh=27,rx=Math.floor((W-rw)/2),ry=H-rh-8;
+    rr(ctx,rx,ry,rw,rh,6,'#dcfce7','#059669',1.5);
+    ctx.fillStyle='#059669';ctx.font='bold 12px DM Mono';ctx.textAlign='center';
+    ctx.fillText('✅  ans = '+String(frame.res),rx+rw/2,ry+rh-8);
+  }
+}
+
+function drawHmap(ctx,W,H,frame){
+  // top: input array
+  const arr=frame.arr||[];const n=arr.length;
+  if(n){
+    const bw=Math.min(46,Math.floor((W-32)/n)-4);const bh=34;const gap=4;
+    const tot=n*(bw+gap)-gap;const sx=Math.floor((W-tot)/2);const sy=10;
+    arr.forEach((v,i)=>{
+      const x=sx+i*(bw+gap);
+      let bg='#fff',bd='#e4e0d5',tc='#1a1614',lw=1.2;
+      if(frame.ci===i){bg='#fef3c7';bd='#d97706';tc='#92400e';lw=2;}
+      else if(frame.fndIdx&&frame.fndIdx.includes(i)){bg='#dcfce7';bd='#059669';tc='#059669';lw=2;}
+      rr(ctx,x,sy,bw,bh,5,bg,bd,lw);
+      ctx.fillStyle=tc;ctx.font=`bold ${bw>36?12:10}px DM Mono`;
+      ctx.textAlign='center';ctx.fillText(String(v),x+bw/2,sy+bh-9);
+      ctx.fillStyle='#a09890';ctx.font='7px DM Mono';
+      ctx.fillText(String(i),x+bw/2,sy+bh+10);
+    });
+    if(frame.ci!==undefined&&frame.ci<n){
+      const x=sx+frame.ci*(bw+gap)+bw/2;
+      ctx.fillStyle='#d97706';ctx.font='bold 8px DM Mono';ctx.textAlign='center';
+      ctx.fillText('▼',x,sy+bh+19);
+    }
+    ctx.fillStyle='#a09890';ctx.font='7px DM Mono';ctx.textAlign='left';
+    ctx.fillText('INPUT',sx,sy-2);
+  }
+
+  // center: hashmap table
+  const hm=frame.hm||{};const entries=Object.entries(hm);
+  const rowH=24,kW=90,vW=90,tW=kW+vW;
+  const tx=Math.floor((W-tW)/2);const ty=n?62:20;
+
+  // header
+  rr(ctx,tx,ty,tW,rowH,4,'#f3f1ec','#e4e0d5',1);
+  ctx.strokeStyle='#e4e0d5';ctx.lineWidth=0.7;
+  ctx.beginPath();ctx.moveTo(tx+kW,ty);ctx.lineTo(tx+kW,ty+rowH);ctx.stroke();
+  ctx.fillStyle='#a09890';ctx.font='bold 8px DM Mono';ctx.textAlign='center';
+  ctx.fillText('KEY',tx+kW/2,ty+rowH-8);
+  ctx.fillText('VALUE',tx+kW+vW/2,ty+rowH-8);
+
+  entries.forEach(([k,v],i)=>{
+    const y=ty+(i+1)*rowH;
+    const isNew=frame.newKey===String(k);
+    const isHL=frame.hlKey===String(k);
+    rr(ctx,tx,y,tW,rowH,0,isNew?'#dbeafe':isHL?'#dcfce7':'#fff','#e4e0d5',0.5);
+    ctx.strokeStyle='#e4e0d5';ctx.lineWidth=0.5;
+    ctx.beginPath();ctx.moveTo(tx+kW,y);ctx.lineTo(tx+kW,y+rowH);ctx.stroke();
+    ctx.fillStyle=isNew?'#1e40af':isHL?'#059669':'#1a1614';
+    ctx.font=(isNew||isHL?'bold ':'')+`11px DM Mono`;ctx.textAlign='center';
+    ctx.fillText(String(k),tx+kW/2,y+rowH-7);
+    ctx.fillText(String(v),tx+kW+vW/2,y+rowH-7);
+  });
+
+  // outer border
+  const totalH=(entries.length+1)*rowH;
+  rr(ctx,tx,ty,tW,totalH,4,null,'#e4e0d5',1);
+  ctx.fillStyle='#a09890';ctx.font='7px DM Mono';ctx.textAlign='center';
+  ctx.fillText('HASHMAP',tx+tW/2,ty-3);
+
+  // result
+  if(frame.res!==undefined){
+    const rw=190,rh=27,rx=Math.floor((W-rw)/2),ry=H-rh-8;
+    rr(ctx,rx,ry,rw,rh,6,'#dcfce7','#059669',1.5);
+    ctx.fillStyle='#059669';ctx.font='bold 12px DM Mono';ctx.textAlign='center';
+    ctx.fillText('✅  ans = '+String(frame.res),rx+rw/2,ry+rh-8);
+  }
+}
+
+function drawVars(ctx,W,H,frame){
+  if(!frame.vars)return;
+  const entries=Object.entries(frame.vars);if(!entries.length)return;
+  const CW=68,RH=32,cols=Math.min(entries.length,Math.floor((W-12)/CW));
+  const rows=Math.ceil(entries.length/cols);
+  const pW=cols*CW,pH=rows*RH+14,px=5,py=H-pH-5;
+  rr(ctx,px,py,pW,pH,5,'rgba(243,241,236,.97)','#e4e0d5',1);
+  ctx.fillStyle='#a09890';ctx.font='bold 7px DM Mono';ctx.textAlign='left';
+  ctx.fillText('VARS',px+4,py+10);
+  entries.forEach(([k,v],idx)=>{
+    const col=idx%cols,row=Math.floor(idx/cols);
+    const ex=px+col*CW,ey=py+14+row*RH;
+    if(col>0){ctx.strokeStyle='#e4e0d5';ctx.lineWidth=0.4;ctx.beginPath();ctx.moveTo(ex,py+14);ctx.lineTo(ex,py+pH);ctx.stroke();}
+    const chg=frame.chg&&frame.chg.includes(k);
+    ctx.fillStyle=chg?'#1d4ed8':'#6b6560';ctx.font='7px DM Mono';ctx.textAlign='center';
+    ctx.fillText(String(k),ex+CW/2,ey+10);
+    ctx.fillStyle=chg?'#2563eb':'#1a1614';
+    const vstr=String(v);ctx.font=`bold ${vstr.length>7?'9':'11'}px DM Mono`;ctx.textAlign='center';
+    ctx.fillText(vstr.length>9?vstr.slice(0,9)+'…':vstr,ex+CW/2,ey+RH-2);
+  });
+}
+
+function drawCond(ctx,W,H,frame){
+  if(frame.cond===undefined||frame.cond===null)return;
+  const cond=String(frame.cond),cv=frame.cv;
+  const pw=Math.min(190,W*.36),ph=42,px=W-pw-5,py=H-ph-5;
+  const bg=cv===true?'#dcfce7':cv===false?'#fee2e2':'#f3f1ec';
+  const bd=cv===true?'#059669':cv===false?'#dc2626':'#e4e0d5';
+  const tc=cv===true?'#059669':cv===false?'#dc2626':'#6b6560';
+  rr(ctx,px,py,pw,ph,7,bg,bd,1.5);
+  ctx.fillStyle=tc;ctx.font='10px DM Mono';ctx.textAlign='center';
+  const d=cond.length>24?cond.slice(0,24)+'…':cond;
+  ctx.fillText(d,px+pw/2,py+14);
+  if(cv!==undefined&&cv!==null){
+    ctx.font='bold 12px DM Mono';
+    ctx.fillText(cv===true?'✓  TRUE':'✗  FALSE',px+pw/2,py+32);
+  }
+}
+
+// ══════════════════════════════════════════
+// CONTROLLER
+// ══════════════════════════════════════════
+function setMsg(sec,t){document.getElementById(sec+'-msg').textContent=t||'';}
+function setSI(sec,i,n){document.getElementById(sec+'-si').textContent='Step '+(i+1)+'/'+n;}
+function setEx(sec,t){document.getElementById(sec+'-ex-t').textContent=t||'—';}
+function hlLine(sec,ln){
+  document.querySelectorAll('#'+sec+'-code .cline').forEach(el=>el.classList.remove('hl'));
+  if(ln>0){
+    const el=document.getElementById(sec+'-cl-'+ln);
+    if(el){el.classList.add('hl');el.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  }
+}
+function renderCode(sec,lines){
+  const c=document.getElementById(sec+'-code');c.innerHTML='';
+  lines.forEach((ln,i)=>{
+    const d=document.createElement('div');d.className='cline';d.id=sec+'-cl-'+(i+1);
+    d.innerHTML=`<span class="ln">${i+1}</span><span class="lc">${ln}</span>`;
+    c.appendChild(d);
+  });
+}
+function applyFrame(sec){
+  const s=S[sec];if(!s.frames)return;
+  const fr=s.frames[s.idx];
+  drawFrame(sec,fr);
+  setMsg(sec,fr.msg);
+  setSI(sec,s.idx,s.frames.length);
+  hlLine(sec,fr.line||0);
+  setEx(sec,fr.exec||'—');
+}
+
+function selProb(sec,idx){
+  stopTimer(sec);
+  const p=(sec==='tp'?TP_PROBS:HM_PROBS)[idx];
+  document.querySelectorAll('#'+sec+'-pbar-e .pb-btn,#'+sec+'-pbar-m .pb-btn,#'+sec+'-pbar-h .pb-btn').forEach(b=>b.classList.remove('sel'));
+  const btn=document.getElementById(sec+'-pb-'+idx);if(btn)btn.classList.add('sel');
+  const dc=p.d==='E'?'E':p.d==='M'?'M':'H';
+  document.getElementById(sec+'-pdesc').innerHTML=
+    `<div class="pdesc-h">${p.name}&nbsp;<span class="diff diff-${dc}">${dc==='E'?'Easy':dc==='M'?'Medium':'Hard'}</span></div>`+
+    `<div class="pdesc-t">${p.desc}</div>`+
+    `<div class="pdesc-why">🧠 <b>কেন ${sec==='tp'?'Two Pointers':'HashMap'}?</b> ${p.why}</div>`;
+  document.getElementById(sec+'-ctit').textContent='C++ — '+p.name;
+  renderCode(sec,p.codeLines);
+  S[sec].frames=p.sim();S[sec].idx=0;
+  applyFrame(sec);
+}
+
+function run(sec){
+  stopTimer(sec);
+  if(!S[sec].frames){setMsg(sec,'⚠️ আগে problem select করো!');return;}
+  S[sec].timer=setInterval(()=>{
+    const s=S[sec];
+    if(s.idx>=s.frames.length-1){stopTimer(sec);return;}
+    s.idx++;applyFrame(sec);
+  },S[sec].speed);
+}
+function step(sec){
+  stopTimer(sec);
+  if(!S[sec].frames){setMsg(sec,'⚠️ আগে problem select করো!');return;}
+  const s=S[sec];if(s.idx<s.frames.length-1)s.idx++;
+  applyFrame(sec);
+}
+function rst(sec){
+  stopTimer(sec);S[sec].idx=0;
+  if(S[sec].frames){applyFrame(sec);setMsg(sec,'↺ Reset — Run বা Step চাপো');}
+  else drawFrame(sec,null);
+}
+function cpCode(sec){
+  const lines=document.querySelectorAll('#'+sec+'-code .lc');
+  navigator.clipboard.writeText([...lines].map(l=>l.textContent).join('\n')).then(()=>{
+    const b=document.querySelector('#'+sec+'-problems .cpb');
+    b.textContent='✓ Copied';b.style.background='#059669';b.style.color='#fff';
+    setTimeout(()=>{b.textContent='Copy';b.style.background='';b.style.color='';},1800);
+  });
+}
+
+// ══════════════════════════════════════════
+// FRAME BUILDERS
+// ══════════════════════════════════════════
+// Array frame
+function AF(arr,ptrs,vars,msg,line,exec,ex){
+  return Object.assign({type:'arr',arr:[...arr],ptrs:ptrs||{},vars:vars||{},msg:msg||'',line:line||0,exec:exec||''},ex||{});
+}
+// HashMap frame
+function HF(hm,arr,vars,msg,line,exec,ex){
+  return Object.assign({type:'hmap',hm:{...hm},arr:[...arr],vars:vars||{},msg:msg||'',line:line||0,exec:exec||''},ex||{});
+}
+// Escape HTML for code lines
+function E(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ══════════════════════════════════════════════════════
+// TWO POINTERS PROBLEMS  (15: 5E 5M 5H)
+// ══════════════════════════════════════════════════════
+const TP_PROBS=[
+
+// ── E1: Two Sum II ──
+{name:'Two Sum II',d:'E',
+ desc:'Sorted array তে দুটো index বের করো যাদের sum = target। arr=[2,7,11,15], target=9.',
+ why:'Array sorted — sum ছোট হলে l বাড়াও, বড় হলে r কমাও। O(n²) → O(n).',
+ codeLines:[E('vector<int> twoSum(vector<int>& a, int t) {'),E('  int l = 0, r = a.size() - 1;'),E('  while (l < r) {'),E('    int s = a[l] + a[r];'),E('    if (s == t)  return {l+1, r+1};'),E('    if (s < t)   l++;  // বড় দরকার'),E('    else         r--;  // ছোট দরকার'),E('  }'),E('  return {};'),E('}')],
+ sim(){
+  const a=[2,7,11,15],t=9,F=[];let l=0,r=a.length-1;
+  F.push(AF(a,{l,r},{l,r,target:t,sum:'?'},'শুরু: l=0, r=3',2,'l=0, r=3 init'));
+  while(l<r){
+    const s=a[l]+a[r];
+    F.push(AF(a,{l,r},{l,r,sum:s,target:t},`a[l]=${a[l]}+a[r]=${a[r]}=${s}`,4,'s = a[l]+a[r]',{hi:[l,r],cond:`${s}==${t}?`,cv:s===t}));
+    if(s===t){F.push(AF(a,{l,r},{l,r,sum:s},`✅ FOUND! [${l+1},${r+1}]`,5,'return {l+1,r+1}',{fnd:[l,r],res:`[${l+1},${r+1}]`}));break;}
+    else if(s<t){F.push(AF(a,{l,r},{l,r,sum:s,target:t},`${s}<${t} → l++`,6,'l++',{hi:[l],cond:'sum<t?',cv:true,chg:['l']}));l++;}
+    else{F.push(AF(a,{l,r},{l,r,sum:s,target:t},`${s}>${t} → r--`,7,'r--',{hi:[r],cond:'sum>t?',cv:true,chg:['r']}));r--;}
+  }
+  return F;
+}},
+
+// ── E2: Valid Palindrome ──
+{name:'Valid Palindrome',d:'E',
+ desc:'String palindrome কিনা। s="raceacar".',
+ why:'দুই প্রান্ত থেকে মেলানো — Opposite Ends। O(n), O(1).',
+ codeLines:[E('bool isPalindrome(string s) {'),E('  int l = 0, r = s.size() - 1;'),E('  while (l < r) {'),E('    if (tolower(s[l]) != tolower(s[r]))'),E('      return false;'),E('    l++; r--;'),E('  }'),E('  return true;'),E('}')],
+ sim(){
+  const s=[...'raceacar'],F=[];let l=0,r=s.length-1;
+  F.push(AF(s,{l,r},{l,r},'শুরু: l=0, r=7',2,'l=0, r=7'));
+  while(l<r){
+    const m=s[l]===s[r];
+    F.push(AF(s,{l,r},{l,r,L:`'${s[l]}'`,R:`'${s[r]}'`},`s[l]='${s[l]}' vs s[r]='${s[r]}'`,4,`compare index ${l} and ${r}`,{hi:[l,r],cond:`'${s[l]}'!='${s[r]}'?`,cv:!m}));
+    if(!m){F.push(AF(s,{l,r},{},'❌ NOT Palindrome',5,'return false',{red:[l,r]}));return F;}
+    F.push(AF(s,{l,r},{l,r},'Match ✓ → l++, r--',6,'l++; r--',{fnd:[l,r],chg:['l','r']}));l++;r--;
+  }
+  F.push(AF(s,{},{},`✅ Palindrome!`,8,'return true',{fnd:[...Array(s.length).keys()]}));
+  return F;
+}},
+
+// ── E3: Remove Duplicates ──
+{name:'Remove Duplicates',d:'E',
+ desc:'Sorted array থেকে in-place duplicate remove। arr=[1,1,2,2,3,3,4].',
+ why:'Same direction: w=write, r=read। O(1) extra space.',
+ codeLines:[E('int removeDuplicates(vector<int>& a) {'),E('  int w = 1;'),E('  for (int r = 1; r < a.size(); r++) {'),E('    if (a[r] != a[w-1]) {'),E('      a[w] = a[r]; w++;'),E('    }'),E('  }'),E('  return w;'),E('}')],
+ sim(){
+  let a=[1,1,2,2,3,3,4],F=[];let w=1;
+  F.push(AF([...a],{w,r:1},{w},'শুরু: w=1 write pointer',2,'w=1'));
+  for(let r=1;r<a.length;r++){
+    const dup=a[r]===a[w-1];
+    F.push(AF([...a],{w,r},{w,r},`a[r]=${a[r]} vs a[w-1]=${a[w-1]}`,4,`a[${r}]!=a[${w-1}]? → ${!dup}`,{hi:[r],org:[w-1],cond:`${a[r]}!=${a[w-1]}?`,cv:!dup}));
+    if(!dup){a[w]=a[r];F.push(AF([...a],{w,r},{w,r},`Unique! a[w]=${a[w]}, w++`,5,'a[w]=a[r]; w++',{fnd:[w],hi:[r],chg:['w']}));w++;}
+    else F.push(AF([...a],{w,r},{w,r},`Dup ${a[r]} → skip`,6,'// skip',{red:[r]}));
+  }
+  F.push(AF([...a],{},{result:w},`✅ ${w} unique`,8,'return w',{fnd:[...Array(w).keys()],red:[...Array(a.length-w).keys()].map(x=>x+w),res:w}));
+  return F;
+}},
+
+// ── E4: Move Zeroes ──
+{name:'Move Zeroes',d:'E',
+ desc:'সব 0 শেষে। arr=[0,1,0,3,12].',
+ why:'Same direction write pointer। Non-zero পেলে swap। O(n), O(1).',
+ codeLines:[E('void moveZeroes(vector<int>& a) {'),E('  int w = 0;'),E('  for (int r = 0; r < a.size(); r++) {'),E('    if (a[r] != 0) {'),E('      swap(a[w], a[r]); w++;'),E('    }'),E('  }'),E('}')],
+ sim(){
+  let a=[0,1,0,3,12],F=[];let w=0;
+  F.push(AF([...a],{w,r:0},{w},'শুরু: w=0',2,'w=0'));
+  for(let r=0;r<a.length;r++){
+    const nz=a[r]!==0;
+    F.push(AF([...a],{w,r},{w,r},`a[r]=${a[r]}`,4,`a[${r}]!=0? → ${nz}`,{hi:[r],org:w!==r?[w]:[],cond:`a[r]!=0?`,cv:nz}));
+    if(nz){[a[w],a[r]]=[a[r],a[w]];F.push(AF([...a],{w,r},{w,r},'swap → w++',5,'swap; w++',{fnd:[w],hi:[r],chg:['w']}));w++;}
+    else F.push(AF([...a],{w,r},{w,r},'0 skip',6,'// skip',{red:[r]}));
+  }
+  F.push(AF([...a],{},{},`✅ [${a}]`,8,'done',{fnd:[...Array(w).keys()],red:[...Array(a.length-w).keys()].map(x=>x+w)}));
+  return F;
+}},
+
+// ── E5: Squares of Sorted Array ──
+{name:'Squares Sorted Array',d:'E',
+ desc:'Squares sorted order এ। arr=[-4,-1,0,3,10].',
+ why:'Opposite ends: বড় absolute value দুই প্রান্তে। শেষ থেকে fill করো।',
+ codeLines:[E('vector<int> sortedSquares(vector<int>& a) {'),E('  int n=a.size(), l=0, r=n-1;'),E('  vector<int> res(n);'),E('  for (int i = n-1; i >= 0; i--) {'),E('    if (abs(a[l]) > abs(a[r]))'),E('      { res[i]=a[l]*a[l]; l++; }'),E('    else { res[i]=a[r]*a[r]; r--; }'),E('  }'),E('  return res;'),E('}')],
+ sim(){
+  const a=[-4,-1,0,3,10],F=[];let l=0,r=a.length-1;
+  const res=new Array(a.length).fill('?');
+  F.push(AF([...a],{l,r},{l,r,i:a.length-1},'শুরু: বড় abs value দুই প্রান্তে',2,'l=0, r=4'));
+  for(let i=a.length-1;i>=0;i--){
+    const al=Math.abs(a[l]),ar=Math.abs(a[r]);
+    F.push(AF([...a],{l,r},{l,r,i,'|l|':al,'|r|':ar},`|${a[l]}|=${al} vs |${a[r]}|=${ar}`,5,`abs(a[l])>abs(a[r])? → ${al>ar}`,{hi:[l,r],cond:`${al}>${ar}?`,cv:al>ar}));
+    if(al>ar){res[i]=al*al;F.push(AF([...a],{l,r},{l,r,i,sq:al*al},`l²=${al*al}→res[${i}]. l++`,6,'res[i]=a[l]²; l++',{fnd:[l],chg:['l']}));l++;}
+    else{res[i]=ar*ar;F.push(AF([...a],{l,r},{l,r,i,sq:ar*ar},`r²=${ar*ar}→res[${i}]. r--`,7,'res[i]=a[r]²; r--',{fnd:[r],chg:['r']}));r--;}
+  }
+  const fin=res.map(x=>typeof x==='number'?x:0);
+  F.push(AF(fin,{},{},`✅ [${fin}]`,9,'return res',{fnd:[...Array(fin.length).keys()]}));
+  return F;
+}},
+
+// ── M1: 3Sum ──
+{name:'3Sum',d:'M',
+ desc:'তিনটি number sum=0। arr=[-4,-1,-1,0,1,2].',
+ why:'Sort + i fix + l,r two pointer। O(n³)→O(n²).',
+ codeLines:[E('vector<vector<int>> threeSum(vector<int>& n) {'),E('  sort(n.begin(), n.end());'),E('  vector<vector<int>> res;'),E('  for (int i=0; i<n.size()-2; i++) {'),E('    if (i>0 && n[i]==n[i-1]) continue;'),E('    int l=i+1, r=n.size()-1;'),E('    while (l < r) {'),E('      int s=n[i]+n[l]+n[r];'),E('      if (s==0){res.push_back(...); l++; r--;}'),E('      else if (s<0) l++;'),E('      else r--;'),E('    }'),E('  }'),E('  return res;'),E('}')],
+ sim(){
+  const a=[-4,-1,-1,0,1,2],F=[];
+  F.push(AF(a,{},{},`Sorted: [${a}]`,2,'sort'));
+  for(let i=0;i<a.length-2;i++){
+    if(i>0&&a[i]===a[i-1]){F.push(AF(a,{i},{i},`dup i=${i} skip`,5,'continue',{red:[i],cond:'dup?',cv:true}));continue;}
+    let l=i+1,r=a.length-1;
+    F.push(AF(a,{i,l,r},{i:a[i],l,r},`i=${i}(${a[i]}). l=${l},r=${r}`,6,'l=i+1,r=n-1',{hi:[i],org:[l,r]}));
+    while(l<r){
+      const s=a[i]+a[l]+a[r];
+      F.push(AF(a,{i,l,r},{i:a[i],l,r,sum:s},`${a[i]}+${a[l]}+${a[r]}=${s}`,8,'s=sum',{hi:[i,l,r],cond:`s==0?(${s})`,cv:s===0}));
+      if(s===0){F.push(AF(a,{i,l,r},{},'✅ ['+a[i]+','+a[l]+','+a[r]+']',9,'push; l++;r--',{fnd:[i,l,r]}));l++;r--;}
+      else if(s<0){F.push(AF(a,{i,l,r},{i:a[i],l,r,sum:s},`${s}<0→l++`,10,'l++',{hi:[l],cond:'s<0?',cv:true,chg:['l']}));l++;}
+      else{F.push(AF(a,{i,l,r},{i:a[i],l,r,sum:s},`${s}>0→r--`,11,'r--',{hi:[r],cond:'s>0?',cv:true,chg:['r']}));r--;}
+    }
+  }
+  F.push(AF(a,{},{},`✅ done`,14,'return res'));return F;
+}},
+
+// ── M2: Container With Most Water ──
+{name:'Container Max Water',d:'M',
+ desc:'Maximum area। h=[1,8,6,2,5,4,8,3,7]. Answer=49.',
+ why:'ছোট height সরাও — area বাড়ার chance। Greedy two pointer।',
+ codeLines:[E('int maxArea(vector<int>& h) {'),E('  int l=0, r=h.size()-1, best=0;'),E('  while (l < r) {'),E('    int area=min(h[l],h[r])*(r-l);'),E('    best=max(best,area);'),E('    if (h[l]<h[r]) l++;'),E('    else r--;'),E('  }'),E('  return best;'),E('}')],
+ sim(){
+  const h=[1,8,6,2,5,4,8,3,7],F=[];let l=0,r=h.length-1,best=0;
+  F.push(AF(h,{l,r},{l,r,best},'শুরু',2,'l=0,r=8,best=0'));
+  while(l<r){
+    const area=Math.min(h[l],h[r])*(r-l),nb=Math.max(best,area);
+    F.push(AF(h,{l,r},{l,r,area,best},`area=${area}`,4,'area=min*width',{hi:[l,r],cond:`${area}>best(${best})?`,cv:area>best}));
+    best=nb;
+    if(h[l]<h[r]){F.push(AF(h,{l,r},{l,r,area,best},`h[l]<h[r]→l++`,6,'l++',{hi:[l],cond:'h[l]<h[r]?',cv:true,chg:['l','best']}));l++;}
+    else{F.push(AF(h,{l,r},{l,r,area,best},`h[r]≤h[l]→r--`,7,'r--',{hi:[r],cond:'h[l]≥h[r]?',cv:true,chg:['r','best']}));r--;}
+  }
+  F.push(AF(h,{},{best},`✅ Max=${best}`,9,'return best',{res:best}));return F;
+}},
+
+// ── M3: Sort Colors ──
+{name:'Sort Colors (DNF)',d:'M',
+ desc:'0,1,2 in-place sort। arr=[2,0,2,1,1,0]. Dutch National Flag.',
+ why:'3 pointer — lo,mid,hi। O(n) one-pass, O(1) space।',
+ codeLines:[E('void sortColors(vector<int>& a) {'),E('  int lo=0, mid=0, hi=a.size()-1;'),E('  while (mid <= hi) {'),E('    if (a[mid]==0){swap(a[lo],a[mid]);lo++;mid++;}'),E('    else if (a[mid]==1) mid++;'),E('    else {swap(a[mid],a[hi]); hi--;}'),E('  }'),E('}')],
+ sim(){
+  let a=[2,0,2,1,1,0],F=[];let lo=0,mid=0,hi=a.length-1;
+  F.push(AF([...a],{lo,mid,hi},{lo,mid,hi},'শুরু',2,'lo=mid=0,hi=5'));
+  while(mid<=hi){
+    const v=a[mid];
+    F.push(AF([...a],{lo,mid,hi},{lo,mid,hi,val:v},`a[mid]=${v}`,4,`check a[mid]=${v}`,{hi:[mid],cond:`a[mid]=${v}`,cv:v}));
+    if(v===0){[a[lo],a[mid]]=[a[mid],a[lo]];F.push(AF([...a],{lo,mid,hi},{lo,mid,hi},'0→swap,lo++,mid++',4,'swap;lo++;mid++',{fnd:[lo],hi:[mid],chg:['lo','mid']}));lo++;mid++;}
+    else if(v===1){F.push(AF([...a],{lo,mid,hi},{lo,mid,hi},'1→mid++',5,'mid++',{org:[mid],chg:['mid']}));mid++;}
+    else{[a[mid],a[hi]]=[a[hi],a[mid]];F.push(AF([...a],{lo,mid,hi},{lo,mid,hi},'2→swap,hi--',6,'swap;hi--',{red:[hi],chg:['hi']}));hi--;}
+  }
+  F.push(AF([...a],{},{},`✅ [${a}]`,8,'done',{fnd:[...Array(a.length).keys()]}));return F;
+}},
+
+// ── M4: Boats to Save People ──
+{name:'Boats to Save People',d:'M',
+ desc:'Max 2 per boat, limit=3. Min boats। w=[1,2,2,3].',
+ why:'Sort → heaviest+lightest pair। Greedy two pointer।',
+ codeLines:[E('int numRescueBoats(vector<int>& p, int lim) {'),E('  sort(p.begin(), p.end());'),E('  int l=0, r=p.size()-1, boats=0;'),E('  while (l <= r) {'),E('    if (p[l]+p[r] <= lim) l++;'),E('    r--; boats++;'),E('  }'),E('  return boats;'),E('}')],
+ sim(){
+  const p=[1,2,2,3],lim=3,F=[];let l=0,r=p.length-1,boats=0;
+  F.push(AF([...p],{l,r},{l,r,boats,lim},'শুরু',3,'l=0,r=3,boats=0'));
+  while(l<=r){
+    const s=p[l]+p[r],fits=s<=lim;
+    F.push(AF([...p],{l,r},{l,r,boats,sum:s,lim},`p[l]+p[r]=${s}`,5,`${s}<=${lim}? → ${fits?'pair':'alone'}`,{hi:[l,r],cond:`${s}<=${lim}?`,cv:fits}));
+    if(fits){F.push(AF([...p],{l,r},{l,r,boats,lim},'pair! l++',5,'l++',{fnd:[l,r],chg:['l']}));l++;}
+    else F.push(AF([...p],{l,r},{l,r,boats,lim},'alone',6,'r-- only',{org:[r]}));
+    r--;boats++;
+    F.push(AF([...p],{l,r},{l,r,boats,lim},`boats=${boats}`,6,'boats++',{chg:['boats','r']}));
+  }
+  F.push(AF([...p],{},{boats},`✅ boats=${boats}`,8,'return',{res:boats}));return F;
+}},
+
+// ── M5: 3Sum Closest ──
+{name:'3Sum Closest',d:'M',
+ desc:'Sum target এর সবচেয়ে কাছের triplet। arr=[-1,2,1,-4], target=1.',
+ why:'Sort + i fix + two pointer। প্রতিটি step এ closest track।',
+ codeLines:[E('int threeSumClosest(vector<int>& n, int t) {'),E('  sort(n.begin(), n.end());'),E('  int cls=n[0]+n[1]+n[2];'),E('  for (int i=0; i<n.size()-2; i++) {'),E('    int l=i+1, r=n.size()-1;'),E('    while (l < r) {'),E('      int s=n[i]+n[l]+n[r];'),E('      if (abs(s-t)<abs(cls-t)) cls=s;'),E('      if (s<t) l++;'),E('      else if (s>t) r--;'),E('      else return s;'),E('    }'),E('  }'),E('  return cls;'),E('}')],
+ sim(){
+  const a=[-1,1,2,-4].sort((x,y)=>x-y),t=1,F=[];let cls=a[0]+a[1]+a[2];
+  F.push(AF([...a],{},{cls,t},'Sorted. cls start='+cls,3,'cls=n[0]+n[1]+n[2]'));
+  for(let i=0;i<a.length-2;i++){
+    let l=i+1,r=a.length-1;
+    F.push(AF([...a],{i,l,r},{i:a[i],l,r,cls,t},`i=${i}(${a[i]})`,5,'l=i+1,r=n-1',{hi:[i]}));
+    while(l<r){
+      const s=a[i]+a[l]+a[r];const better=Math.abs(s-t)<Math.abs(cls-t);
+      F.push(AF([...a],{i,l,r},{i:a[i],l,r,sum:s,cls,t},`${a[i]}+${a[l]}+${a[r]}=${s}`,8,`|${s}-${t}|<|${cls}-${t}|? → ${better}`,{hi:[i,l,r],cond:`closer?`,cv:better}));
+      if(better)cls=s;
+      if(s===t){F.push(AF([...a],{i,l,r},{},`Exact! ${s}`,11,'return s',{fnd:[i,l,r],res:s}));return F;}
+      else if(s<t){F.push(AF([...a],{i,l,r},{l,r,cls,t},`${s}<${t}→l++`,9,'l++',{hi:[l],cond:'s<t?',cv:true,chg:['l']}));l++;}
+      else{F.push(AF([...a],{i,l,r},{l,r,cls,t},`${s}>${t}→r--`,10,'r--',{hi:[r],cond:'s>t?',cv:true,chg:['r']}));r--;}
+    }
+  }
+  F.push(AF([...a],{},{cls},`✅ closest=${cls}`,14,'return cls',{res:cls}));return F;
+}},
+
+// ── H1: Trapping Rain Water ──
+{name:'Trapping Rain Water',d:'H',
+ desc:'Height array তে trap হওয়া পানি। h=[0,1,0,2,1,0,1,3]. Answer=6.',
+ why:'যে দিকে height কম সেদিক process। lMax/rMax দিয়ে পানি বের হয়। O(n), O(1).',
+ codeLines:[E('int trap(vector<int>& h) {'),E('  int l=0,r=h.size()-1;'),E('  int lMax=0,rMax=0,water=0;'),E('  while (l <= r) {'),E('    if (h[l] <= h[r]) {'),E('      lMax=max(lMax,h[l]);'),E('      water+=lMax-h[l]; l++;'),E('    } else {'),E('      rMax=max(rMax,h[r]);'),E('      water+=rMax-h[r]; r--;'),E('    }'),E('  }'),E('  return water;'),E('}')],
+ sim(){
+  const h=[0,1,0,2,1,0,1,3],F=[];let l=0,r=h.length-1,lMax=0,rMax=0,water=0;
+  F.push(AF([...h],{l,r},{l,r,water,lMax,rMax},'শুরু',3,'lMax=rMax=water=0'));
+  while(l<=r){
+    F.push(AF([...h],{l,r},{l,r,water,lMax,rMax},`h[l]=${h[l]}, h[r]=${h[r]}`,5,`h[l]<=h[r]? (${h[l]}<=${h[r]})`,{hi:[l,r],cond:`h[l]<=h[r]?`,cv:h[l]<=h[r]}));
+    if(h[l]<=h[r]){lMax=Math.max(lMax,h[l]);const add=lMax-h[l];water+=add;F.push(AF([...h],{l,r},{l,r,water,lMax,rMax},`+${add} water. l++`,7,`water+=${add}; l++`,{hi:[l],chg:['water','lMax']}));l++;}
+    else{rMax=Math.max(rMax,h[r]);const add=rMax-h[r];water+=add;F.push(AF([...h],{l,r},{l,r,water,lMax,rMax},`+${add} water. r--`,10,`water+=${add}; r--`,{hi:[r],chg:['water','rMax']}));r--;}
+  }
+  F.push(AF([...h],{},{water},`✅ water=${water}`,13,'return',{res:water}));return F;
+}},
+
+// ── H2: 4Sum ──
+{name:'4Sum',d:'H',
+ desc:'চারটি number sum=0। arr=[-2,-1,0,0,1,2].',
+ why:'দুটো outer loop + inner two pointer। O(n⁴)→O(n³). Duplicate skip।',
+ codeLines:[E('vector<vector<int>> fourSum(vector<int>& n, int t) {'),E('  sort(n.begin(), n.end());'),E('  vector<vector<int>> res;'),E('  for (int i=0; i<n.size()-3; i++) {'),E('    if (i>0&&n[i]==n[i-1]) continue;'),E('    for (int j=i+1; j<n.size()-2; j++) {'),E('      if (j>i+1&&n[j]==n[j-1]) continue;'),E('      int l=j+1, r=n.size()-1;'),E('      while (l<r) {'),E('        int s=n[i]+n[j]+n[l]+n[r];'),E('        if(s==t){res.push_back(...);l++;r--;}'),E('        else if(s<t) l++;'),E('        else r--;'),E('      }'),E('    }'),E('  }'),E('  return res;'),E('}')],
+ sim(){
+  const a=[-2,-1,0,0,1,2],t=0,F=[];
+  F.push(AF(a,{},{target:t},'Sorted: ['+a+']',2,'sort'));
+  for(let i=0;i<a.length-3;i++){
+    if(i>0&&a[i]===a[i-1]){F.push(AF(a,{i},{},`dup i skip`,5,'continue',{red:[i]}));continue;}
+    for(let j=i+1;j<a.length-2;j++){
+      if(j>i+1&&a[j]===a[j-1]){F.push(AF(a,{i,j},{},`dup j skip`,7,'continue',{red:[j]}));continue;}
+      let l=j+1,r=a.length-1;
+      F.push(AF(a,{i,j,l,r},{i:a[i],j:a[j],l,r},`i=${i},j=${j}`,8,'l=j+1,r=n-1',{hi:[i,j],org:[l,r]}));
+      while(l<r){
+        const s=a[i]+a[j]+a[l]+a[r];
+        F.push(AF(a,{i,j,l,r},{sum:s},`${a[i]}+${a[j]}+${a[l]}+${a[r]}=${s}`,10,'s=sum',{hi:[i,j,l,r],cond:`s==0?(${s})`,cv:s===t}));
+        if(s===t){F.push(AF(a,{i,j,l,r},{},'✅ quad found',11,'push;l++;r--',{fnd:[i,j,l,r]}));l++;r--;}
+        else if(s<t){l++;}else{r--;}
+      }
+    }
+  }
+  F.push(AF(a,{},{},`✅ done`,17,'return'));return F;
+}},
+
+// ── H3: Min Ops to Reduce to 0 ──
+{name:'Min Ops to Reduce 0',d:'H',
+ desc:'Array শুরু/শেষ থেকে নিয়ে sum=x করো। Min ops। arr=[1,1,4,2,3], x=5.',
+ why:'Convert: max middle subarray = total-x। Sliding window two pointer।',
+ codeLines:[E('int minOperations(vector<int>& a, int x) {'),E('  int tot=0; for(int v:a) tot+=v;'),E('  int target=tot-x;'),E('  if(target<0) return -1;'),E('  int l=0,s=0,best=-1;'),E('  for(int r=0;r<a.size();r++) {'),E('    s+=a[r];'),E('    while(s>target&&l<=r) s-=a[l++];'),E('    if(s==target) best=max(best,r-l+1);'),E('  }'),E('  return best<0?-1:a.size()-best;'),E('}')],
+ sim(){
+  const a=[1,1,4,2,3],x=5,F=[];
+  const tot=a.reduce((s,v)=>s+v,0),target=tot-x;
+  let l=0,s=0,best=-1;
+  F.push(AF([...a],{},{tot,target,x},`total=${tot}, target=${target}`,3,`target=tot-x=${target}`));
+  for(let r=0;r<a.length;r++){
+    s+=a[r];
+    F.push(AF([...a],{l,r},{l,r,s,target,best},`+a[r]=${a[r]}, s=${s}`,7,`s+=a[${r}]`,{win:[l,r],hi:[r],cond:`s>target?(${s}>${target})`,cv:s>target}));
+    while(s>target&&l<=r){F.push(AF([...a],{l,r},{l,r,s,target},`shrink`,8,'s-=a[l++]',{win:[l,r],red:[l],chg:['s','l']}));s-=a[l];l++;}
+    if(s===target){best=Math.max(best,r-l+1);F.push(AF([...a],{l,r},{l,r,s,target,best},`match! len=${r-l+1}`,9,'best=max',{fnd:[l,r],chg:['best']}));}
+  }
+  const ans=best<0?-1:a.length-best;
+  F.push(AF([...a],{},{ans,x},`✅ ops=${ans}`,11,'return',{res:ans}));return F;
+}},
+
+// ── H4: Longest Mountain ──
+{name:'Longest Mountain',d:'H',
+ desc:'Longest mountain subarray (up+down)। arr=[2,1,4,7,3,2,5]. Answer=5.',
+ why:'Peak খুঁজে বাম-ডান expand। Two pointer from peak।',
+ codeLines:[E('int longestMountain(vector<int>& a) {'),E('  int n=a.size(), best=0;'),E('  for (int i=1; i<n-1; i++) {'),E('    if (a[i]>a[i-1]&&a[i]>a[i+1]) {'),E('      int l=i-1, r=i+1;'),E('      while(l>0&&a[l]>a[l-1]) l--;'),E('      while(r<n-1&&a[r]>a[r+1]) r++;'),E('      best=max(best,r-l+1);'),E('    }'),E('  }'),E('  return best;'),E('}')],
+ sim(){
+  const a=[2,1,4,7,3,2,5],n=a.length,F=[];let best=0;
+  F.push(AF([...a],{},{best},'Peak খুঁজবো, expand করবো',2,'best=0'));
+  for(let i=1;i<n-1;i++){
+    const isPeak=a[i]>a[i-1]&&a[i]>a[i+1];
+    F.push(AF([...a],{i},{i,val:a[i],best},`i=${i}: a[${i}]=${a[i]}`,4,'peak check',{hi:[i],cond:`a[i]>prev&&next?`,cv:isPeak}));
+    if(!isPeak)continue;
+    let l=i-1,r=i+1;
+    F.push(AF([...a],{l,i,r},{l,r,peak:a[i],best},`Peak! expand`,5,'l=i-1,r=i+1',{fnd:[i],org:[l,r]}));
+    while(l>0&&a[l]>a[l-1]){F.push(AF([...a],{l,i,r},{l,r,best},`a[l]>a[l-1]→l--`,6,'l--',{hi:[l],cond:`a[l]>a[l-1]?`,cv:true,chg:['l']}));l--;}
+    while(r<n-1&&a[r]>a[r+1]){F.push(AF([...a],{l,i,r},{l,r,best},`a[r]>a[r+1]→r++`,7,'r++',{hi:[r],cond:`a[r]>a[r+1]?`,cv:true,chg:['r']}));r++;}
+    const len=r-l+1;best=Math.max(best,len);
+    F.push(AF([...a],{l,i,r},{l,r,len,best},`len=${len},best=${best}`,8,'best=max',{fnd:[...Array(len).keys()].map(x=>x+l),chg:['best']}));
+  }
+  F.push(AF([...a],{},{best},`✅ longest=${best}`,11,'return',{res:best}));return F;
+}},
+
+// ── H5: Interval Intersections ──
+{name:'Interval Intersections',d:'H',
+ desc:'দুটো sorted interval list এর intersection। A=[[0,2],[5,10]], B=[[1,5],[8,12]].',
+ why:'দুই sorted list → two pointer। যেটা আগে শেষ সেটার pointer বাড়াও।',
+ codeLines:[E('vector<vector<int>> intersection('),E('  vector<vector<int>>& A, vector<vector<int>>& B) {'),E('  vector<vector<int>> res;'),E('  int i=0, j=0;'),E('  while (i<A.size()&&j<B.size()) {'),E('    int lo=max(A[i][0],B[j][0]);'),E('    int hi=min(A[i][1],B[j][1]);'),E('    if (lo<=hi) res.push_back({lo,hi});'),E('    if (A[i][1]<B[j][1]) i++;'),E('    else j++;'),E('  }'),E('  return res;'),E('}')],
+ sim(){
+  const A=[[0,2],[5,10],[13,23]],B=[[1,5],[8,12],[15,24]];
+  const F=[];let ai=0,bi=0;const res=[];
+  const flat=A.map(x=>x[1]).concat(B.map(x=>x[0]));
+  F.push(AF([0,2,5,10,13,23],{i:0,j:0},{i:0,j:0},`A:${A.map(x=>`[${x}]`)} B:${B.map(x=>`[${x}]`)}`,4,'i=0,j=0'));
+  while(ai<A.length&&bi<B.length){
+    const lo=Math.max(A[ai][0],B[bi][0]),hi=Math.min(A[ai][1],B[bi][1]),ov=lo<=hi;
+    F.push(AF([0,2,5,10,13,23],{i:ai,j:bi},{i:ai,j:bi,lo,hi,A:`[${A[ai]}]`,B:`[${B[bi]}]`},
+      `A[${ai}]=[${A[ai]}] B[${bi}]=[${B[bi]}]. lo=${lo},hi=${hi}`,8,`lo<=hi? → ${ov}`,{hi:[ai*2,ai*2+1],cond:`lo<=hi?(${lo}<=${hi})`,cv:ov}));
+    if(ov){res.push([lo,hi]);F.push(AF([0,2,5,10,13,23],{i:ai,j:bi},{},`✅ [${lo},${hi}]`,8,'push',{fnd:[ai*2,ai*2+1]}));}
+    const advA=A[ai][1]<B[bi][1];
+    F.push(AF([0,2,5,10,13,23],{i:ai,j:bi},{i:ai,j:bi},`A.end=${A[ai][1]} ${advA?'<':'≥'} B.end=${B[bi][1]} → ${advA?'i++':'j++'}`,advA?9:10,advA?'i++':'j++',{cond:`A.end<B.end?`,cv:advA,chg:[advA?'i':'j']}));
+    if(advA)ai++;else bi++;
+  }
+  F.push(AF([0,2,5,10,13,23],{},{result:res.map(x=>`[${x}]`).join(',')},`✅ ${res.map(x=>`[${x}]`).join(' ')}`));return F;
+}}
+]; // end TP_PROBS
+
+// ══════════════════════════════════════════════════════
+// HASHMAP PROBLEMS  (15: 5E 5M 5H)
+// ══════════════════════════════════════════════════════
+const HM_PROBS=[
+
+// ── E1: Two Sum ──
+{name:'Two Sum',d:'E',
+ desc:'Array তে দুটো index যাদের sum=target। arr=[2,7,11,15], target=9. HashMap দিয়ে O(n)।',
+ why:'complement = target-a[i] আগে map এ দেখা গেছে? এক pass এই O(n)।',
+ codeLines:[E('vector<int> twoSum(vector<int>& a, int t) {'),E('  unordered_map<int,int> mp;'),E('  for (int i=0; i<a.size(); i++) {'),E('    int comp = t - a[i];'),E('    if (mp.count(comp))'),E('      return {mp[comp], i};'),E('    mp[a[i]] = i;'),E('  }'),E('  return {};'),E('}')],
+ sim(){
+  const a=[2,7,11,15],t=9,F=[];const mp={};
+  F.push(HF({},[...a],{target:t},'শুরু: map empty. comp=target-a[i] খুঁজবো',2,'map init'));
+  for(let i=0;i<a.length;i++){
+    const comp=t-a[i],found=mp[comp]!==undefined;
+    F.push(HF({...mp},[...a],{i,val:a[i],comp,target:t},`a[${i}]=${a[i]}, comp=${t}-${a[i]}=${comp}`,4,`comp=${comp}`,{ci:i,hlKey:String(comp),cond:`map[${comp}] exists?`,cv:found}));
+    if(found){F.push(HF({...mp},[...a],{ans:`[${mp[comp]},${i}]`},`✅ FOUND! [${mp[comp]},${i}]`,6,'return {mp[comp],i}',{ci:i,res:`[${mp[comp]},${i}]`}));return F;}
+    mp[a[i]]=i;F.push(HF({...mp},[...a],{i},`map[${a[i]}]=${i} store করলাম`,7,`mp[${a[i]}]=${i}`,{ci:i,newKey:String(a[i])}));
+  }
+  return F;
+}},
+
+// ── E2: Contains Duplicate ──
+{name:'Contains Duplicate',d:'E',
+ desc:'Array তে duplicate আছে? arr=[1,2,3,1]. HashSet দিয়ে O(n)।',
+ why:'"Seen before?" — map তে O(1) lookup। Duplicate পেলে সাথে সাথে return।',
+ codeLines:[E('bool containsDuplicate(vector<int>& a) {'),E('  unordered_set<int> seen;'),E('  for (int x : a) {'),E('    if (seen.count(x))'),E('      return true;  // duplicate!'),E('    seen.insert(x);'),E('  }'),E('  return false;'),E('}')],
+ sim(){
+  const a=[1,2,3,1],F=[];const seen={};
+  F.push(HF({},[...a],{},'শুরু: seen empty',2,'set init'));
+  for(let i=0;i<a.length;i++){
+    const dup=seen[a[i]]!==undefined;
+    F.push(HF({...seen},[...a],{i,val:a[i]},`a[${i}]=${a[i]} — seen তে আছে?`,4,`seen.count(${a[i]})`,{ci:i,hlKey:String(a[i]),cond:`${a[i]} in seen?`,cv:dup}));
+    if(dup){F.push(HF({...seen},[...a],{ans:true},`✅ Duplicate ${a[i]} পাওয়া গেছে!`,5,'return true',{ci:i,res:'true'}));return F;}
+    seen[a[i]]=1;F.push(HF({...seen},[...a],{i},`seen.insert(${a[i]})`,6,`insert ${a[i]}`,{ci:i,newKey:String(a[i])}));
+  }
+  F.push(HF({...seen},[...a],{},`No duplicate → false`,8,'return false',{res:'false'}));return F;
+}},
+
+// ── E3: Valid Anagram ──
+{name:'Valid Anagram',d:'E',
+ desc:'দুটো string anagram কিনা। s="anagram", t="nagaram"। Frequency count compare।',
+ why:'প্রতিটি char এর frequency count করো। দুটো map সমান হলে anagram।',
+ codeLines:[E('bool isAnagram(string s, string t) {'),E('  if(s.size()!=t.size()) return false;'),E('  unordered_map<char,int> cnt;'),E('  for (char c : s) cnt[c]++;'),E('  for (char c : t) {'),E('    cnt[c]--;'),E('    if (cnt[c] < 0) return false;'),E('  }'),E('  return true;'),E('}')],
+ sim(){
+  const s=[...'anagram'],t=[...'nagaram'],F=[];const cnt={};
+  F.push(HF({},[...s],{},'Pass 1: s এর frequency count করো',4,'cnt[c]++ for s'));
+  for(let i=0;i<s.length;i++){
+    cnt[s[i]]=(cnt[s[i]]||0)+1;
+    F.push(HF({...cnt},[...s],{i,char:`'${s[i]}'`},`s[${i}]='${s[i]}' → cnt[${s[i]}]=${cnt[s[i]]}`,4,`cnt['${s[i]}']++`,{ci:i,newKey:s[i]}));
+  }
+  F.push(HF({...cnt},[...t],{},'Pass 2: t দিয়ে decrement করো',5,'cnt[c]-- for t'));
+  for(let i=0;i<t.length;i++){
+    cnt[t[i]]=(cnt[t[i]]||0)-1;
+    const neg=cnt[t[i]]<0;
+    F.push(HF({...cnt},[...t],{i,char:`'${t[i]}'`},`t[${i}]='${t[i]}' → cnt=${cnt[t[i]]}`,7,`cnt['${t[i]}']--`,{ci:i,hlKey:t[i],cond:`cnt<0? (${cnt[t[i]]})`,cv:neg}));
+    if(neg){F.push(HF({...cnt},[...t],{},'❌ Not Anagram',7,'return false',{res:'false'}));return F;}
+  }
+  F.push(HF({...cnt},[...t],{},`✅ Valid Anagram!`,9,'return true',{res:'true'}));return F;
+}},
+
+// ── E4: First Unique Character ──
+{name:'First Unique Char',d:'E',
+ desc:'String এর প্রথম non-repeating character এর index। s="leetcode" → 0.',
+ why:'Two pass: frequency count করো, তারপর প্রথম frequency=1 খুঁজো।',
+ codeLines:[E('int firstUniqChar(string s) {'),E('  unordered_map<char,int> cnt;'),E('  for (char c : s) cnt[c]++;'),E('  for (int i=0; i<s.size(); i++) {'),E('    if (cnt[s[i]] == 1)'),E('      return i;  // first unique'),E('  }'),E('  return -1;'),E('}')],
+ sim(){
+  const s=[...'leetcode'],F=[];const cnt={};
+  F.push(HF({},[...s],{},'Pass 1: সব char এর frequency count',3,'cnt[c]++'));
+  s.forEach(c=>{cnt[c]=(cnt[c]||0)+1;});
+  F.push(HF({...cnt},[...s],{},'Frequency done. Pass 2: প্রথম cnt=1 খুঁজো',4,'for loop start'));
+  for(let i=0;i<s.length;i++){
+    const u=cnt[s[i]]===1;
+    F.push(HF({...cnt},[...s],{i,char:`'${s[i]}'`,freq:cnt[s[i]]},`s[${i}]='${s[i]}' freq=${cnt[s[i]]}`,5,`cnt['${s[i]}']==1? → ${u}`,{ci:i,hlKey:s[i],cond:`freq==1?`,cv:u}));
+    if(u){F.push(HF({...cnt},[...s],{ans:i},`✅ First unique at index ${i}`,6,'return i',{ci:i,res:i}));return F;}
+  }
+  F.push(HF({...cnt},[...s],{},`No unique → -1`,8,'return -1',{res:-1}));return F;
+}},
+
+// ── E5: Ransom Note ──
+{name:'Ransom Note',d:'E',
+ desc:'"ransom" note কি "magazine" এর letters দিয়ে বানানো যাবে? r="aa", m="aab".',
+ why:'Magazine এর frequency count করো। Ransom এর প্রতিটি char কি available?',
+ codeLines:[E('bool canConstruct(string r, string m) {'),E('  unordered_map<char,int> cnt;'),E('  for (char c : m) cnt[c]++;'),E('  for (char c : r) {'),E('    if (--cnt[c] < 0)'),E('      return false;'),E('  }'),E('  return true;'),E('}')],
+ sim(){
+  const r=[...'aa'],m=[...'aab'],F=[];const cnt={};
+  F.push(HF({},[...m],{},'Magazine এর frequency build করো',3,'cnt[c]++ for magazine'));
+  m.forEach(c=>{cnt[c]=(cnt[c]||0)+1;});
+  F.push(HF({...cnt},[...r],{},'Ransom এর প্রতিটি char check করো',4,'for ransom'));
+  for(let i=0;i<r.length;i++){
+    cnt[r[i]]=(cnt[r[i]]||0)-1;const neg=cnt[r[i]]<0;
+    F.push(HF({...cnt},[...r],{i,char:`'${r[i]}'`},`ransom[${i}]='${r[i]}' → cnt=${cnt[r[i]]}`,5,`--cnt['${r[i]}']`,{ci:i,hlKey:r[i],cond:`cnt<0?(${cnt[r[i]]})`,cv:neg}));
+    if(neg){F.push(HF({...cnt},[...r],{},'❌ Not enough letters',6,'return false',{res:'false'}));return F;}
+  }
+  F.push(HF({...cnt},[...r],{},`✅ Can construct!`,8,'return true',{res:'true'}));return F;
+}},
+
+// ── M1: Group Anagrams ──
+{name:'Group Anagrams',d:'M',
+ desc:'Anagram গুলো group করো। ["eat","tea","tan","ate","nat","bat"].',
+ why:'Sorted word = key। Same key = anagram group। HashMap এ list store।',
+ codeLines:[E('vector<vector<string>> groupAnagrams('),E('  vector<string>& s) {'),E('  unordered_map<string,vector<string>> mp;'),E('  for (auto& w : s) {'),E('    string key = w;'),E('    sort(key.begin(), key.end());'),E('    mp[key].push_back(w);'),E('  }'),E('  // collect values...'),E('}')],
+ sim(){
+  const words=['eat','tea','tan','ate','nat'],F=[];const mp={};
+  F.push(HF({},[0,1,2,3,4].map(i=>words[i].charCodeAt(0)-96),{},'sorted word = key → anagram group',4,'for each word'));
+  words.forEach((w,i)=>{
+    const key=[...w].sort().join('');
+    const dup=mp[key]!==undefined;
+    F.push(HF({...Object.fromEntries(Object.entries(mp).map(([k,v])=>[k,v.join(',')]))},
+      [0,1,2,3,4].map(j=>words[j].charCodeAt(0)-96),
+      {word:`"${w}"`,key:`"${key}"`},
+      `"${w}" → sort → key="${key}"`,6,`sort word to get key`,{ci:i,hlKey:key,cond:`key="${key}" new?`,cv:!dup}));
+    if(!mp[key])mp[key]=[];mp[key].push(w);
+    F.push(HF({...Object.fromEntries(Object.entries(mp).map(([k,v])=>[k,v.join(',')]))},
+      [0,1,2,3,4].map(j=>words[j].charCodeAt(0)-96),
+      {groups:Object.keys(mp).length},
+      `mp["${key}"].push("${w}")`,7,'push to group',{ci:i,newKey:key}));
+  });
+  F.push(HF({...Object.fromEntries(Object.entries(mp).map(([k,v])=>[k,v.join(',')]))},
+    [0,1,2,3,4].map(j=>words[j].charCodeAt(0)-96),
+    {groups:Object.keys(mp).length},`✅ ${Object.keys(mp).length} groups found`));return F;
+}},
+
+// ── M2: Top K Frequent ──
+{name:'Top K Frequent Elements',d:'M',
+ desc:'Array তে top-K frequent elements। arr=[1,1,1,2,2,3], k=2. Ans=[1,2].',
+ why:'Frequency count করো, তারপর top-K বের করো। Bucket sort O(n)।',
+ codeLines:[E('vector<int> topKFrequent(vector<int>& a, int k) {'),E('  unordered_map<int,int> cnt;'),E('  for (int x : a) cnt[x]++;'),E('  // bucket[i] = list of nums with freq i'),E('  vector<vector<int>> bucket(a.size()+1);'),E('  for (auto& [v,f] : cnt)'),E('    bucket[f].push_back(v);'),E('  vector<int> res;'),E('  for (int i=a.size(); i>0 && res.size()<k; i--)'),E('    for (int v : bucket[i]) res.push_back(v);'),E('  return res;'),E('}')],
+ sim(){
+  const a=[1,1,1,2,2,3],k=2,F=[];const cnt={};
+  F.push(HF({},[...a],{k},'Frequency count করো',3,'cnt[x]++'));
+  a.forEach((v,i)=>{
+    cnt[v]=(cnt[v]||0)+1;
+    F.push(HF({...cnt},[...a],{i,val:v,freq:cnt[v]},`cnt[${v}]=${cnt[v]}`,3,'cnt[x]++',{ci:i,newKey:String(v)}));
+  });
+  F.push(HF({...cnt},[...a],{k},`Bucket sort. Top-${k} high freq বের করো`,5,'bucket sort start'));
+  const bucket=Array.from({length:a.length+1},()=>[]);
+  Object.entries(cnt).forEach(([v,f])=>bucket[f].push(parseInt(v)));
+  const res=[];let i=a.length;
+  while(i>0&&res.length<k){
+    if(bucket[i].length){
+      bucket[i].forEach(v=>{
+        if(res.length<k){res.push(v);
+          F.push(HF({...cnt},[...a],{freq:i,val:v,result:`[${res}]`,k},`freq=${i}: ${v} → result`,9,'push to result',{fndIdx:a.map((x,idx)=>x===v?idx:-1).filter(x=>x>=0),res:`[${res}]`}));}
+      });
+    }
+    i--;
+  }
+  F.push(HF({...cnt},[...a],{result:`[${res}]`},`✅ Top-${k}: [${res}]`,11,'return res',{res:`[${res}]`}));return F;
+}},
+
+// ── M3: Subarray Sum = K ──
+{name:'Subarray Sum = K',d:'M',
+ desc:'Sum=K এমন subarray count। arr=[1,2,3,1,2], k=3. HashMap prefix দিয়ে O(n)।',
+ why:'prefix[i] - prefix[j] = k → prefix[j] = prefix[i]-k আগে দেখা গেছে? Prefix+Map।',
+ codeLines:[E('int subarraySum(vector<int>& a, int k) {'),E('  unordered_map<int,int> mp;'),E('  mp[0] = 1;  // empty prefix'),E('  int pre=0, cnt=0;'),E('  for (int x : a) {'),E('    pre += x;'),E('    cnt += mp[pre-k];'),E('    mp[pre]++;'),E('  }'),E('  return cnt;'),E('}')],
+ sim(){
+  const a=[1,2,3,1,2],k=3,F=[];const mp={0:1};let pre=0,cnt=0;
+  F.push(HF({...mp},[...a],{pre,cnt,k},'শুরু: mp={0:1}. pre-k map এ আছে?',3,'mp[0]=1 init'));
+  for(let i=0;i<a.length;i++){
+    pre+=a[i];const tgt=pre-k;const found=mp[tgt]||0;
+    F.push(HF({...mp},[...a],{i,pre,cnt,k,target:tgt},`i=${i}: pre=${pre}, need mp[${tgt}]=${found}`,7,`cnt+=mp[pre-k]=mp[${tgt}]=${found}`,{ci:i,hlKey:String(tgt),cond:`mp[${tgt}] exists?`,cv:!!found}));
+    cnt+=found;mp[pre]=(mp[pre]||0)+1;
+    F.push(HF({...mp},[...a],{pre,cnt,k},`cnt=${cnt}, mp[${pre}]++`,8,`mp[${pre}]++`,{ci:i,newKey:String(pre),chg:['cnt']}));
+  }
+  F.push(HF({...mp},[...a],{cnt,k},`✅ count=${cnt}`,10,'return cnt',{res:cnt}));return F;
+}},
+
+// ── M4: Longest Consecutive Sequence ──
+{name:'Longest Consecutive',d:'M',
+ desc:'Unsorted array তে longest consecutive sequence। arr=[100,4,200,1,3,2]. Ans=4 ([1,2,3,4]).',
+ why:'HashSet তে সব number রাখো। Sequence এর start খুঁজো (n-1 নেই)। O(n).',
+ codeLines:[E('int longestConsecutive(vector<int>& n) {'),E('  unordered_set<int> st(n.begin(),n.end());'),E('  int best=0;'),E('  for (int x : st) {'),E('    if (!st.count(x-1)) {  // sequence start'),E('      int cur=x, len=1;'),E('      while (st.count(cur+1)){cur++;len++;}'),E('      best=max(best,len);'),E('    }'),E('  }'),E('  return best;'),E('}')],
+ sim(){
+  const a=[100,4,200,1,3,2],F=[];const st=new Set(a);
+  const stObj=Object.fromEntries([...st].map(v=>[v,'✓']));
+  F.push(HF({...stObj},[...a],{best:0},'HashSet build করো. Sequence start খুঁজো (x-1 নেই)',2,'set build'));
+  let best=0;
+  for(const x of st){
+    const isStart=!st.has(x-1);
+    F.push(HF({...stObj},[...a],{x,isStart,best},`x=${x}: x-1=${x-1} in set?`,5,`!st.count(${x}-1)=${isStart}`,{hlKey:String(x),cond:`x-1=${x-1} not in set?`,cv:isStart}));
+    if(!isStart)continue;
+    let cur=x,len=1;
+    while(st.has(cur+1)){
+      F.push(HF({...stObj},[...a],{x,cur,len,best},`cur+1=${cur+1} in set → extend`,7,`cur++; len++`,{hlKey:String(cur+1),cond:`${cur+1} in set?`,cv:true,chg:['cur','len']}));
+      cur++;len++;
+    }
+    best=Math.max(best,len);
+    F.push(HF({...stObj},[...a],{x,cur,len,best},`sequence [${x}..${cur}] len=${len}, best=${best}`,8,'best=max',{chg:['best']}));
+  }
+  F.push(HF({...stObj},[...a],{best},`✅ longest=${best}`,11,'return',{res:best}));return F;
+}},
+
+// ── M5: Word Pattern ──
+{name:'Word Pattern',d:'M',
+ desc:'"abba" pattern, s="dog cat cat dog" match করে? দুটো HashMap দিয়ে bijection check।',
+ why:'p→word এবং word→p দুটো map। Bijection (one-to-one) check করো।',
+ codeLines:[E('bool wordPattern(string p, string s) {'),E('  // split s into words'),E('  unordered_map<char,string> cw;'),E('  unordered_map<string,char> wc;'),E('  vector<string> words = split(s);'),E('  if (p.size()!=words.size()) return false;'),E('  for (int i=0; i<p.size(); i++) {'),E('    char c=p[i]; string w=words[i];'),E('    if(cw.count(c)&&cw[c]!=w) return false;'),E('    if(wc.count(w)&&wc[w]!=c) return false;'),E('    cw[c]=w; wc[w]=c;'),E('  }'),E('  return true;'),E('}')],
+ sim(){
+  const p=[...'abba'],words=['dog','cat','cat','dog'],F=[];
+  const cw={},wc={};
+  F.push(HF({},[0,1,2,3],{},`p="${p.join('')}", words=[${words.map(w=>`"${w}"`)}]`,7,'loop start'));
+  for(let i=0;i<p.length;i++){
+    const c=p[i],w=words[i];
+    const c2w=cw[c]!==undefined&&cw[c]!==w;
+    const w2c=wc[w]!==undefined&&wc[w]!==c;
+    F.push(HF({...Object.fromEntries([...Object.entries(cw),...Object.entries(wc)])},
+      [0,1,2,3],{i,char:`'${c}'`,word:`"${w}"`},
+      `p[${i}]='${c}', words[${i}]="${w}"`,9,`check conflict`,{ci:i,cond:`conflict?`,cv:c2w||w2c}));
+    if(c2w||w2c){F.push(HF({...Object.fromEntries([...Object.entries(cw),...Object.entries(wc)])},
+      [0,1,2,3],{},'❌ Pattern mismatch!',9,'return false',{res:'false'}));return F;}
+    cw[c]=w;wc[w]=c;
+    F.push(HF({...Object.fromEntries([...Object.entries(cw).map(([k,v])=>[k,v]),...Object.entries(wc)])},
+      [0,1,2,3],{i},`map: '${c}'↔"${w}"`,11,'cw[c]=w; wc[w]=c',{ci:i,newKey:c}));
+  }
+  F.push(HF({...Object.fromEntries([...Object.entries(cw),...Object.entries(wc)])},
+    [0,1,2,3],{},'✅ Pattern matches!',13,'return true',{res:'true'}));return F;
+}},
+
+// ── H1: Minimum Window Substring ──
+{name:'Min Window Substring',d:'H',
+ desc:'"ADOBECODEBANC" তে "ABC" এর minimum window। Answer="BANC".',
+ why:'HashMap দিয়ে need/have count। formed == required হলে shrink। Sliding window+HashMap।',
+ codeLines:[E('string minWindow(string s, string t) {'),E('  unordered_map<char,int> need,have;'),E('  for (char c:t) need[c]++;'),E('  int formed=0,req=need.size();'),E('  int l=0,best=INT_MAX,start=0;'),E('  for (int r=0; r<s.size(); r++) {'),E('    have[s[r]]++;'),E('    if(need.count(s[r])&&have[s[r]]==need[s[r]])'),E('      formed++;'),E('    while(formed==req) {'),E('      if(r-l+1<best){best=r-l+1;start=l;}'),E('      have[s[l]]--;'),E('      if(need.count(s[l])&&have[s[l]]<need[s[l]])'),E('        formed--;'),E('      l++;'),E('    }'),E('  }'),E('  return best==INT_MAX?""s.substr(start,best);'),E('}')],
+ sim(){
+  const s=[...'ADOBECODEBANC'],t=[...'ABC'],F=[];
+  const need={};t.forEach(c=>{need[c]=(need[c]||0)+1;});
+  const have={};let formed=0,req=Object.keys(need).length;
+  let l=0,best=999,start=0;
+  F.push(HF({...need},[0,1,2,3,4,5,6,7,8,9,10,11,12].map(i=>s[i].charCodeAt(0)-64),{formed,req,l,best:'∞'},`need=${JSON.stringify(need)}. formed=${formed}/${req}`,4,'need build, formed=0'));
+  for(let r=0;r<Math.min(s.length,13);r++){
+    const c=s[r];have[c]=(have[c]||0)+1;
+    if(need[c]&&have[c]===need[c])formed++;
+    F.push(HF({...Object.fromEntries(Object.entries(need).map(([k,v])=>[k,`n:${v} h:${have[k]||0}`]))},
+      [0,1,2,3,4,5,6,7,8,9,10,11,12].map(i=>s[i].charCodeAt(0)-64),
+      {r,char:`'${c}'`,formed,req,l},`r=${r}'${c}': formed=${formed}/${req}`,8,`have[${c}]++`,{ci:r,cond:`formed==req?(${formed}==${req})`,cv:formed===req}));
+    while(formed===req){
+      const len=r-l+1;if(len<best){best=len;start=l;}
+      F.push(HF({...Object.fromEntries(Object.entries(need).map(([k,v])=>[k,`n:${v} h:${have[k]||0}`]))},
+        [0,1,2,3,4,5,6,7,8,9,10,11,12].map(i=>s[i].charCodeAt(0)-64),
+        {l,r,len,best,window:s.slice(l,r+1).join('')},`window "${s.slice(l,r+1).join('')}" len=${len}`,11,'shrink',{chg:['best']}));
+      have[s[l]]--;if(need[s[l]]&&have[s[l]]<need[s[l]])formed--;l++;
+    }
+  }
+  const ans=best===999?'':s.slice(start,start+best).join('');
+  F.push(HF({},[],{ans:`"${ans}"`},`✅ Min window="${ans}"`,18,'return result',{res:`"${ans}"`}));return F;
+}},
+
+// ── H2: Longest Substring K Distinct ──
+{name:'Longest K Distinct Substr',d:'H',
+ desc:'At most K distinct char substring সবচেয়ে লম্বা। s="eceba", k=2. Ans=3("ece").',
+ why:'Sliding window + HashMap frequency। window এ >k types → shrink করো।',
+ codeLines:[E('int lengthOfLongestSubstringKDistinct('),E('  string s, int k) {'),E('  unordered_map<char,int> cnt;'),E('  int l=0, best=0;'),E('  for (int r=0; r<s.size(); r++) {'),E('    cnt[s[r]]++;'),E('    while (cnt.size() > k) {'),E('      cnt[s[l]]--;'),E('      if (!cnt[s[l]]) cnt.erase(s[l]);'),E('      l++;'),E('    }'),E('    best=max(best,r-l+1);'),E('  }'),E('  return best;'),E('}')],
+ sim(){
+  const s=[...'eceba'],k=2,F=[];const cnt={};let l=0,best=0;
+  F.push(HF({},[0,1,2,3,4].map(i=>s[i].charCodeAt(0)-96),{l,best,k},'শুরু: max K distinct types',4,'l=0,best=0'));
+  for(let r=0;r<s.length;r++){
+    const c=s[r];cnt[c]=(cnt[c]||0)+1;
+    const types=Object.keys(cnt).length;
+    F.push(HF({...cnt},[0,1,2,3,4].map(i=>s[i].charCodeAt(0)-96),{l,r,types,k,best},`add '${c}', types=${types}`,6,`cnt['${c}']++`,{ci:r,hlKey:c,cond:`types>k?(${types}>${k})`,cv:types>k}));
+    while(Object.keys(cnt).length>k){
+      F.push(HF({...cnt},[0,1,2,3,4].map(i=>s[i].charCodeAt(0)-96),{l,r,types:Object.keys(cnt).length,k,best},`shrink: remove s[l='${s[l]}']`,9,'cnt--; l++',{ci:l,red:[l]}));
+      cnt[s[l]]--;if(!cnt[s[l]])delete cnt[s[l]];l++;
+    }
+    const len=r-l+1;best=Math.max(best,len);
+    F.push(HF({...cnt},[0,1,2,3,4].map(i=>s[i].charCodeAt(0)-96),{l,r,len,best},`window [${l}..${r}], len=${len}, best=${best}`,12,'best=max',{chg:best===len?['best']:[]}));
+  }
+  F.push(HF({...cnt},[],{best},`✅ longest=${best}`,14,'return',{res:best}));return F;
+}},
+
+// ── H3: Subarrays with K Different ──
+{name:'Subarrays with K Different',d:'H',
+ desc:'Exactly K distinct integers এমন subarray count। arr=[1,2,1,2,3], k=2. Ans=7.',
+ why:'atMostK(k) - atMostK(k-1) = exactlyK। HashMap দিয়ে at-most count।',
+ codeLines:[E('// exactly(k) = atMost(k) - atMost(k-1)'),E('int atMost(vector<int>& a, int k) {'),E('  unordered_map<int,int> cnt;'),E('  int l=0, res=0;'),E('  for (int r=0; r<a.size(); r++) {'),E('    if (++cnt[a[r]] == 1) k--;'),E('    while (k < 0) {'),E('      if (--cnt[a[l]] == 0) k++;'),E('      l++;'),E('    }'),E('    res += r-l+1;'),E('  }'),E('  return res;'),E('}'),E('int subarraysWithKDistinct(vector<int>& a,int k)'),E('{ return atMost(a,k)-atMost(a,k-1); }')],
+ sim(){
+  const a=[1,2,1,2,3],K=2,F=[];
+  function atMost(k){
+    const cnt={};let l=0,res=0;const steps=[];
+    let kk=k;
+    for(let r=0;r<a.length;r++){
+      cnt[a[r]]=(cnt[a[r]]||0)+1;if(cnt[a[r]]===1)kk--;
+      while(kk<0){cnt[a[l]]--;if(!cnt[a[l]])kk++;l++;}
+      res+=r-l+1;
+      steps.push({cnt:{...cnt},l,r,res,k:kk,add:r-l+1});
+    }
+    return{res,steps};
+  }
+  const {res:r1,steps:s1}=atMost(K);
+  const {res:r2,steps:s2}=atMost(K-1);
+  F.push(HF({},[...a],{k:K,formula:'exactK=atMost(k)-atMost(k-1)'},'atMost(k) - atMost(k-1) = exactly k distinct',1,'formula'));
+  s1.forEach((st,i)=>{F.push(HF({...Object.fromEntries(Object.entries(st.cnt).map(([k,v])=>[k,v]))},
+    [...a],{l:st.l,r:st.r,res:st.res,k:K,kLeft:st.k},
+    `atMost(${K}): r=${st.r}, +${st.add}, res=${st.res}`,11,'res+=r-l+1',{ci:st.r,cond:`kLeft>=0?(${st.k}>=0)`,cv:st.k>=0}));});
+  F.push(HF({},[...a],{atMostK:r1,atMostKm1:r2,ans:r1-r2},`atMost(${K})=${r1}, atMost(${K-1})=${r2}`,15,`${r1}-${r2}=${r1-r2}`,{res:r1-r2}));
+  return F;
+}},
+
+// ── H4: LRU Cache ──
+{name:'LRU Cache',d:'H',
+ desc:'LRU Cache implement করো (capacity=3)। get/put operations. HashMap + ordering।',
+ why:'HashMap O(1) lookup + doubly linked list O(1) order maintain। Combined data structure।',
+ codeLines:[E('class LRUCache {'),E('  int cap;'),E('  list<pair<int,int>> order;'),E('  unordered_map<int,list<pair<int,int>>::iterator> mp;'),E('public:'),E('  LRUCache(int cap):cap(cap){}'),E('  int get(int key) {'),E('    if(!mp.count(key)) return -1;'),E('    order.splice(order.begin(),order,mp[key]);'),E('    return mp[key]->second;'),E('  }'),E('  void put(int key, int val) {'),E('    if(mp.count(key)) order.erase(mp[key]);'),E('    order.push_front({key,val});'),E('    mp[key]=order.begin();'),E('    if(order.size()>cap){mp.erase(order.back().first);order.pop_back();}'),E('  }'),E('};')],
+ sim(){
+  const ops=[['put',1,1],['put',2,2],['put',3,3],['get',2],['put',4,4],['get',1],['get',3],['get',4]];
+  const F=[];const cache={};const order=[];const cap=3;
+  F.push(HF({},[], {capacity:cap},'LRU Cache cap=3. Most recently used → front।',1,'init'));
+  ops.forEach(([op,k,v])=>{
+    if(op==='put'){
+      const evict=order.length>=cap&&!cache[k];
+      if(cache[k]){const idx=order.indexOf(k);if(idx>=0)order.splice(idx,1);}
+      order.unshift(k);cache[k]=v;
+      let evicted=null;
+      if(order.length>cap){evicted=order.pop();delete cache[evicted];}
+      F.push(HF({...cache},order.slice(0,cap+1).map(x=>x||0),{op:`put(${k},${v})`,order:`[${order}]`,cap},
+        `put(${k},${v})${evicted?` → evict ${evicted}`:''}`,14,`put key=${k}`,{newKey:String(k),cond:evict?`cap reached, evict LRU`:'',cv:!!evict}));
+    }else{
+      const val=cache[k];const found=val!==undefined;
+      if(found){const idx=order.indexOf(k);if(idx>=0)order.splice(idx,1);order.unshift(k);}
+      F.push(HF({...cache},order.slice(0,cap+1).map(x=>x||0),{op:`get(${k})`,result:found?val:-1,order:`[${order}]`},
+        `get(${k}) → ${found?val:-1}`,8,`get key=${k}`,{hlKey:String(k),cond:`${k} in cache?`,cv:found,res:found?val:-1}));
+    }
+  });
+  return F;
+}},
+
+// ── H5: 4Sum Count ──
+{name:'4Sum Count (4 Arrays)',d:'H',
+ desc:'4টি array থেকে একটা করে নিয়ে sum=0 কতটা way। A=[1,2],B=[-2,-1],C=[-1,2],D=[0,2]. Ans=2.',
+ why:'A+B তার sum → map তে count store। C+D এর জন্য complement map এ look up। O(n²).',
+ codeLines:[E('int fourSumCount(vector<int>& A, vector<int>& B,'),E('                 vector<int>& C, vector<int>& D) {'),E('  unordered_map<int,int> mp;'),E('  for (int a : A)'),E('    for (int b : B)'),E('      mp[a+b]++;  // store all A+B sums'),E('  int cnt=0;'),E('  for (int c : C)'),E('    for (int d : D)'),E('      cnt += mp[-(c+d)];  // complement'),E('  return cnt;'),E('}')],
+ sim(){
+  const A=[1,2],B=[-2,-1],C=[-1,2],D=[0,2],F=[];const mp={};
+  F.push(HF({},[...A],{pass:'A+B sums'},'Pass 1: সব A+B sum store করো',4,'A+B loop'));
+  for(const a of A)for(const b of B){
+    const s=a+b;mp[s]=(mp[s]||0)+1;
+    F.push(HF({...mp},[...A],{a,b,sum:s,count:mp[s]},`A=${a}+B=${b}=${s}. mp[${s}]=${mp[s]}`,6,`mp[${s}]++`,{newKey:String(s)}));
+  }
+  let cnt=0;
+  F.push(HF({...mp},[...C],{pass:'C+D complement check',cnt},'Pass 2: C+D এর -(c+d) map এ look up',8,'C+D loop'));
+  for(const c of C)for(const d of D){
+    const neg=-(c+d);const found=mp[neg]||0;cnt+=found;
+    F.push(HF({...mp},[...C],{c,d,neg,found,cnt},`C=${c}+D=${d}=${c+d}, need mp[${neg}]=${found}. cnt=${cnt}`,10,`cnt+=mp[${neg}]=${found}`,{hlKey:String(neg),cond:`mp[${neg}] exists?`,cv:!!found,chg:found?['cnt']:[]　}));
+  }
+  F.push(HF({...mp},[],{cnt},`✅ Count=${cnt}`,11,'return cnt',{res:cnt}));return F;
+}}
+
+]; // end HM_PROBS
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  function buildBar(sec,probs){
+    probs.forEach((p,i)=>{
+      const btn=document.createElement('button');
+      btn.id=sec+'-pb-'+i;btn.className='pb-btn';
+      const dspan=`<span style="font-size:8px;font-weight:700;margin-left:3px;color:${p.d==='E'?'#059669':p.d==='M'?'#d97706':'#dc2626'}">${p.d}</span>`;
+      btn.innerHTML=p.name+dspan;
+      btn.onclick=()=>selProb(sec,i);
+      const bar=document.getElementById(sec+'-pbar-'+p.d.toLowerCase());
+      if(bar)bar.appendChild(btn);
+    });
+  }
+  buildBar('tp',TP_PROBS);
+  buildBar('hm',HM_PROBS);
+  drawFrame('tp',null);
+  drawFrame('hm',null);
+  document.getElementById('tp-spd-lbl').textContent='2x';
+  document.getElementById('hm-spd-lbl').textContent='2x';
+});
+
+window.addEventListener('resize',()=>{
+  if(S.tp.frames)drawFrame('tp',S.tp.frames[S.tp.idx]); else drawFrame('tp',null);
+  if(S.hm.frames)drawFrame('hm',S.hm.frames[S.hm.idx]); else drawFrame('hm',null);
+});
+</script>
+</body>
+</html>
