@@ -7,7 +7,7 @@ bool Bits(std::vector<int>& bits){
     int n = bits.size();
 
     int i = 0;
-
+    // raju 
     while( i < n -1){
         if(bits[i] == 1)  i +=2;
         else i +=1;
