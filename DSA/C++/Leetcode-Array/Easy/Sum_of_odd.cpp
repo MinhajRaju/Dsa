@@ -32,7 +32,7 @@ int SumOfOdd(std::vector<int>& nums){
 
 
 int main(){
-    //
+    ///
 
     std::vector<int> nums = {1, 4, 2, 5, 3};
 
