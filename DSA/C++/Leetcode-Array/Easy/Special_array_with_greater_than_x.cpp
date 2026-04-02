@@ -8,7 +8,7 @@ int findSpecialNumber(std::vector<int>& nums){
     int  n = nums.size();
 
 
-    for(int i = 0 ; i < n ; i++){
+    for(int i = 0 ; i <= n ; i++){
 
         int count =  0;
 
@@ -40,7 +40,7 @@ int findSpecialNumber(std::vector<int>& nums){
 
 int main(){
 
-    std::vector<int> nums = {0, 4, 3, 0, 4};
+    std::vector<int> nums = {3,5};
 
     std::cout << findSpecialNumber(nums);
 
