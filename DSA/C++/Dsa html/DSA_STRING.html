@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DSA Master — String Complete Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fafaf8;--bg2:#f3f1ec;--bg3:#e8e4da;--card:#fff;--bd:#e4e0d5;
+  --t:#1a1614;--t2:#6b6560;--t3:#a09890;
+  --blue:#2563eb;--green:#059669;--red:#dc2626;--teal:#0891b2;--orange:#d97706;
+  --sh:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:15px;}
+body{background:var(--bg);color:var(--t);font-family:'DM Sans',sans-serif;line-height:1.6;overflow-x:hidden;}
+.layout{display:flex;min-height:100vh;}
+.sb{width:236px;min-width:236px;position:sticky;top:0;height:100vh;background:var(--card);border-right:1px solid var(--bd);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--bd) transparent;flex-shrink:0;}
+.sb-logo{padding:14px 14px 10px;border-bottom:1px solid var(--bd);}
+.sb-logo-t{font-size:13px;font-weight:700;}
+.sb-logo-s{font-size:10px;color:var(--t3);margin-top:1px;}
+.ng{padding:3px 0;border-bottom:1px solid var(--bd);}
+.ng:last-child{border-bottom:none;}
+.ng-t{padding:5px 13px 2px;font-size:9px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--t3);}
+.nl{display:block;padding:4px 13px;font-size:11.5px;color:var(--t2);text-decoration:none;border-left:2px solid transparent;transition:all .1s;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.nl:hover{color:var(--teal);border-left-color:var(--teal);background:#ecfeff;}
+.nl.sub{padding-left:22px;font-size:11px;color:var(--t3);}
+.nl.sub:hover{color:var(--teal);}
+.main{flex:1;min-width:0;}
+.hero{padding:46px 48px 38px;background:linear-gradient(150deg,#fafaf8 55%,#ecfeff);border-bottom:1px solid var(--bd);}
+.hero-e{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;}
+.hero h1{font-size:clamp(24px,3.5vw,46px);font-weight:700;letter-spacing:-1px;line-height:1.1;margin-bottom:8px;}
+.hero h1 em{font-style:normal;color:var(--teal);}
+.hero p{font-size:13.5px;color:var(--t2);max-width:520px;line-height:1.75;margin-bottom:22px;}
+.stats-row{display:flex;gap:0;border:1px solid var(--bd);border-radius:8px;overflow:hidden;width:fit-content;background:var(--card);box-shadow:var(--sh);}
+.stat{padding:10px 17px;text-align:center;border-right:1px solid var(--bd);}
+.stat:last-child{border-right:none;}
+.stat-n{font-size:18px;font-weight:700;font-family:'DM Mono',monospace;}
+.stat-l{font-size:9px;color:var(--t3);margin-top:1px;}
+.sec-divider{padding:28px 48px 0;background:var(--bg);}
+.sec-divider-inner{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--bd);padding-bottom:14px;}
+.sec-divider-icon{font-size:22px;}
+.sec-divider-title{font-size:20px;font-weight:700;letter-spacing:-.4px;}
+.sec-divider-sub{font-size:12px;color:var(--t3);margin-top:1px;}
+.theory{padding:28px 48px 36px;border-bottom:1px solid var(--bd);background:var(--card);}
+.theory-h{font-size:15px;font-weight:700;letter-spacing:-.2px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.theory-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.tbox{background:var(--bg);border:1px solid var(--bd);border-radius:7px;padding:13px 15px;}
+.tbox-h{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:7px;display:flex;align-items:center;gap:5px;}
+.tbox p,.tbox li{font-size:12px;color:var(--t);line-height:1.8;}
+.tbox ul{padding-left:14px;}
+.tbox li{margin-bottom:1px;}
+.tbox li b,.tbox p b{color:var(--teal);}
+.sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;}
+.sig{background:var(--card);border:1px solid var(--bd);border-radius:5px;padding:6px 9px;font-size:11px;color:var(--t2);display:flex;align-items:flex-start;gap:6px;line-height:1.55;}
+.ptrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px;}
+.ptcard{background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:9px 11px;}
+.ptcard-h{font-size:10px;font-weight:700;margin-bottom:5px;}
+.ptcard pre{font-family:'DM Mono';font-size:10px;color:var(--t2);background:var(--bg);padding:5px 7px;border-radius:4px;line-height:1.65;white-space:pre;}
+.ptcard p{font-size:10.5px;margin-top:5px;color:var(--t3);}
+.probs-sec{padding:28px 48px 40px;border-bottom:2px solid var(--bd);}
+.diff-bar{display:flex;align-items:center;gap:8px;margin-bottom:10px;margin-top:22px;}
+.diff-bar:first-of-type{margin-top:0;}
+.diff-dot{width:9px;height:9px;border-radius:50%;}
+.diff-lbl{font-size:12.5px;font-weight:700;}
+.diff-sub{font-size:11px;color:var(--t3);}
+.pbar{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;}
+.pb-btn{padding:4px 10px;border-radius:15px;border:1.5px solid var(--bd);font-family:inherit;font-size:11px;font-weight:500;cursor:pointer;background:var(--card);color:var(--t2);transition:all .12s;white-space:nowrap;}
+.pb-btn:hover{border-color:var(--teal);color:var(--teal);}
+.pb-btn.sel{color:#fff;border-color:transparent;}
+.pb-btn.sel.e{background:#059669;}
+.pb-btn.sel.m{background:#d97706;}
+.pb-btn.sel.h{background:#dc2626;}
+.pdesc{background:var(--card);border:1px solid var(--bd);border-radius:7px;padding:11px 14px;margin-bottom:11px;box-shadow:var(--sh);}
+.pdesc-h{font-size:13px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.pdesc-t{font-size:12px;color:var(--t2);line-height:1.7;}
+.pdesc-why{font-size:11.5px;color:var(--t);background:var(--bg);border-left:3px solid var(--teal);padding:5px 10px;border-radius:0 5px 5px 0;margin-top:7px;line-height:1.6;}
+.pdesc-cards{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px;}
+.pdesc-card{border-radius:6px;padding:8px 11px;font-size:11.5px;line-height:1.65;}
+.pdesc-card-h{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:4px;}
+.pdesc-card.intuition{background:#ecfeff;border:1px solid #a5f3fc;color:#164e63;}
+.pdesc-card.intuition .pdesc-card-h{color:#0891b2;}
+.pdesc-card.analogy{background:#fdf4ff;border:1px solid #e9d5ff;color:#3b1f52;}
+.pdesc-card.analogy .pdesc-card-h{color:#7c3aed;}
+.diff{padding:1px 6px;border-radius:4px;font-size:9px;font-weight:700;}
+.diff-E{background:#dcfce7;color:#059669;}
+.diff-M{background:#fef3c7;color:#d97706;}
+.diff-H{background:#fee2e2;color:#dc2626;}
+.pcols{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.pcol{display:flex;flex-direction:column;gap:10px;}
+.acard{background:var(--card);border:1px solid var(--bd);border-radius:8px;overflow:hidden;box-shadow:var(--sh);}
+.ahead{display:flex;align-items:center;justify-content:space-between;padding:6px 11px;background:var(--bg2);border-bottom:1px solid var(--bd);gap:6px;flex-wrap:wrap;}
+.atit{font-size:9px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--t3);}
+.asi{font-size:9px;font-family:'DM Mono',monospace;color:var(--teal);white-space:nowrap;}
+.abtns{display:flex;gap:4px;align-items:center;}
+.ab{padding:3px 9px;border-radius:4px;border:1px solid var(--bd);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;transition:all .12s;background:var(--card);color:var(--t2);}
+.ab.run:hover{background:var(--teal);color:#fff;border-color:var(--teal);}
+.ab.stp:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.ab.rst:hover{background:var(--bg3);}
+.spd{display:flex;align-items:center;gap:4px;border-left:1px solid var(--bd);padding-left:7px;margin-left:2px;}
+.spd-lbl{font-size:9px;color:var(--t3);}
+.spd-range{width:55px;height:3px;cursor:pointer;accent-color:var(--teal);}
+canvas.acv{width:100%;display:block;background:#fafaf8;}
+.amsg{padding:5px 11px;font-size:11px;color:var(--teal);border-top:1px solid var(--bd);font-family:'DM Mono',monospace;min-height:28px;background:var(--bg2);line-height:1.5;}
+.ccard{background:var(--card);border:1px solid var(--bd);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--sh);}
+.chead{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:var(--bg2);border-bottom:1px solid var(--bd);}
+.clang{font-size:11px;font-weight:700;color:var(--t2);}
+.cpb{background:none;border:1px solid var(--bd);color:var(--t2);padding:2px 8px;border-radius:4px;font-size:10px;cursor:pointer;font-family:inherit;transition:all .12s;}
+.cpb:hover{background:var(--teal);color:#fff;border-color:var(--teal);}
+.clines{padding:6px 0;overflow:auto;font-family:'DM Mono',monospace;font-size:11.5px;line-height:1.75;max-height:500px;background:#fafafa;scrollbar-width:thin;scrollbar-color:var(--bd) transparent;}
+.cline{display:flex;align-items:stretch;transition:background .15s;padding:0 12px;min-height:24px;}
+.cline:hover{background:#f3f1ec;}
+.cline.hl{background:#cffafe !important;border-left:3px solid var(--teal);}
+.cline.hl .ln{color:var(--teal);}
+.ln{width:24px;flex-shrink:0;font-size:10px;color:#c0bab3;text-align:right;padding-right:12px;padding-top:2px;user-select:none;}
+.lc{color:#1a1614;white-space:pre;}
+.ex-bar{display:flex;align-items:center;gap:5px;padding:3px 11px;background:#ecfeff;border-top:1px solid #a5f3fc;font-size:10px;font-family:'DM Mono',monospace;color:var(--teal);min-height:22px;}
+#prog{position:fixed;top:0;left:236px;right:0;height:2px;background:linear-gradient(90deg,#0891b2,#2563eb,#059669);transform-origin:left;transform:scaleX(0);z-index:100;transition:transform .08s;}
+.footer{padding:28px 48px;text-align:center;border-top:1px solid var(--bd);background:var(--bg2);}
+@media(max-width:900px){.pcols{grid-template-columns:1fr;}.sb{display:none;}#prog{left:0;}.theory-grid,.ptrow,.sig-grid{grid-template-columns:1fr;}.probs-sec,.theory,.hero,.sec-divider{padding:20px 16px;}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<div class="layout">
+<nav class="sb">
+  <div class="sb-logo">
+    <div class="sb-logo-t">DSA Pattern Master</div>
+    <div class="sb-logo-s">String · 30 Problems · বাংলায়</div>
+  </div>
+  <div class="ng">
+    <div class="ng-t">📝 String Core</div>
+    <a class="nl" onclick="goto('sc-theory')">📖 Theory &amp; Patterns</a>
+    <a class="nl sub" onclick="pickAndGo('sc',0)">Reverse String ·E</a>
+    <a class="nl sub" onclick="pickAndGo('sc',1)">Valid Palindrome ·E</a>
+    <a class="nl sub" onclick="pickAndGo('sc',2)">Longest Common Prefix ·E</a>
+    <a class="nl sub" onclick="pickAndGo('sc',3)">Valid Anagram ·E</a>
+    <a class="nl sub" onclick="pickAndGo('sc',4)">Reverse Vowels ·E</a>
+    <a class="nl sub" onclick="pickAndGo('sc',5)">Longest Palindromic Substr ·M</a>
+    <a class="nl sub" onclick="pickAndGo('sc',6)">Decode String ·M</a>
+    <a class="nl sub" onclick="pickAndGo('sc',7)">String Compression ·M</a>
+    <a class="nl sub" onclick="pickAndGo('sc',8)">Count and Say ·M</a>
+    <a class="nl sub" onclick="pickAndGo('sc',9)">Reverse Words ·M</a>
+    <a class="nl sub" onclick="pickAndGo('sc',10)">Edit Distance ·H</a>
+    <a class="nl sub" onclick="pickAndGo('sc',11)">Longest Valid Parens ·H</a>
+    <a class="nl sub" onclick="pickAndGo('sc',12)">Regex Matching ·H</a>
+    <a class="nl sub" onclick="pickAndGo('sc',13)">Wildcard Matching ·H</a>
+    <a class="nl sub" onclick="pickAndGo('sc',14)">Shortest Palindrome ·H</a>
+  </div>
+  <div class="ng">
+    <div class="ng-t">🔍 String + Sliding Window</div>
+    <a class="nl" onclick="goto('sw-theory')">📖 Theory &amp; Patterns</a>
+    <a class="nl sub" onclick="pickAndGo('sw',0)">First Unique Char ·E</a>
+    <a class="nl sub" onclick="pickAndGo('sw',1)">Ransom Note ·E</a>
+    <a class="nl sub" onclick="pickAndGo('sw',2)">Isomorphic Strings ·E</a>
+    <a class="nl sub" onclick="pickAndGo('sw',3)">Word Pattern ·E</a>
+    <a class="nl sub" onclick="pickAndGo('sw',4)">Find First Occurrence ·E</a>
+    <a class="nl sub" onclick="pickAndGo('sw',5)">Longest No-Repeat Substr ·M</a>
+    <a class="nl sub" onclick="pickAndGo('sw',6)">Permutation in String ·M</a>
+    <a class="nl sub" onclick="pickAndGo('sw',7)">Find All Anagrams ·M</a>
+    <a class="nl sub" onclick="pickAndGo('sw',8)">Longest Repeating Replace ·M</a>
+    <a class="nl sub" onclick="pickAndGo('sw',9)">Group Anagrams ·M</a>
+    <a class="nl sub" onclick="pickAndGo('sw',10)">Minimum Window Substr ·H</a>
+    <a class="nl sub" onclick="pickAndGo('sw',11)">Substring Concatenation ·H</a>
+    <a class="nl sub" onclick="pickAndGo('sw',12)">Longest K Distinct Chars ·H</a>
+    <a class="nl sub" onclick="pickAndGo('sw',13)">Min Window Subsequence ·H</a>
+    <a class="nl sub" onclick="pickAndGo('sw',14)">Palindrome Pairs ·H</a>
+  </div>
+</nav>
+<main class="main">
+<section class="hero">
+  <div class="hero-e">Complete Guide · 30 Problems · Step-by-Step Code Trace · বাংলায়</div>
+  <h1>String &amp;<br><em>Sliding Window Master</em></h1>
+  <p>প্রতিটি step এ code এর line highlight হয়। Character array, two pointer, sliding window, hashmap — সব live animate হয়। Reverse String থেকে শুরু করে Palindrome Pairs পর্যন্ত সব বাংলায় বোঝো।</p>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-n">30</div><div class="stat-l">Problems</div></div>
+    <div class="stat"><div class="stat-n">2</div><div class="stat-l">Patterns</div></div>
+    <div class="stat"><div class="stat-n">5+5+5</div><div class="stat-l">E · M · H each</div></div>
+    <div class="stat"><div class="stat-n">Live</div><div class="stat-l">Code Trace</div></div>
+  </div>
+</section>
+<div class="sec-divider" id="sc-section">
+  <div class="sec-divider-inner">
+    <span class="sec-divider-icon">📝</span>
+    <div>
+      <div class="sec-divider-title">String Core</div>
+      <div class="sec-divider-sub">Two Pointer · Expand Center · Stack · DP · 15 problems</div>
+    </div>
+  </div>
+</div>
+<section class="theory" id="sc-theory">
+  <div class="theory-h">📖 String — কী, কেন, কখন?</div>
+  <div class="theory-grid">
+    <div class="tbox">
+      <div class="tbox-h">💡 মূল কৌশলগুলো</div>
+      <p><b>Two Pointer:</b> l=0, r=n-1। দুই দিক থেকে ভেতরে আসো। Palindrome check, reverse, vowel swap।</p><br>
+      <p><b>Expand Around Center:</b> প্রতিটি index কে center ধরে বাইরে expand করো। Longest palindromic substring।</p><br>
+      <p><b>Stack:</b> LIFO — bracket matching, decode nested string।</p><br>
+      <p><b>DP (2D table):</b> Subproblem overlap থাকলে। Edit distance, regex, wildcard matching।</p>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">🎯 কখন কোন technique?</div>
+      <ul>
+        <li><b>Two Pointer</b> — palindrome check, reverse, opposite ends</li>
+        <li><b>Expand Center</b> — longest palindromic substring O(n²)</li>
+        <li><b>Stack</b> — nested structure decode, valid parentheses</li>
+        <li><b>DP [i][j]</b> — edit distance, regex, wildcard, LCS</li>
+        <li><b>RLE scan</b> — count &amp; say, string compression</li>
+        <li><b>KMP prefix</b> — pattern matching, shortest palindrome</li>
+      </ul>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">🔍 এই signal দেখলে কী ভাবো?</div>
+      <div class="sig-grid">
+        <div class="sig">📌 "palindrome check" → two pointer l,r</div>
+        <div class="sig">📌 "longest palindrome" → expand around center</div>
+        <div class="sig">📌 "decode k[...]" → stack + counter</div>
+        <div class="sig">📌 "min edit operations" → edit distance DP</div>
+        <div class="sig">📌 "match with . and *" → regex DP table</div>
+        <div class="sig">📌 "compress aabbb→a2b3" → RLE two pointer</div>
+      </div>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">⚡ তিনটি Main Pattern</div>
+      <div class="ptrow">
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#0891b2">① Two Pointer</div>
+          <pre>l=0, r=n-1
+while l &lt; r:
+  if s[l]!=s[r]:
+    return false
+  l++; r--
+return true</pre>
+          <p>Palindrome Check</p>
+        </div>
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#2563eb">② Expand Center</div>
+          <pre>best=""
+for c in 0..2n-1:
+  l=c/2,r=l+c%2
+  while s[l]==s[r]:
+    update best
+    l--; r++</pre>
+          <p>Longest Palindrome</p>
+        </div>
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#059669">③ Edit Distance DP</div>
+          <pre>dp[i][j]=
+ match? dp[i-1][j-1]
+ else 1+min(
+  dp[i-1][j],
+  dp[i][j-1],
+  dp[i-1][j-1])</pre>
+          <p>Min Operations</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="probs-sec" id="sc-problems">
+  <div class="diff-bar"><div class="diff-dot" style="background:#059669"></div><span class="diff-lbl">Easy</span><span class="diff-sub">— two pointer, frequency count, basic scan</span></div>
+  <div class="pbar" id="sc-pbar-e"></div>
+  <div class="diff-bar"><div class="diff-dot" style="background:#d97706"></div><span class="diff-lbl">Medium</span><span class="diff-sub">— expand center, stack decode, RLE</span></div>
+  <div class="pbar" id="sc-pbar-m"></div>
+  <div class="diff-bar"><div class="diff-dot" style="background:#dc2626"></div><span class="diff-lbl">Hard</span><span class="diff-sub">— 2D DP, KMP, advanced pattern</span></div>
+  <div class="pbar" id="sc-pbar-h"></div>
+  <div class="pdesc" id="sc-pdesc" style="margin-top:14px;">
+    <div class="pdesc-h">⬆️ উপর থেকে problem select করো</div>
+    <div class="pdesc-t">Click করলে description, কেন এই pattern, code এবং animation দেখাবে।</div>
+  </div>
+  <div class="pcols">
+    <div class="pcol">
+      <div class="acard">
+        <div class="ahead">
+          <span class="atit">⚡ VISUALIZATION</span>
+          <span class="asi" id="sc-si">—</span>
+          <div class="abtns">
+            <button class="ab run" onclick="run('sc')">▶ Run</button>
+            <button class="ab stp" onclick="step('sc')">⏭ Step</button>
+            <button class="ab rst" onclick="rst('sc')">↺</button>
+            <div class="spd">
+              <span class="spd-lbl">Speed</span>
+              <input type="range" class="spd-range" id="sc-spd" min="1" max="5" value="3" oninput="setSpd('sc',this.value)">
+              <span class="spd-lbl" id="sc-spd-lbl">2x</span>
+            </div>
+          </div>
+        </div>
+        <canvas id="sc-cv" class="acv" height="280"></canvas>
+        <div id="sc-msg" class="amsg">▶ Problem select করো</div>
+      </div>
+    </div>
+    <div class="pcol">
+      <div class="ccard">
+        <div class="chead">
+          <span class="clang" id="sc-ctit">C++ — String Core</span>
+          <button class="cpb" onclick="cpCode('sc')">Copy</button>
+        </div>
+        <div id="sc-code" class="clines"><div class="cline"><span class="ln">1</span><span class="lc">// উপর থেকে problem select করো</span></div></div>
+        <div class="ex-bar" id="sc-ex"><span>▶</span><span id="sc-ex-t">—</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="sec-divider" id="sw-section">
+  <div class="sec-divider-inner">
+    <span class="sec-divider-icon">🔍</span>
+    <div>
+      <div class="sec-divider-title">String + Sliding Window</div>
+      <div class="sec-divider-sub">HashMap · Fixed Window · Variable Window · Two Pointer · 15 problems</div>
+    </div>
+  </div>
+</div>
+<section class="theory" id="sw-theory">
+  <div class="theory-h">📖 Sliding Window on String — কী, কেন, কখন?</div>
+  <div class="theory-grid">
+    <div class="tbox">
+      <div class="tbox-h">💡 মূল ধারণা</div>
+      <p><b>Sliding Window</b> মানে string এর উপর একটা "জানালা" সরানো। Window এর ভেতরের character frequency efficiently maintain করো।</p><br>
+      <p><b>Fixed Window:</b> size সবসময় k। Right এ যোগ, Left এ বাদ।</p><br>
+      <p><b>Variable Window:</b> condition মেটানোর জন্য expand বা shrink। Min/Max window খোঁজো।</p>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">🎯 কখন কোন technique?</div>
+      <ul>
+        <li><b>Fixed window freq</b> — permutation in string, anagram</li>
+        <li><b>Variable window</b> — longest no-repeat, min window</li>
+        <li><b>HashMap freq</b> — first unique, ransom note</li>
+        <li><b>Bijection map</b> — isomorphic strings, word pattern</li>
+        <li><b>Sort key grouping</b> — group anagrams</li>
+        <li><b>need/have two maps</b> — minimum window substring</li>
+      </ul>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">🔍 Signal দেখলে কী ভাবো?</div>
+      <div class="sig-grid">
+        <div class="sig">📌 "longest without repeat" → variable window + set</div>
+        <div class="sig">📌 "permutation/anagram in s" → fixed window freq</div>
+        <div class="sig">📌 "min window containing all" → shrink window</div>
+        <div class="sig">📌 "group by anagram" → sorted key map</div>
+        <div class="sig">📌 "first unique char" → freq map scan</div>
+        <div class="sig">📌 "char-to-char mapping" → bijection double map</div>
+      </div>
+    </div>
+    <div class="tbox">
+      <div class="tbox-h">⚡ তিনটি Core Pattern</div>
+      <div class="ptrow">
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#0891b2">① Fixed Window</div>
+          <pre>l=0
+for r in 0..n:
+  add s[r] to win
+  if r-l+1==k:
+    check window
+    remove s[l]; l++</pre>
+          <p>Anagram / Permutation</p>
+        </div>
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#2563eb">② Variable Window</div>
+          <pre>l=0, seen={}
+for r in 0..n:
+  while conflict:
+    remove s[l]; l++
+  add s[r]
+  ans=max(ans,r-l+1)</pre>
+          <p>Longest No-Repeat</p>
+        </div>
+        <div class="ptcard">
+          <div class="ptcard-h" style="color:#059669">③ Min Window</div>
+          <pre>need=freq(t)
+have=0, formed=0
+for r in 0..n:
+  add s[r]
+  while formed==req:
+    update ans
+    remove s[l]; l++</pre>
+          <p>Minimum Window Substr</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="probs-sec" id="sw-problems">
+  <div class="diff-bar"><div class="diff-dot" style="background:#059669"></div><span class="diff-lbl">Easy</span><span class="diff-sub">— frequency map, bijection, linear scan</span></div>
+  <div class="pbar" id="sw-pbar-e"></div>
+  <div class="diff-bar"><div class="diff-dot" style="background:#d97706"></div><span class="diff-lbl">Medium</span><span class="diff-sub">— sliding window, fixed frequency window</span></div>
+  <div class="pbar" id="sw-pbar-m"></div>
+  <div class="diff-bar"><div class="diff-dot" style="background:#dc2626"></div><span class="diff-lbl">Hard</span><span class="diff-sub">— variable shrink, multi-map, word-level</span></div>
+  <div class="pbar" id="sw-pbar-h"></div>
+  <div class="pdesc" id="sw-pdesc" style="margin-top:14px;">
+    <div class="pdesc-h">⬆️ উপর থেকে problem select করো</div>
+    <div class="pdesc-t">Click করলে description, কেন Sliding Window, code এবং animation দেখাবে।</div>
+  </div>
+  <div class="pcols">
+    <div class="pcol">
+      <div class="acard">
+        <div class="ahead">
+          <span class="atit">⚡ VISUALIZATION</span>
+          <span class="asi" id="sw-si">—</span>
+          <div class="abtns">
+            <button class="ab run" onclick="run('sw')">▶ Run</button>
+            <button class="ab stp" onclick="step('sw')">⏭ Step</button>
+            <button class="ab rst" onclick="rst('sw')">↺</button>
+            <div class="spd">
+              <span class="spd-lbl">Speed</span>
+              <input type="range" class="spd-range" id="sw-spd" min="1" max="5" value="3" oninput="setSpd('sw',this.value)">
+              <span class="spd-lbl" id="sw-spd-lbl">2x</span>
+            </div>
+          </div>
+        </div>
+        <canvas id="sw-cv" class="acv" height="280"></canvas>
+        <div id="sw-msg" class="amsg">▶ Problem select করো</div>
+      </div>
+    </div>
+    <div class="pcol">
+      <div class="ccard">
+        <div class="chead">
+          <span class="clang" id="sw-ctit">C++ — String + Sliding Window</span>
+          <button class="cpb" onclick="cpCode('sw')">Copy</button>
+        </div>
+        <div id="sw-code" class="clines"><div class="cline"><span class="ln">1</span><span class="lc">// উপর থেকে problem select করো</span></div></div>
+        <div class="ex-bar" id="sw-ex"><span>▶</span><span id="sw-ex-t">—</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="footer">
+  <div style="font-size:14px;font-weight:700;margin-bottom:4px;">Happy Coding! 🚀</div>
+  <div style="font-size:11px;color:var(--t3);">DSA Master · String Complete Guide · 30 Problems · বাংলায়</div>
+</div>
+</main>
+</div>
+<script>
+window.addEventListener('scroll',()=>{
+  const p=document.getElementById('prog');
+  const r=window.scrollY/(document.body.scrollHeight-window.innerHeight)||0;
+  p.style.transform='scaleX('+Math.min(1,r)+')';
+});
+function goto(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'});}
+function pickAndGo(sec,idx){selProb(sec,idx);document.getElementById(sec+'-problems').scrollIntoView({behavior:'smooth'});}
+const S={sc:{frames:null,idx:0,timer:null,speed:800},sw:{frames:null,idx:0,timer:null,speed:800}};
+function setSpd(sec,v){
+  const SPDS=[2000,1300,800,450,200],LBLS=['0.5x','1x','2x','3x','5x'];
+  S[sec].speed=SPDS[parseInt(v)-1];
+  document.getElementById(sec+'-spd-lbl').textContent=LBLS[parseInt(v)-1];
+  if(S[sec].timer){clearInterval(S[sec].timer);S[sec].timer=null;run(sec);}
+}
+function stopTimer(sec){if(S[sec].timer){clearInterval(S[sec].timer);S[sec].timer=null;}}
+function getCtx(sec){
+  const c=document.getElementById(sec+'-cv');
+  const W=c.clientWidth||600,H=parseInt(c.getAttribute('height'))||280;
+  c.width=W;c.height=H;return{ctx:c.getContext('2d'),W,H};
+}
+function rr(ctx,x,y,w,h,r,fill,stroke,lw){
+  r=Math.min(r||0,w/2,h/2);
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);
+  ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();
+  if(fill){ctx.fillStyle=fill;ctx.fill();}
+  if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1.5;ctx.stroke();}
+}
+function drawFrame(sec,frame){
+  const{ctx,W,H}=getCtx(sec);
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#fafaf8';ctx.fillRect(0,0,W,H);
+  if(!frame){
+    ctx.fillStyle='#a09890';ctx.font='12px DM Sans';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('⬆ Problem select করো, তারপর Run বা Step চাপো',W/2,H/2);
+    ctx.textBaseline='alphabetic';return;
+  }
+  if(frame.type==='dp')drawDP(ctx,W,H,frame);
+  else if(frame.type==='map')drawMapFrame(ctx,W,H,frame);
+  else drawArr(ctx,W,H,frame);
+  drawVars(ctx,W,H,frame);
+  drawCond(ctx,W,H,frame);
+}
+function drawArr(ctx,W,H,frame){
+  const arr=frame.arr||[];const n=arr.length;if(!n)return;
+  const bw=Math.min(50,Math.floor((W-32)/n)-5),bh=42,gap=5;
+  const tot=n*(bw+gap)-gap,sx=Math.floor((W-tot)/2),sy=22;
+  if(frame.win){
+    const[wl,wr]=frame.win;
+    if(wr>=wl&&wl>=0&&wr<n){
+      const wx=sx+wl*(bw+gap)-6,ww=(wr-wl+1)*(bw+gap)-gap+12;
+      rr(ctx,wx,sy-9,ww,bh+18,8,'#ecfeff','#67e8f9',1.5);
+      ctx.fillStyle='#0891b2';ctx.font='bold 7px DM Mono';ctx.textAlign='left';
+      ctx.fillText('WINDOW',wx+4,sy-12);
+    }
+  }
+  arr.forEach((v,i)=>{
+    const x=sx+i*(bw+gap);
+    let bg='#fff',bd='#e4e0d5',tc='#1a1614',lw=1.5;
+    if(frame.fnd&&frame.fnd.includes(i)){bg='#dcfce7';bd='#059669';tc='#059669';lw=2.5;}
+    else if(frame.hi&&frame.hi.includes(i)){bg='#cffafe';bd='#0891b2';tc='#0e7490';lw=2.5;}
+    else if(frame.org&&frame.org.includes(i)){bg='#fef3c7';bd='#d97706';tc='#92400e';lw=2;}
+    else if(frame.red&&frame.red.includes(i)){bg='#fee2e2';bd='#dc2626';tc='#991b1b';lw=2;}
+    rr(ctx,x,sy,bw,bh,6,bg,bd,lw);
+    ctx.fillStyle=tc;ctx.font='bold '+(bw>42?13:11)+'px DM Mono';
+    ctx.textAlign='center';ctx.fillText(String(v),x+bw/2,sy+bh-11);
+    ctx.fillStyle='#a09890';ctx.font='8px DM Mono';
+    ctx.fillText(String(i),x+bw/2,sy+bh+12);
+  });
+  if(frame.ptrs){
+    const PC={l:'#0891b2',r:'#dc2626',i:'#7c3aed',j:'#059669',p:'#d97706',cur:'#d97706'};
+    const SEEN={};
+    Object.entries(frame.ptrs).forEach(([nm,pos])=>{
+      if(pos===undefined||pos<0||pos>=n)return;
+      const x=sx+pos*(bw+gap)+bw/2,c=PC[nm]||'#475569';
+      const off=(SEEN[pos]||0)*13;SEEN[pos]=(SEEN[pos]||0)+1;
+      const by=sy+bh+14+off;
+      ctx.fillStyle=c;ctx.font='bold 9px DM Mono';ctx.textAlign='center';
+      ctx.fillText(nm.toUpperCase(),x,by+9);
+      ctx.beginPath();ctx.moveTo(x-4,by+11);ctx.lineTo(x+4,by+11);ctx.lineTo(x,by+17);
+      ctx.fillStyle=c;ctx.fill();
+    });
+  }
+  if(frame.res!==undefined){
+    const rw=230,rh=27,rx=Math.floor((W-rw)/2),ry=H-rh-8;
+    rr(ctx,rx,ry,rw,rh,6,'#dcfce7','#059669',1.5);
+    ctx.fillStyle='#059669';ctx.font='bold 12px DM Mono';ctx.textAlign='center';
+    ctx.fillText('✅  ans = '+String(frame.res),rx+rw/2,ry+rh-8);
+  }
+}
+function drawMapFrame(ctx,W,H,frame){
+  const arr=frame.arr||[];const n=arr.length;
+  const bw=Math.min(44,Math.floor((W-16)/Math.max(n,1))-5),bh=36,gap=4;
+  const tot=n*(bw+gap)-gap,sx=Math.floor((W-tot)/2);
+  ctx.fillStyle='#a09890';ctx.font='bold 7px DM Mono';ctx.textAlign='left';
+  ctx.fillText('STR:',Math.max(4,sx-36),28);
+  arr.forEach((v,i)=>{
+    const x=sx+i*(bw+gap),sy=12;
+    let bg='#fff',bd='#e4e0d5',tc='#1a1614',lw=1;
+    if(frame.hi&&frame.hi.includes(i)){bg='#cffafe';bd='#0891b2';tc='#0e7490';lw=2;}
+    else if(frame.fnd&&Array.isArray(frame.fnd)&&frame.fnd.includes(i)){bg='#dcfce7';bd='#059669';tc='#059669';lw=2;}
+    else if(frame.red&&Array.isArray(frame.red)&&frame.red.includes(i)){bg='#fee2e2';bd='#dc2626';tc='#991b1b';lw=2;}
+    rr(ctx,x,sy,bw,bh,5,bg,bd,lw);
+    ctx.fillStyle=tc;ctx.font='bold '+(bw>38?11:9)+'px DM Mono';ctx.textAlign='center';
+    ctx.fillText(String(v),x+bw/2,sy+bh-9);
+    ctx.fillStyle='#a09890';ctx.font='7px DM Mono';
+    ctx.fillText(String(i),x+bw/2,sy+bh+10);
+  });
+  const mp=frame.mp||{},entries=Object.entries(mp);
+  const mapY=64,cellW=Math.min(68,(W-16)/Math.max(entries.length,1)-4);
+  ctx.fillStyle='#0891b2';ctx.font='bold 7px DM Mono';ctx.textAlign='left';
+  ctx.fillText(frame.mapTitle||'MAP {char→count}:',8,mapY-2);
+  entries.slice(0,14).forEach(([k,v],i)=>{
+    const x=8+i*(cellW+3),isNew=frame.newKey===String(k);
+    rr(ctx,x,mapY,cellW,28,4,isNew?'#fef3c7':'#ecfeff',isNew?'#d97706':'#a5f3fc',isNew?2:1);
+    ctx.fillStyle='#6b6560';ctx.font='8px DM Mono';ctx.textAlign='center';
+    ctx.fillText(String(k),x+cellW/2,mapY+12);
+    ctx.fillStyle=isNew?'#d97706':'#0891b2';ctx.font='bold 9px DM Mono';
+    ctx.fillText('→'+String(v),x+cellW/2,mapY+26);
+  });
+  if(frame.res!==undefined){
+    const rw=230,rh=27,rx=Math.floor((W-rw)/2),ry=H-rh-8;
+    rr(ctx,rx,ry,rw,rh,6,'#dcfce7','#059669',1.5);
+    ctx.fillStyle='#059669';ctx.font='bold 12px DM Mono';ctx.textAlign='center';
+    ctx.fillText('✅  ans = '+String(frame.res),rx+rw/2,ry+rh-8);
+  }
+}
+function drawDP(ctx,W,H,frame){
+  const s1=frame.s1||'',s2=frame.s2||'',dp=frame.dp||[];
+  const n=s1.length,m=s2.length;
+  const cw=Math.min(34,Math.floor((W-60)/(m+2))),ch=Math.min(28,Math.floor((H-50)/(n+2)));
+  const startX=44,startY=20;
+  ctx.fillStyle='#0891b2';ctx.font='bold 9px DM Mono';ctx.textAlign='center';
+  ctx.fillText('ε',startX+cw/2,startY-4);
+  for(let j=0;j<m;j++)ctx.fillText(s2[j],startX+(j+2)*cw+cw/2,startY-4);
+  ctx.fillText('ε',startX-12,startY+ch/2+8);
+  for(let i=0;i<n;i++)ctx.fillText(s1[i],startX-12,startY+(i+2)*ch+ch/2+8);
+  for(let i=0;i<=n;i++){
+    for(let j=0;j<=m;j++){
+      if(!dp[i]||dp[i][j]===undefined)continue;
+      const x=startX+(j+1)*cw,y=startY+(i+1)*ch;
+      const isHi=frame.hi&&frame.hi[0]===i&&frame.hi[1]===j;
+      const isBase=i===0||j===0;
+      const bg=isHi?'#cffafe':isBase?'#f3f1ec':'#fff';
+      const bd=isHi?'#0891b2':isBase?'#d1cdc7':'#e4e0d5';
+      rr(ctx,x,y,cw-1,ch-1,3,bg,bd,isHi?2:1);
+      ctx.fillStyle=isHi?'#0891b2':'#1a1614';
+      const val=dp[i][j];
+      const disp=typeof val==='boolean'?(val?'T':'F'):String(val);
+      ctx.font='bold '+(cw>28?10:9)+'px DM Mono';ctx.textAlign='center';
+      ctx.fillText(disp,x+cw/2-0.5,y+ch-6);
+    }
+  }
+  if(frame.res!==undefined){
+    const rw=220,rh=26,rx=Math.floor((W-rw)/2),ry=H-rh-6;
+    rr(ctx,rx,ry,rw,rh,6,'#dcfce7','#059669',1.5);
+    ctx.fillStyle='#059669';ctx.font='bold 12px DM Mono';ctx.textAlign='center';
+    ctx.fillText('✅  ans = '+String(frame.res),rx+rw/2,ry+rh-7);
+  }
+}
+function drawVars(ctx,W,H,frame){
+  if(!frame.vars)return;
+  const entries=Object.entries(frame.vars);if(!entries.length)return;
+  if(frame.type==='dp')return;
+  const CW=72,RH=32,cols=Math.min(entries.length,Math.floor((W-12)/CW));
+  const rows=Math.ceil(entries.length/cols),pW=cols*CW,pH=rows*RH+14,px=5,py=H-pH-5;
+  rr(ctx,px,py,pW,pH,5,'rgba(243,241,236,.97)','#e4e0d5',1);
+  ctx.fillStyle='#a09890';ctx.font='bold 7px DM Mono';ctx.textAlign='left';ctx.fillText('VARS',px+4,py+10);
+  entries.forEach(([k,v],idx)=>{
+    const col=idx%cols,row=Math.floor(idx/cols),ex=px+col*CW,ey=py+14+row*RH;
+    if(col>0){ctx.strokeStyle='#e4e0d5';ctx.lineWidth=0.4;ctx.beginPath();ctx.moveTo(ex,py+14);ctx.lineTo(ex,py+pH);ctx.stroke();}
+    const chg=frame.chg&&frame.chg.includes(k);
+    ctx.fillStyle=chg?'#0e7490':'#6b6560';ctx.font='7px DM Mono';ctx.textAlign='center';
+    ctx.fillText(String(k),ex+CW/2,ey+10);
+    ctx.fillStyle=chg?'#0891b2':'#1a1614';
+    const vstr=String(v);ctx.font='bold '+(vstr.length>7?'9':'11')+'px DM Mono';ctx.textAlign='center';
+    ctx.fillText(vstr.length>9?vstr.slice(0,9)+'…':vstr,ex+CW/2,ey+RH-2);
+  });
+}
+function drawCond(ctx,W,H,frame){
+  if(frame.cond===undefined||frame.cond===null)return;
+  if(frame.type==='map'||frame.type==='dp')return;
+  const cond=String(frame.cond),cv=frame.cv;
+  const pw=Math.min(190,W*.36),ph=42,px=W-pw-5,py=H-ph-5;
+  const bg=cv===true?'#dcfce7':cv===false?'#fee2e2':'#f3f1ec';
+  const bd=cv===true?'#059669':cv===false?'#dc2626':'#e4e0d5';
+  const tc=cv===true?'#059669':cv===false?'#dc2626':'#6b6560';
+  rr(ctx,px,py,pw,ph,7,bg,bd,1.5);
+  ctx.fillStyle=tc;ctx.font='10px DM Mono';ctx.textAlign='center';
+  const d=cond.length>24?cond.slice(0,24)+'…':cond;
+  ctx.fillText(d,px+pw/2,py+14);
+  if(cv!==undefined&&cv!==null){ctx.font='bold 12px DM Mono';ctx.fillText(cv===true?'✓  TRUE':'✗  FALSE',px+pw/2,py+32);}
+}
+function setMsg(sec,t){document.getElementById(sec+'-msg').textContent=t||'';}
+function setSI(sec,i,n){document.getElementById(sec+'-si').textContent='Step '+(i+1)+'/'+n;}
+function setEx(sec,t){document.getElementById(sec+'-ex-t').textContent=t||'—';}
+function hlLine(sec,ln){
+  document.querySelectorAll('#'+sec+'-code .cline').forEach(el=>el.classList.remove('hl'));
+  if(ln>0){const el=document.getElementById(sec+'-cl-'+ln);if(el){el.classList.add('hl');el.scrollIntoView({block:'nearest',behavior:'smooth'});}}
+}
+function renderCode(sec,lines){
+  const c=document.getElementById(sec+'-code');c.innerHTML='';
+  lines.forEach((ln,i)=>{
+    const d=document.createElement('div');d.className='cline';d.id=sec+'-cl-'+(i+1);
+    d.innerHTML='<span class="ln">'+(i+1)+'</span><span class="lc">'+ln+'</span>';
+    c.appendChild(d);
+  });
+}
+function applyFrame(sec){
+  const s=S[sec];if(!s.frames)return;
+  const fr=s.frames[s.idx];
+  drawFrame(sec,fr);setMsg(sec,fr.msg);setSI(sec,s.idx,s.frames.length);hlLine(sec,fr.line||0);setEx(sec,fr.exec||'—');
+}
+function selProb(sec,idx){
+  stopTimer(sec);
+  const PROBS=sec==='sc'?SC_PROBS:SW_PROBS;
+  const p=PROBS[idx];if(!p)return;
+  document.querySelectorAll('#'+sec+'-pbar-e .pb-btn,#'+sec+'-pbar-m .pb-btn,#'+sec+'-pbar-h .pb-btn').forEach(b=>b.classList.remove('sel','e','m','h'));
+  const btn=document.getElementById(sec+'-pb-'+idx);
+  if(btn){btn.classList.add('sel');btn.classList.add(p.d.toLowerCase());}
+  const dc=p.d;
+  document.getElementById(sec+'-pdesc').innerHTML=
+    '<div class="pdesc-h">'+p.name+'&nbsp;<span class="diff diff-'+dc+'">'+( dc==='E'?'Easy':dc==='M'?'Medium':'Hard')+'</span></div>'+
+    '<div class="pdesc-t">'+p.desc+'</div>'+
+    '<div class="pdesc-why">🧠 <b>কেন এই Pattern?</b> '+p.why+'</div>'+
+    '<div class="pdesc-cards">'+
+    '<div class="pdesc-card intuition"><div class="pdesc-card-h">💡 Intuition</div>'+(p.intuition||'')+'</div>'+
+    '<div class="pdesc-card analogy"><div class="pdesc-card-h">🌍 Real-Life Analogy</div>'+(p.analogy||'')+'</div>'+
+    '</div>';
+  document.getElementById(sec+'-ctit').textContent='C++ — '+p.name;
+  renderCode(sec,p.codeLines);
+  S[sec].frames=p.sim();S[sec].idx=0;applyFrame(sec);
+}
+function run(sec){
+  stopTimer(sec);
+  if(!S[sec].frames){setMsg(sec,'⚠️ আগে problem select করো!');return;}
+  S[sec].timer=setInterval(()=>{const s=S[sec];if(s.idx>=s.frames.length-1){stopTimer(sec);return;}s.idx++;applyFrame(sec);},S[sec].speed);
+}
+function step(sec){
+  stopTimer(sec);
+  if(!S[sec].frames){setMsg(sec,'⚠️ আগে problem select করো!');return;}
+  const s=S[sec];if(s.idx<s.frames.length-1)s.idx++;applyFrame(sec);
+}
+function rst(sec){
+  stopTimer(sec);S[sec].idx=0;
+  if(S[sec].frames){applyFrame(sec);setMsg(sec,'↺ Reset — Run বা Step চাপো');}else drawFrame(sec,null);
+}
+function cpCode(sec){
+  const lines=document.querySelectorAll('#'+sec+'-code .lc');
+  navigator.clipboard.writeText([...lines].map(l=>l.textContent).join('\n')).then(()=>{
+    const b=document.querySelector('#'+sec+'-problems .cpb');
+    if(b){b.textContent='✓ Copied';b.style.background='#0891b2';b.style.color='#fff';setTimeout(()=>{b.textContent='Copy';b.style.background='';b.style.color='';},1800);}
+  });
+}
+function AF(arr,ptrs,vars,msg,line,exec,ex){return Object.assign({type:'arr',arr:[...arr],ptrs:ptrs||{},vars:vars||{},msg:msg||'',line:line||0,exec:exec||''},ex||{});}
+function MF(arr,mp,vars,msg,line,exec,ex){return Object.assign({type:'map',arr:[...arr],mp:{...mp},vars:vars||{},msg:msg||'',line:line||0,exec:exec||''},ex||{});}
+function DPF(s1,s2,dp,vars,msg,line,exec,ex){return Object.assign({type:'dp',s1,s2,dp:dp.map(r=>[...r]),vars:vars||{},msg:msg||'',line:line||0,exec:exec||''},ex||{});}
+function E(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+// ══════════════════════════════════════════
+// SC_PROBS — String Core (15: 5E 5M 5H)
+// ══════════════════════════════════════════
+const SC_PROBS=[
+// E1
+{name:'Reverse String',d:'E',
+ desc:'LeetCode 344. ["h","e","l","l","o"] কে in-place reverse করো → ["o","l","l","e","h"]। Extra space নেওয়া যাবে না।',
+ why:'Two pointer। l=0, r=n-1। l&lt;r থাকলে s[l] ↔ s[r] swap করো। O(n/2) swaps, O(1) space।',
+ intuition:'দুই প্রান্ত থেকে ভেতরে আসো। প্রতিটি pair swap করো। মাঝে পৌঁছালে done।',
+ analogy:'🪞 আয়নার সামনে বাম-ডান উল্টো হয়। প্রতিটি character pair একে অপরের জায়গা নেয়।',
+ codeLines:[E('void reverseString(vector<char>& s) {'),E('  int l=0, r=s.size()-1;'),E('  while(l < r) {'),E('    swap(s[l], s[r]);'),E('    l++; r--;'),E('  }'),E('}')],
+ sim(){
+   const s=[...'hello'];let l=0,r=s.length-1;const F=[];
+   F.push(AF([...s],{l,r},{l,r},'s="hello"। l=0, r=4। Two pointer swap শুরু।',2,'l=0,r=4',{hi:[l,r]}));
+   while(l<r){
+     F.push(AF([...s],{l,r},{l,r,'s[l]':s[l],'s[r]':s[r]},'l='+l+' "'+s[l]+'" ↔ r='+r+' "'+s[r]+'"। Swapping!',4,'swap(s['+l+'],s['+r+'])',{hi:[l,r]}));
+     [s[l],s[r]]=[s[r],s[l]];l++;r--;
+     F.push(AF([...s],{l,r},{l,r},'Swapped! l='+l+', r='+r+'।',5,'l++,r--',{fnd:[l-1,r+1]}));
+   }
+   F.push(AF([...s],{},{result:'"'+s.join('')+'"'},'✅ Reversed: "'+s.join('')+'"',7,'done',{res:'"'+s.join('')+'"',fnd:[...s.keys()]}));
+   return F;
+ }},
+// E2
+{name:'Valid Palindrome',d:'E',
+ desc:'LeetCode 125. s="racecar" — alphanumeric রেখে lowercase। Palindrome? "racecar"→true, "hello"→false।',
+ why:'Two pointer। l&lt;r পর্যন্ত s[l]===s[r] check করো। O(n), O(1) space।',
+ intuition:'প্রথম আর শেষ char মেলাও। ভেতরে আসো। Mismatch হলেই false।',
+ analogy:'📖 বইয়ের ১ম ও শেষ পাতা, ২য় ও পেনাল্টিমেট পাতা — সব same? তাহলে palindrome।',
+ codeLines:[E('bool isPalindrome(string s) {'),E('  int l=0, r=s.size()-1;'),E('  while(l < r) {'),E('    while(l<r && !isalnum(s[l])) l++;'),E('    while(l<r && !isalnum(s[r])) r--;'),E('    if(tolower(s[l])!=tolower(s[r])) return false;'),E('    l++; r--;'),E('  }'),E('  return true;'),E('}')],
+ sim(){
+   const s=[...'racecar'];let l=0,r=s.length-1;const F=[];
+   F.push(AF([...s],{l,r},{l,r},'s="racecar"। l=0,r=6। Check শুরু।',2,'l=0,r=6'));
+   while(l<r){
+     const match=s[l]===s[r];
+     F.push(AF([...s],{l,r},{l,r,'s[l]':'"'+s[l]+'"','s[r]':'"'+s[r]+'"',match},
+       'l='+l+':"'+s[l]+'", r='+r+':"'+s[r]+'". Match? '+match,6,'compare',
+       {hi:match?[l,r]:undefined,fnd:match?[l,r]:undefined,red:match?undefined:[l,r],cond:'"'+s[l]+'"=="'+s[r]+'"?',cv:match}));
+     if(!match){F.push(AF([...s],{},{result:'false'},'✅ Not palindrome!',6,'return false',{res:'false'}));return F;}
+     l++;r--;
+   }
+   F.push(AF([...s],{},{result:'true'},'✅ "racecar" is palindrome!',9,'return true',{fnd:[...s.keys()],res:'true'}));
+   return F;
+ }},
+// E3
+{name:'Longest Common Prefix',d:'E',
+ desc:'LeetCode 14. ["flower","flow","flight"] → "fl"। সব string এর সবচেয়ে লম্বা common শুরু খোঁজো।',
+ why:'strs[0] reference। Column by column: সবার সাথে মিলছে? না মিললেই return। O(m·n)।',
+ intuition:'সবগুলো string এর ১ম column, তারপর ২য়, তারপর ৩য়। কেউ আলাদা হলে থামো।',
+ analogy:'📏 তিনটা রুলার পাশাপাশি। যেখানে পর্যন্ত একসাথে থাকে সেটাই LCP।',
+ codeLines:[E('string longestCommonPrefix(vector<string>& s) {'),E('  string ref=s[0];'),E('  for(int c=0; c<ref.size(); c++) {'),E('    for(int k=1; k<s.size(); k++) {'),E('      if(c>=s[k].size() || s[k][c]!=ref[c])'),E('        return ref.substr(0,c);'),E('    }'),E('  }'),E('  return ref;'),E('}')],
+ sim(){
+   const strs=["flower","flow","flight"];const ref=[...'flower'];let prefix='';const F=[];
+   F.push(AF([...ref],{},{ref:'"flower"',n:3},'ref="flower"। Column-by-column scan।',2,'ref=s[0]'));
+   for(let c=0;c<ref.length;c++){
+     const ch=ref[c];let allMatch=true;
+     for(const s of strs){if(c>=s.length||s[c]!==ch){allMatch=false;break;}}
+     F.push(AF([...ref],{},{col:c,char:'"'+ch+'"',match:allMatch?'yes':'no',prefix:'"'+prefix+'"'},
+       'col='+c+': "'+ch+'". Match all '+strs.length+'? '+(allMatch?'✓':'✗'),allMatch?3:5,'check col '+c,
+       {hi:allMatch?[c]:undefined,fnd:allMatch?[c]:undefined,red:allMatch?undefined:[c],cond:'all=="'+ch+'"?',cv:allMatch}));
+     if(!allMatch){
+       F.push(AF([...ref],{},{result:'"'+prefix+'"'},'✅ LCP = "'+prefix+'"',6,'return "'+prefix+'"',{res:'"'+prefix+'"'}));
+       return F;
+     }
+     prefix+=ch;
+   }
+   F.push(AF([...ref],{},{result:'"'+prefix+'"'},'✅ LCP = "'+prefix+'"',9,'return ref',{res:'"'+prefix+'"',fnd:[...ref.keys()]}));
+   return F;
+ }},
+// E4
+{name:'Valid Anagram',d:'E',
+ desc:'LeetCode 242. s="anagram", t="nagaram" → true। s এর সব char t তে আছে? হ্যাঁ → true।',
+ why:'Freq map। s দিয়ে increment, t দিয়ে decrement। Negative হলে false। O(n)।',
+ intuition:'s এর char "deposit", t এর char "withdraw"। শেষে সব zero → anagram।',
+ analogy:'🏪 s এর সব item stock করো। t এর customer একে একে নেয়। Negative হলে fail।',
+ codeLines:[E('bool isAnagram(string s, string t) {'),E('  if(s.size()!=t.size()) return false;'),E('  unordered_map<char,int> freq;'),E('  for(char c:s) freq[c]++;'),E('  for(char c:t) {'),E('    freq[c]--;'),E('    if(freq[c]<0) return false;'),E('  }'),E('  return true;'),E('}')],
+ sim(){
+   const s=[...'anagram'];let mp={};const F=[];
+   F.push(MF([...s],{},'','s="anagram"। Freq map build।',3,'freq={}'));
+   for(const ch of s){mp[ch]=(mp[ch]||0)+1;F.push(MF([...s],{...mp},{char:'"'+ch+'"',freq:mp[ch]},'freq["'+ch+'"]='+mp[ch]+'।',4,'freq["'+ch+'"]='+mp[ch],{newKey:ch}));}
+   const t=[...'nagaram'];
+   F.push(MF([...t],{...mp},{},'t="nagaram"। Decrement করবো।',5,'scan t'));
+   let ok=true;
+   for(const ch of t){
+     mp[ch]=(mp[ch]||0)-1;const bad=mp[ch]<0;
+     F.push(MF([...t],{...mp},{char:'"'+ch+'"',count:mp[ch],ok:!bad},'freq["'+ch+'"]='+mp[ch]+'. ok='+(!bad),6,'decrement',{newKey:ch}));
+     if(bad){ok=false;break;}
+   }
+   F.push(MF([...s],{...mp},{result:String(ok)},'✅ Anagram? '+ok,9,'return '+ok,{res:String(ok)}));
+   return F;
+ }},
+// E5
+{name:'Reverse Vowels of a String',d:'E',
+ desc:'LeetCode 345. s="hello" → "holle"। Vowels (a,e,i,o,u) এর positions swap করো, consonant unchanged।',
+ why:'Two pointer। l থেকে vowel খোঁজো, r থেকে vowel খোঁজো। দুটো পেলে swap। O(n), O(1)।',
+ intuition:'Regular reverse এর মতো কিন্তু শুধু vowel এ কাজ। Consonant skip করো।',
+ analogy:'🎤 গানে শুধু vowel sound গুলো উল্টো করো। Consonant অপরিবর্তিত।',
+ codeLines:[E('string reverseVowels(string s) {'),E('  string v="aeiouAEIOU";'),E('  int l=0, r=s.size()-1;'),E('  while(l < r) {'),E('    while(l<r && v.find(s[l])==string::npos) l++;'),E('    while(l<r && v.find(s[r])==string::npos) r--;'),E('    if(l<r) { swap(s[l],s[r]); l++; r--; }'),E('  }'),E('  return s;'),E('}')],
+ sim(){
+   const s=[...'hello'];const vow=new Set([...'aeiouAEIOU']);let l=0,r=s.length-1;const F=[];
+   F.push(AF([...s],{l,r},{l,r},'s="hello"। Vowels: e,o। l=0,r=4।',3,'l=0,r=4'));
+   while(l<r){
+     while(l<r&&!vow.has(s[l]))l++;
+     while(l<r&&!vow.has(s[r]))r--;
+     if(l<r){
+       F.push(AF([...s],{l,r},{l,r,'s[l]':'"'+s[l]+'"','s[r]':'"'+s[r]+'"'},'vowel l='+l+':"'+s[l]+'", r='+r+':"'+s[r]+'"। Swap!',7,'swap('+l+','+r+')',{hi:[l,r]}));
+       [s[l],s[r]]=[s[r],s[l]];l++;r--;
+       F.push(AF([...s],{l,r},{l,r},'Swapped! l='+l+',r='+r+'।',7,'l++,r--',{fnd:[l-1,r+1]}));
+     }
+   }
+   F.push(AF([...s],{},{result:'"'+s.join('')+'"'},'✅ Result: "'+s.join('')+'"',9,'return s',{res:'"'+s.join('')+'"'}));
+   return F;
+ }},
+// M1
+{name:'Longest Palindromic Substring',d:'M',
+ desc:'LeetCode 5. s="babad" → "bab"। Longest palindromic substring।',
+ why:'Expand Around Center। প্রতিটি center থেকে outward expand। Odd + even। O(n²), O(1) space।',
+ intuition:'Palindrome সর্বদা center থেকে symmetrical। প্রতিটি center থেকে expand যাও।',
+ analogy:'🌊 পুকুরে ঢিল ফেলো। দুই দিকের ঢেউ একসাথে চললে palindrome বড় হচ্ছে।',
+ codeLines:[E('string longestPalindrome(string s) {'),E('  int n=s.size(); string best="";'),E('  for(int c=0; c<2*n-1; c++) {'),E('    int l=c/2, r=l+(c%2);'),E('    while(l>=0&&r<n&&s[l]==s[r]) {'),E('      if(r-l+1>(int)best.size()) best=s.substr(l,r-l+1);'),E('      l--; r++;'),E('    }'),E('  }'),E('  return best;'),E('}')],
+ sim(){
+   const s=[...'babad'];let best='',bL=0;const F=[];
+   F.push(AF([...s],{},{s:'"babad"',best:'""'},'s="babad"। Expand around center।',2,'best=""'));
+   for(let c=0;c<2*s.length-1;c++){
+     let l=Math.floor(c/2),r=l+(c%2);
+     F.push(AF([...s],{l,r},{c,l,r,type:c%2===0?'odd':'even'},'center='+c+': l='+l+',r='+r+'। Expanding.',4,'expand',{hi:[l,r]}));
+     while(l>=0&&r<s.length&&s[l]===s[r]){
+       const sub=s.slice(l,r+1).join('');const nb=r-l+1>best.length;
+       if(nb){best=sub;bL=l;}
+       F.push(AF([...s],{l,r},{l,r,'match':'✓',sub:'"'+sub+'"',best:'"'+best+'"'},'Match! "'+sub+'" len='+(r-l+1)+'. best="'+best+'"',6,'update best',{win:[l,r],fnd:[l,r],chg:nb?['best']:undefined}));
+       l--;r++;
+     }
+   }
+   F.push(AF([...s],{},{result:'"'+best+'"'},'✅ Longest palindrome: "'+best+'"',10,'return best',
+     {fnd:[...Array(best.length)].map((_,i)=>bL+i),res:'"'+best+'"'}));
+   return F;
+ }},
+// M2
+{name:'Decode String',d:'M',
+ desc:'LeetCode 394. s="3[a2[c]]" → "accaccacc"। k[string] মানে string টা k বার repeat।',
+ why:'Stack। "[" তে count+current push। "]" তে pop করে repeat। O(output size)।',
+ intuition:'Nested bracket → stack। "]" পেলে সর্বশেষ context pop করো, repeat করো।',
+ analogy:'🪆 Russian doll। Inner doll unwrap করো, outer এর সাথে জোড়া দাও।',
+ codeLines:[E('string decodeString(string s) {'),E('  stack<pair<int,string>> stk;'),E('  string cur=""; int num=0;'),E('  for(char ch : s) {'),E('    if(isdigit(ch)) num=num*10+(ch-\'0\');'),E('    else if(ch==\'[\') { stk.push({num,cur}); num=0; cur=""; }'),E('    else if(ch==\']\') {'),E('      auto [k,prev]=stk.top(); stk.pop();'),E('      string rep=""; for(int i=0;i<k;i++) rep+=cur;'),E('      cur=prev+rep;'),E('    } else cur+=ch;'),E('  }'),E('  return cur;'),E('}')],
+ sim(){
+   const s=[...'2[ab]'];let cur='',num=0;const stk=[];const F=[];
+   F.push(AF([...s],{},{cur:'""',num:0,stk:'[]'},'s="2[ab]"। Stack decode।',3,'init'));
+   for(let i=0;i<s.length;i++){
+     const ch=s[i];
+     if(ch>='0'&&ch<='9'){num=num*10+parseInt(ch);F.push(AF([...s],{i},{i,ch:'"'+ch+'"',num,cur:'"'+cur+'"'},'digit '+ch+'. num='+num,5,'num='+num,{hi:[i]}));}
+     else if(ch==='['){stk.push([num,cur]);num=0;cur='';F.push(AF([...s],{i},{i,stk:'depth='+stk.length,num:0,cur:'""'},'push! depth='+stk.length,6,'push',{hi:[i]}));}
+     else if(ch===']'){
+       const[k,prev]=stk.pop();cur=prev+cur.repeat(k);
+       F.push(AF([...s],{i},{i,k,prev:'"'+prev+'"',cur:'"'+cur+'"'},'pop! repeat×'+k+'. cur="'+cur+'"',10,'cur=prev+rep×'+k,{fnd:[i]}));
+     }else{cur+=ch;F.push(AF([...s],{i},{i,ch:'"'+ch+'"',cur:'"'+cur+'"'},'char. cur="'+cur+'"',11,'cur+="'+ch+'"',{org:[i]}));}
+   }
+   F.push(AF([...s],{},{result:'"'+cur+'"'},'✅ Decoded: "'+cur+'"',13,'return "'+cur+'"',{res:'"'+cur+'"'}));
+   return F;
+ }},
+// M3
+{name:'String Compression',d:'M',
+ desc:'LeetCode 443. ["a","a","b","b","c","c","c"]→["a","2","b","2","c","3"] in-place। count=1 হলে number লিখবে না।',
+ why:'Two pointer। i=read, w=write। Group count করো, i এগিয়ে যাও, w তে লেখো। O(n), O(1)।',
+ intuition:'i group পড়ে, w compressed result লেখে। i সবসময় w এর ahead।',
+ analogy:'📦 Shipping — একই item count করে একসাথে পাঠাও। জায়গা বাঁচাও।',
+ codeLines:[E('int compress(vector<char>& s) {'),E('  int w=0, n=s.size();'),E('  for(int i=0; i<n; ) {'),E('    char ch=s[i]; int cnt=0;'),E('    while(i<n && s[i]==ch) { i++; cnt++; }'),E('    s[w++]=ch;'),E('    if(cnt>1) {'),E('      string cs=to_string(cnt);'),E('      for(char c:cs) s[w++]=c;'),E('    }'),E('  }'),E('  return w;'),E('}')],
+ sim(){
+   const arr=[...'aabccc'];let w=0,i=0;const F=[];
+   F.push(AF([...arr],{i,w},{i,w},'s="aabccc"。 i=read, w=write pointer。',2,'w=0',{hi:[i],org:[w]}));
+   while(i<arr.length){
+     const ch=arr[i];let cnt=0;const gi=i;
+     while(i<arr.length&&arr[i]===ch){i++;cnt++;}
+     F.push(AF([...arr],{i:gi,w},{ch:'"'+ch+'"',cnt,i:gi,w},'group "'+ch+'"×'+cnt+'。 Writing...',5,'cnt='+cnt,{win:[gi,i-1],hi:[gi]}));
+     arr[w]=ch;w++;
+     if(cnt>1){const cs=String(cnt);for(const c of cs){arr[w]=c;w++;}}
+     F.push(AF([...arr],{i,w},{i,w,written:'"'+arr.slice(0,w).join('')+'"'},'Written: "'+arr.slice(0,w).join('')+'"',9,'w='+w,{fnd:[...Array(w).keys()]}));
+   }
+   F.push(AF([...arr.slice(0,w)],{},{result:w,compressed:'"'+arr.slice(0,w).join('')+'"'},'✅ Compressed: "'+arr.slice(0,w).join('')+'", len='+w,12,'return '+w,{res:w}));
+   return F;
+ }},
+// M4
+{name:'Count and Say',d:'M',
+ desc:'LeetCode 38. n=1→"1", n=2→"11", n=3→"21", n=4→"1211"। আগের string এর digit গুলো count করে নতুন string।',
+ why:'RLE (Run-Length Encoding)। প্রতিটি group এর digit আর count লেখো। O(n·2ⁿ)।',
+ intuition:'"1" → "one 1" → "11"। "11" → "two 1s" → "21"। "21" → "one 2, one 1" → "1211"।',
+ analogy:'📢 পাশের মানুষকে বলো: এই sequence এ কী কতটা আছে। সে যা বলে সেটাই পরের sequence।',
+ codeLines:[E('string countAndSay(int n) {'),E('  string cur="1";'),E('  for(int k=1; k<n; k++) {'),E('    string next="";'),E('    for(int i=0; i<cur.size(); ) {'),E('      char ch=cur[i]; int cnt=0;'),E('      while(i<cur.size()&&cur[i]==ch){i++;cnt++;}'),E('      next+=to_string(cnt)+ch;'),E('    }'),E('    cur=next;'),E('  }'),E('  return cur;'),E('}')],
+ sim(){
+   const F=[];let cur='1';
+   F.push(AF([...'1'],{},{n:4,cur:'"1"',step:1},'n=4। cur="1" দিয়ে শুরু।',2,'cur="1"',{fnd:[0]}));
+   for(let k=1;k<4;k++){
+     let next='';const cs=[...cur];let i=0;
+     while(i<cs.length){
+       const ch=cs[i];let cnt=0;const gi=i;
+       while(i<cs.length&&cs[i]===ch){i++;cnt++;}
+       next+=String(cnt)+ch;
+       F.push(AF([...cs],{},{step:k+1,'grp':'"'+ch+'"×'+cnt,next:'"'+next+'"'},'Step '+k+': "'+ch+'"×'+cnt+' → next="'+next+'"',8,'next+="'+cnt+ch+'"',{win:[gi,i-1],hi:[gi]}));
+     }
+     cur=next;
+     F.push(AF([...cur],{},{step:k+1,cur:'"'+cur+'"'},'iter '+k+' done. cur="'+cur+'"',10,'cur=next',{fnd:[...cur.split('').keys()]}));
+   }
+   F.push(AF([...cur],{},{result:'"'+cur+'"'},'✅ countAndSay(4) = "'+cur+'"',12,'return cur',{res:'"'+cur+'"'}));
+   return F;
+ }},
+// M5
+{name:'Reverse Words in a String',d:'M',
+ desc:'LeetCode 151. s="the sky is blue" → "blue is sky the"। Words reverse করো, spaces trim করো।',
+ why:'Split → filter empty → words reverse → join single space। O(n)।',
+ intuition:'প্রতিটি word একটা unit। Words reverse করো, characters নয়।',
+ analogy:'📚 Shelf এর বইগুলো উল্টো সাজাও। বইয়ের ভেতরের অক্ষর same।',
+ codeLines:[E('string reverseWords(string s) {'),E('  istringstream iss(s);'),E('  vector<string> words;'),E('  string w;'),E('  while(iss>>w) words.push_back(w);'),E('  reverse(words.begin(),words.end());'),E('  string res="";'),E('  for(int i=0;i<words.size();i++){'),E('    if(i) res+=" ";'),E('    res+=words[i];'),E('  }'),E('  return res;'),E('}')],
+ sim(){
+   const words=['the','sky','is','blue'];const F=[];
+   F.push(AF([...words],{},{words:'["the","sky","is","blue"]'},'Words split done।',5,'split',{fnd:[...words.keys()]}));
+   let l=0,r=words.length-1;
+   while(l<r){
+     F.push(AF([...words],{l,r},{l,r,'w[l]':'"'+words[l]+'"','w[r]':'"'+words[r]+'"'},'Swap words['+l+'] ↔ words['+r+']।',6,'swap',{hi:[l,r]}));
+     [words[l],words[r]]=[words[r],words[l]];l++;r--;
+     F.push(AF([...words],{l,r},{l,r},'Swapped! ["'+words.join('","')+'"]',6,'l++,r--',{fnd:[l-1,r+1]}));
+   }
+   F.push(AF([...words],{},{result:'"'+words.join(' ')+'"'},'✅ Result: "'+words.join(' ')+'"',12,'return res',{fnd:[...words.keys()],res:'"'+words.join(' ')+'"'}));
+   return F;
+ }},
+// H1
+{name:'Edit Distance',d:'H',
+ desc:'LeetCode 72. s1="horse",s2="ros"→3। Minimum insert/delete/replace করে s1 কে s2 তে রূপান্তর।',
+ why:'2D DP। dp[i][j]=s1[0..i-1] থেকে s2[0..j-1] তে যেতে min cost। O(m·n)।',
+ intuition:'dp[i][j]: s1 এর i char কে s2 এর j char এ রূপান্তর করতে কত।  Table পূরণ করো।',
+ analogy:'🔧 দুটো শব্দের সেতু। প্রতিটি cell বলে এ পর্যন্ত কত কাজ লাগল।',
+ codeLines:[E('int minDistance(string s1, string s2) {'),E('  int n=s1.size(), m=s2.size();'),E('  vector<vector<int>> dp(n+1,vector<int>(m+1,0));'),E('  for(int i=0;i<=n;i++) dp[i][0]=i;'),E('  for(int j=0;j<=m;j++) dp[0][j]=j;'),E('  for(int i=1;i<=n;i++)'),E('    for(int j=1;j<=m;j++) {'),E('      if(s1[i-1]==s2[j-1]) dp[i][j]=dp[i-1][j-1];'),E('      else dp[i][j]=1+min({dp[i-1][j],dp[i][j-1],dp[i-1][j-1]});'),E('    }'),E('  return dp[n][m];'),E('}')],
+ sim(){
+   const s1='hor',s2='ro';const n=s1.length,m=s2.length;
+   const dp=Array.from({length:n+1},(_,i)=>Array.from({length:m+1},(_,j)=>i===0?j:j===0?i:0));
+   const F=[];
+   F.push(DPF(s1,s2,dp.map(r=>[...r]),{},'s1="hor",s2="ro"。 Base case setup。',4,'base cases'));
+   for(let i=1;i<=n;i++){
+     for(let j=1;j<=m;j++){
+       if(s1[i-1]===s2[j-1])dp[i][j]=dp[i-1][j-1];
+       else dp[i][j]=1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
+       F.push(DPF(s1,s2,dp.map(r=>[...r]),
+         {i,j,'s1[i]':s1[i-1],'s2[j]':s2[j-1],'dp':dp[i][j]},
+         's1['+i+']="'+s1[i-1]+'", s2['+j+']="'+s2[j-1]+'". '+(s1[i-1]===s2[j-1]?'Match!':'No match.')+'dp='+dp[i][j],
+         s1[i-1]===s2[j-1]?8:9,'dp['+i+']['+j+']='+dp[i][j],{hi:[i,j]}));
+     }
+   }
+   F.push(DPF(s1,s2,dp.map(r=>[...r]),{ans:dp[n][m]},'✅ Edit Distance='+dp[n][m],11,'return dp[n][m]',{res:dp[n][m]}));
+   return F;
+ }},
+// H2
+{name:'Longest Valid Parentheses',d:'H',
+ desc:'LeetCode 32. s=")()())"→4। সবচেয়ে লম্বা valid parentheses substring এর length।',
+ why:'Stack। -1 base দিয়ে শুরু। "(" → push index। ")" → pop, empty? push new base, else length update। O(n)।',
+ intuition:'Stack এ base রাখো। "]" পেলে pop করো। Empty হলে নতুন base। else current-top = valid length।',
+ analogy:'🧩 Bracket matching যেন telephone line। Connected থাকলে length বাড়ে।',
+ codeLines:[E('int longestValidParentheses(string s) {'),E('  stack<int> stk;'),E('  stk.push(-1);'),E('  int ans=0;'),E('  for(int i=0; i<s.size(); i++) {'),E('    if(s[i]==\'(\') stk.push(i);'),E('    else {'),E('      stk.pop();'),E('      if(stk.empty()) stk.push(i);'),E('      else ans=max(ans,i-stk.top());'),E('    }'),E('  }'),E('  return ans;'),E('}')],
+ sim(){
+   const s=[...')(()())'];let ans=0;const stk=[-1];const F=[];
+   F.push(AF([...s],{},{stk:'[-1]',ans:0},'s=")(()()"。 Stack=[-1]。',3,'stk={-1}'));
+   for(let i=0;i<s.length;i++){
+     const ch=s[i];
+     if(ch==='('){stk.push(i);F.push(AF([...s],{i},{i,ch:"'('",stk:'['+stk.join(',')+']',ans},'Push idx '+i+'。',6,'push('+i+')',{hi:[i]}));}
+     else{
+       stk.pop();
+       if(stk.length===0){stk.push(i);F.push(AF([...s],{i},{i,ch:"')'",stk:'['+stk.join(',')+']',ans},'Empty! New base='+i+'。',9,'push('+i+')',{hi:[i]}));}
+       else{
+         const len=i-stk[stk.length-1];if(len>ans)ans=len;
+         F.push(AF([...s],{i},{i,len,ans,top:stk[stk.length-1]},'valid len='+len+'. ans='+ans+'。',10,'ans='+ans,{fnd:[i],chg:['ans']}));
+       }
+     }
+   }
+   F.push(AF([...s],{},{ans},'✅ Longest valid parens = '+ans,13,'return '+ans,{res:ans}));
+   return F;
+ }},
+// H3
+{name:'Regular Expression Matching',d:'H',
+ desc:'LeetCode 10. s="aa",p="a*"→true। "." যেকোনো char। "*" আগের char 0+ বার।',
+ why:'2D DP। dp[i][j]=s[0..i-1] matches p[0..j-1]। "*" আসলে zero বা one-more match। O(m·n)।',
+ intuition:'dp[i][j]: s এর i char, p এর j pattern match করে? Table পূরণ করো।',
+ analogy:'🎯 Pattern matching — প্রতিটি cell বলে "এখানে পর্যন্ত match হয়েছে?"।',
+ codeLines:[E('bool isMatch(string s, string p) {'),E('  int n=s.size(), m=p.size();'),E('  vector<vector<bool>> dp(n+1,vector<bool>(m+1,false));'),E('  dp[0][0]=true;'),E('  for(int j=2;j<=m;j+=2)'),E('    if(p[j-1]==\'*\') dp[0][j]=dp[0][j-2];'),E('  for(int i=1;i<=n;i++) for(int j=1;j<=m;j++) {'),E('    if(p[j-1]==\'*\') {'),E('      dp[i][j]=dp[i][j-2];'),E('      if(p[j-2]==\'.\' || p[j-2]==s[i-1])'),E('        dp[i][j]=dp[i][j]||dp[i-1][j];'),E('    } else if(p[j-1]==\'.\' || p[j-1]==s[i-1])'),E('      dp[i][j]=dp[i-1][j-1];'),E('  }'),E('  return dp[n][m];'),E('}')],
+ sim(){
+   const s1='aa',p='a*';const n=s1.length,m=p.length;
+   const dp=Array.from({length:n+1},()=>Array(m+1).fill(false));
+   dp[0][0]=true;for(let j=2;j<=m;j+=2)if(p[j-1]==='*')dp[0][j]=dp[0][j-2];
+   const F=[];
+   F.push(DPF(s1,p,dp.map(r=>[...r]),{},'s="aa",p="a*"。 Base case।',4,'dp[0][0]=T'));
+   for(let i=1;i<=n;i++){
+     for(let j=1;j<=m;j++){
+       if(p[j-1]==='*'){dp[i][j]=dp[i][j-2];if(p[j-2]==='.'||p[j-2]===s1[i-1])dp[i][j]=dp[i][j]||dp[i-1][j];}
+       else if(p[j-1]==='.'||p[j-1]===s1[i-1])dp[i][j]=dp[i-1][j-1];
+       F.push(DPF(s1,p,dp.map(r=>[...r]),{i,j,'p[j]':p[j-1],'dp':dp[i][j]},
+         'i='+i+',j='+j+' p="'+p[j-1]+'". dp='+dp[i][j],8,'dp['+i+']['+j+']='+dp[i][j],{hi:[i,j]}));
+     }
+   }
+   F.push(DPF(s1,p,dp.map(r=>[...r]),{ans:dp[n][m]},'✅ Match? '+dp[n][m],15,'return dp[n][m]',{res:String(dp[n][m])}));
+   return F;
+ }},
+// H4
+{name:'Wildcard Matching',d:'H',
+ desc:'LeetCode 44. s="adceb",p="*a*b"→true。 "?" যেকোনো 1 char। "*" যেকোনো sequence (empty সহ)।',
+ why:'2D DP। dp[i][j]=s[0..i-1] matches p[0..j-1]。 "*" → dp[i][j-1] (zero) || dp[i-1][j] (one+)。 O(m·n)。',
+ intuition:'"*" টা সবচেয়ে tricky। Zero char বা more char — দুটো option এর OR।',
+ analogy:'🃏 Wildcard joker — যেকোনো হাতের সাথে match হয়। DP table সব possibilities cover করে।',
+ codeLines:[E('bool isMatch(string s, string p) {'),E('  int n=s.size(), m=p.size();'),E('  vector<vector<bool>> dp(n+1,vector<bool>(m+1,false));'),E('  dp[0][0]=true;'),E('  for(int j=1;j<=m&&p[j-1]==\'*\';j++) dp[0][j]=true;'),E('  for(int i=1;i<=n;i++) for(int j=1;j<=m;j++) {'),E('    if(p[j-1]==\'*\')'),E('      dp[i][j]=dp[i-1][j]||dp[i][j-1];  // one+ or zero'),E('    else if(p[j-1]==\'?\'||p[j-1]==s[i-1])'),E('      dp[i][j]=dp[i-1][j-1];'),E('  }'),E('  return dp[n][m];'),E('}')],
+ sim(){
+   const s1='abc',p='*b*';const n=s1.length,m=p.length;
+   const dp=Array.from({length:n+1},()=>Array(m+1).fill(false));
+   dp[0][0]=true;for(let j=1;j<=m&&p[j-1]==='*';j++)dp[0][j]=true;
+   const F=[];
+   F.push(DPF(s1,p,dp.map(r=>[...r]),{},'s="abc",p="*b*"。 Base setup。',4,'dp init'));
+   for(let i=1;i<=n;i++){
+     for(let j=1;j<=m;j++){
+       if(p[j-1]==='*')dp[i][j]=dp[i-1][j]||dp[i][j-1];
+       else if(p[j-1]==='?'||p[j-1]===s1[i-1])dp[i][j]=dp[i-1][j-1];
+       F.push(DPF(s1,p,dp.map(r=>[...r]),{i,j,'p[j]':p[j-1],'val':dp[i][j]},
+         'i='+i+',j='+j+' p="'+p[j-1]+'". dp='+dp[i][j],7,'dp['+i+']['+j+']='+dp[i][j],{hi:[i,j]}));
+     }
+   }
+   F.push(DPF(s1,p,dp.map(r=>[...r]),{ans:dp[n][m]},'✅ Wildcard Match? '+dp[n][m],12,'return '+dp[n][m],{res:String(dp[n][m])}));
+   return F;
+ }},
+// H5
+{name:'Shortest Palindrome',d:'H',
+ desc:'LeetCode 214. s="aacecaaa"→"aaacecaaa"। Minimum characters prepend করে s কে palindrome বানাও।',
+ why:'KMP। s + "#" + reverse(s) এ KMP prefix function চালাও। শেষ value = longest palindromic prefix length। বাকি part prepend করো। O(n)।',
+ intuition:'s এর longest palindromic prefix খোঁজো। KMP failure function দিয়ে এটা O(n) তে পাওয়া যায়।',
+ analogy:'🔄 শুধু শুরুর অংশটা mirror করো। যতটুকু already palindrome সেটা ছাড়া।',
+ codeLines:[E('string shortestPalindrome(string s) {'),E('  string r=s; reverse(r.begin(),r.end());'),E('  string t=s+"#"+r;'),E('  int n=t.size();'),E('  vector<int> kmp(n,0);'),E('  for(int i=1;i<n;i++) {'),E('    int j=kmp[i-1];'),E('    while(j && t[i]!=t[j]) j=kmp[j-1];'),E('    if(t[i]==t[j]) j++;'),E('    kmp[i]=j;'),E('  }'),E('  int len=kmp[n-1];  // palindrome prefix len'),E('  string add=s.substr(len);'),E('  reverse(add.begin(),add.end());'),E('  return add+s;'),E('}')],
+ sim(){
+   const s=[...'aacecaa'];const rev=[...s].reverse();const t=[...s,'#',...rev];const F=[];
+   const kmp=Array(t.length).fill(0);
+   F.push(AF([...t],{},{t:'"'+t.join('')+'"',n:t.length},'t = s+"#"+rev = "'+t.join('')+'"。 KMP prefix function।',3,'t built',{org:[s.length]}));
+   for(let i=1;i<t.length;i++){
+     let j=kmp[i-1];
+     while(j&&t[i]!==t[j])j=kmp[j-1];
+     if(t[i]===t[j])j++;
+     kmp[i]=j;
+     F.push(AF([...t],{i},{i,'t[i]':'"'+t[i]+'"',kmp_i:j},'kmp['+i+']='+j+'。',9,'kmp['+i+']='+j,{hi:[i],chg:j>0?['kmp_i']:undefined}));
+   }
+   const len=kmp[t.length-1];
+   const add=[...s].slice(len).reverse().join('');
+   F.push(AF([...s],{},{palindrome_prefix:len,add:'"'+add+'"',result:'"'+add+s.join('')+'"'},
+     '✅ Prepend "'+add+'". Result: "'+add+s.join('')+'"',15,'return add+s',{res:'"'+add+s.join('')+'"'}));
+   return F;
+ }}
+];
+// ══════════════════════════════════════════
+// SW_PROBS — String + Sliding Window (15: 5E 5M 5H)
+// ══════════════════════════════════════════
+const SW_PROBS=[
+// E1
+{name:'First Unique Character',d:'E',
+ desc:'LeetCode 387. s="leetcode"→0। First non-repeating character এর index। না থাকলে -1।',
+ why:'Freq map। First pass: count প্রতিটি char। Second pass: first with count==1। O(n)।',
+ intuition:'দুই বার scan। প্রথমে সব count করো। দ্বিতীয় বারে first unique খোঁজো।',
+ analogy:'📋 Attendance sheet। একবার সবার নাম mark করো। তারপর শুধু একবার আসা প্রথম জনকে ডাকো।',
+ codeLines:[E('int firstUniqChar(string s) {'),E('  unordered_map<char,int> freq;'),E('  for(char c:s) freq[c]++;  // count all'),E('  for(int i=0;i<s.size();i++)'),E('    if(freq[s[i]]==1) return i;  // first unique'),E('  return -1;'),E('}')],
+ sim(){
+   const s=[...'leetcode'];let mp={};const F=[];
+   F.push(MF([...s],{},'','s="leetcode"। Freq count করবো।',2,'freq={}'));
+   for(const ch of s){mp[ch]=(mp[ch]||0)+1;F.push(MF([...s],{...mp},{char:'"'+ch+'"',cnt:mp[ch]},'freq["'+ch+'"]='+mp[ch]+'。',3,'freq["'+ch+'"]='+mp[ch],{newKey:ch}));}
+   let ans=-1;
+   for(let i=0;i<s.length;i++){
+     const unique=mp[s[i]]===1;
+     F.push(MF([...s],{...mp},{i,'s[i]':'"'+s[i]+'"','freq':mp[s[i]],unique},
+       'i='+i+': "'+s[i]+'" freq='+mp[s[i]]+'. Unique? '+unique,4,'check i='+i,{hi:unique?[i]:undefined,fnd:unique?[i]:undefined}));
+     if(unique){ans=i;break;}
+   }
+   F.push(MF([...s],{...mp},{result:ans},'✅ First unique at index '+ans,6,'return '+ans,{res:ans}));
+   return F;
+ }},
+// E2
+{name:'Ransom Note',d:'E',
+ desc:'LeetCode 383. ransomNote="aa",magazine="aab"→true। magazine এর letters দিয়ে ransomNote বানানো যায়?',
+ why:'Freq map। magazine এর char count। ransomNote এর প্রতিটি char এ decrement। Negative হলে false। O(n)।',
+ intuition:'magazine থেকে "নাও"। ransomNote এ "দাও"। যা নেওয়ার চেয়ে বেশি দরকার → impossible।',
+ analogy:'✂️ magazine কেটে ransom letter বানাও। চাই এর চেয়ে কম থাকলে হবে না।',
+ codeLines:[E('bool canConstruct(string note, string mag) {'),E('  unordered_map<char,int> cnt;'),E('  for(char c:mag) cnt[c]++;    // magazine count'),E('  for(char c:note) {'),E('    if(--cnt[c]<0) return false; // not enough'),E('  }'),E('  return true;'),E('}')],
+ sim(){
+   const mag=[...'aab'];let mp={};const F=[];
+   F.push(MF([...mag],{},'','magazine="aab"। Count করবো।',2,'cnt={}'));
+   for(const ch of mag){mp[ch]=(mp[ch]||0)+1;F.push(MF([...mag],{...mp},{char:'"'+ch+'"',cnt:mp[ch]},'cnt["'+ch+'"]='+mp[ch]+'。',3,'cnt["'+ch+'"]='+mp[ch],{newKey:ch}));}
+   const note=[...'aa'];
+   F.push(MF([...note],{...mp},{},'note="aa"। Decrement করবো।',4,'scan note'));
+   let ok=true;
+   for(let i=0;i<note.length;i++){
+     const ch=note[i];mp[ch]=(mp[ch]||0)-1;const bad=mp[ch]<0;
+     F.push(MF([...note],{...mp},{i,char:'"'+ch+'"',cnt:mp[ch],ok:!bad},'cnt["'+ch+'"]='+mp[ch]+'. ok='+(!bad),5,'cnt["'+ch+'"]='+mp[ch],{hi:bad?[i]:undefined,fnd:bad?undefined:[i],newKey:ch}));
+     if(bad){ok=false;break;}
+   }
+   F.push(MF([...note],{...mp},{result:String(ok)},'✅ Can construct? '+ok,7,'return '+ok,{res:String(ok)}));
+   return F;
+ }},
+// E3
+{name:'Isomorphic Strings',d:'E',
+ desc:'LeetCode 205. s="egg",t="add"→true। s এর প্রতিটি char t এর exactly একটা char এ map হয়।',
+ why:'Bijection। s→t map + t→s map। দুটো দিকেই consistent mapping থাকা চাই। O(n)।',
+ intuition:'শুধু s→t map রাখলে হবে না। "ab"→"aa" true হয়ে যাবে। তাই দুই দিকের map check করো।',
+ analogy:'🔑 Two-way lock। Key A → Lock 1। কিন্তু Lock 1 → Key A ও চাই। অন্য key নয়।',
+ codeLines:[E('bool isIsomorphic(string s, string t) {'),E('  unordered_map<char,char> st,ts;'),E('  for(int i=0;i<s.size();i++) {'),E('    if(st.count(s[i])&&st[s[i]]!=t[i]) return false;'),E('    if(ts.count(t[i])&&ts[t[i]]!=s[i]) return false;'),E('    st[s[i]]=t[i];'),E('    ts[t[i]]=s[i];'),E('  }'),E('  return true;'),E('}')],
+ sim(){
+   const s=[...'egg'],t=[...'add'];let st={},ts={};const F=[];
+   F.push(AF([...s],{},{s:'"egg"',t:'"add"'},'s="egg",t="add"। Bijection check।',2,'st={},ts={}'));
+   for(let i=0;i<s.length;i++){
+     const sc=s[i],tc=t[i];
+     const bad=(st[sc]&&st[sc]!==tc)||(ts[tc]&&ts[tc]!==sc);
+     F.push(AF([...s],{i},{i,'s[i]':'"'+sc+'"','t[i]':'"'+tc+'"',st:JSON.stringify(st),ok:!bad},
+       'i='+i+': "'+sc+'"↔"'+tc+'". Conflict? '+bad,4,'check bijection',
+       {hi:[i],fnd:!bad?[i]:undefined,red:bad?[i]:undefined,cond:'"'+sc+'"↔"'+tc+'"?',cv:!bad}));
+     if(bad){F.push(AF([...s],{},{result:'false'},'✅ Not isomorphic!',4,'return false',{res:'false'}));return F;}
+     st[sc]=tc;ts[tc]=sc;
+   }
+   F.push(AF([...s],{},{result:'true'},'✅ Isomorphic!',9,'return true',{fnd:[...s.keys()],res:'true'}));
+   return F;
+ }},
+// E4
+{name:'Word Pattern',d:'E',
+ desc:'LeetCode 290. pattern="abba",s="dog cat cat dog"→true। pattern এর char ↔ word bijection।',
+ why:'Isomorphic strings এর মতো। char→word + word→char double map। O(n)।',
+ intuition:'প্রতিটি char ঠিক একটা word এ map হয়, এবং প্রতিটি word ঠিক একটা char এ।',
+ analogy:'🎭 নাটকের চরিত্র-অভিনেতা mapping। একজন actor শুধু একটা character play করে।',
+ codeLines:[E('bool wordPattern(string p, string s) {'),E('  vector<string> w; istringstream iss(s);'),E('  string t; while(iss>>t) w.push_back(t);'),E('  if(p.size()!=w.size()) return false;'),E('  unordered_map<char,string> cw;'),E('  unordered_map<string,char> wc;'),E('  for(int i=0;i<p.size();i++) {'),E('    if(cw.count(p[i])&&cw[p[i]]!=w[i]) return false;'),E('    if(wc.count(w[i])&&wc[w[i]]!=p[i]) return false;'),E('    cw[p[i]]=w[i]; wc[w[i]]=p[i];'),E('  }'),E('  return true;'),E('}')],
+ sim(){
+   const pat=[...'abba'],words=['dog','cat','cat','dog'];let cw={},wc={};const F=[];
+   F.push(AF([...pat],{},{pat:'"abba"',words:'["dog","cat","cat","dog"]'},'pattern="abba"। Word pattern check।',4,'cw={},wc={}'));
+   for(let i=0;i<pat.length;i++){
+     const c=pat[i],w=words[i];
+     const bad=(cw[c]&&cw[c]!==w)||(wc[w]&&wc[w]!==c);
+     F.push(AF([...pat],{i},{i,char:'"'+c+'"',word:'"'+w+'"',ok:!bad},
+       'i='+i+': "'+c+'"↔"'+w+'". ok? '+(!bad),8,'check',
+       {hi:[i],fnd:!bad?[i]:undefined,red:bad?[i]:undefined,cond:'"'+c+'"↔"'+w+'"?',cv:!bad}));
+     if(bad){F.push(AF([...pat],{},{result:'false'},'✅ Pattern mismatch!',8,'return false',{res:'false'}));return F;}
+     cw[c]=w;wc[w]=c;
+   }
+   F.push(AF([...pat],{},{result:'true'},'✅ Word pattern matches!',12,'return true',{fnd:[...pat.keys()],res:'true'}));
+   return F;
+ }},
+// E5
+{name:'Find First Occurrence in String',d:'E',
+ desc:'LeetCode 28. haystack="sadbutsad",needle="sad"→0। needle এর first occurrence এর index।',
+ why:'Naive O(m·n) বা KMP O(m+n)। Naive: প্রতিটি position এ needle match করার চেষ্টা।',
+ intuition:'haystack এর প্রতিটি position থেকে needle match করো। First match হলেই return।',
+ analogy:'📰 Newspaper এ word খোঁজো। প্রথম লাইন থেকে শুরু করো, match হলে থামো।',
+ codeLines:[E('int strStr(string hay, string needle) {'),E('  int n=hay.size(), m=needle.size();'),E('  for(int i=0; i<=n-m; i++) {'),E('    int j=0;'),E('    while(j<m && hay[i+j]==needle[j]) j++;'),E('    if(j==m) return i;  // found!'),E('  }'),E('  return -1;'),E('}')],
+ sim(){
+   const hay=[...'sadbutsad'],needle=[...'sad'];const F=[];
+   F.push(AF([...hay],{},{hay:'"sadbutsad"',needle:'"sad"'},'Naive substring search।',2,'i=0'));
+   for(let i=0;i<=hay.length-needle.length;i++){
+     let j=0;
+     while(j<needle.length&&hay[i+j]===needle[j])j++;
+     const found=j===needle.length;
+     F.push(AF([...hay],{i},{i,matched:j,total:needle.length,found},'i='+i+': matched '+j+'/'+needle.length+'. Found? '+found,5,'check i='+i,
+       {win:[i,i+needle.length-1],fnd:found?[...Array(needle.length)].map((_,k)=>i+k):undefined,red:found?undefined:j<needle.length?[i+j]:undefined,cond:'j==m?',cv:found}));
+     if(found){F.push(AF([...hay],{},{result:i},'✅ Found at index '+i+'!',6,'return '+i,{res:i,fnd:[...Array(needle.length)].map((_,k)=>i+k)}));return F;}
+   }
+   F.push(AF([...hay],{},{result:-1},'✅ Not found. Return -1।',8,'return -1',{res:-1}));
+   return F;
+ }},
+// M1
+{name:'Longest Substring Without Repeating',d:'M',
+ desc:'LeetCode 3. s="abcabcbb"→3 ("abc")। কোনো char repeat নেই এমন সবচেয়ে লম্বা substring।',
+ why:'Variable sliding window। l,r। seen set। r তে conflict → l কে এগিয়ে দাও। O(n)।',
+ intuition:'Right expand করো। Duplicate পেলে left কে সামনে দাও যতক্ষণ duplicate না যায়।',
+ analogy:'🚞 Train এ unlimited seat নেই। নতুন passenger উঠলে যদি conflict হয়, পুরনো কাউকে নামাও।',
+ codeLines:[E('int lengthOfLongestSubstring(string s) {'),E('  unordered_set<char> seen;'),E('  int l=0, ans=0;'),E('  for(int r=0; r<s.size(); r++) {'),E('    while(seen.count(s[r])) { seen.erase(s[l]); l++; }'),E('    seen.insert(s[r]);'),E('    ans=max(ans, r-l+1);'),E('  }'),E('  return ans;'),E('}')],
+ sim(){
+   const s=[...'abcabc'];let seen=new Set(),l=0,ans=0;const F=[];
+   F.push(AF([...s],{l},{l,ans},'s="abcabc"。 Variable window।',3,'l=0,ans=0'));
+   for(let r=0;r<s.length;r++){
+     while(seen.has(s[r])){seen.delete(s[l]);l++;}
+     seen.add(s[r]);
+     if(r-l+1>ans)ans=r-l+1;
+     F.push(AF([...s],{l,r},{l,r,'s[r]':'"'+s[r]+'"',ans,len:r-l+1},
+       'r='+r+': "'+s[r]+'". window=['+l+'..'+r+'] len='+(r-l+1)+'. ans='+ans,7,'ans='+ans,
+       {win:[l,r],hi:[r],chg:r-l+1>=ans?['ans']:undefined}));
+   }
+   F.push(AF([...s],{},{ans},'✅ Longest no-repeat = '+ans,9,'return '+ans,{res:ans}));
+   return F;
+ }},
+// M2
+{name:'Permutation in String',d:'M',
+ desc:'LeetCode 567. s1="ab",s2="eidbaooo"→true। s2 তে s1 এর কোনো permutation substring আছে?',
+ why:'Fixed window। Window size = len(s1)। s1 এর freq আর window এর freq compare করো। O(n)।',
+ intuition:'s1 এর freq একটা "signature"। s2 তে প্রতিটি size-m window এর signature মিলে?',
+ analogy:'🔐 Password lock। s1 এর letter combination যদি s2 এর কোনো window তে থাকে।',
+ codeLines:[E('bool checkInclusion(string s1, string s2) {'),E('  int m=s1.size(), n=s2.size();'),E('  if(m>n) return false;'),E('  vector<int> f1(26,0), win(26,0);'),E('  for(int i=0;i<m;i++){ f1[s1[i]-\'a\']++; win[s2[i]-\'a\']++; }'),E('  if(f1==win) return true;'),E('  for(int r=m; r<n; r++) {'),E('    win[s2[r]-\'a\']++;'),E('    win[s2[r-m]-\'a\']--;'),E('    if(f1==win) return true;'),E('  }'),E('  return false;'),E('}')],
+ sim(){
+   const s1=[...'ab'],s2=[...'eidbao'];const m=s1.length;
+   const f1={};for(const c of s1)f1[c]=(f1[c]||0)+1;
+   let win={};for(let i=0;i<m;i++)win[s2[i]]=(win[s2[i]]||0)+1;
+   const F=[];const cmpMp=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+   F.push(MF([...s2],{...win},{m,s1:'"ab"',f1:'{"a":1,"b":1}'},'s2="eidbao"。 Fixed window size='+m+'。',4,'init window',{mapTitle:'WIN {char→cnt}:'}));
+   if(cmpMp(f1,win)){F.push(MF([...s2],{...win},{result:'true'},'✅ Permutation found at start!',6,'return true',{res:'true'}));return F;}
+   let found=false;
+   for(let r=m;r<s2.length;r++){
+     win[s2[r]]=(win[s2[r]]||0)+1;
+     const out=s2[r-m];win[out]--;if(win[out]===0)delete win[out];
+     const match=cmpMp(f1,win);
+     F.push(MF([...s2],{...win},{r,in:'"'+s2[r]+'"',out:'"'+out+'"',match},'r='+r+': +'+s2[r]+' -'+out+'. Match? '+match,9,'compare',
+       {win:[r-m+1,r],hi:[r],newKey:s2[r],mapTitle:'WIN {char→cnt}:'}));
+     if(match){found=true;break;}
+   }
+   F.push(MF([...s2],{...win},{result:String(found)},'✅ Permutation found? '+found,12,'return '+found,{res:String(found)}));
+   return F;
+ }},
+// M3
+{name:'Find All Anagrams in a String',d:'M',
+ desc:'LeetCode 438. s="cbaebabacd",p="abc"→[0,6]। s তে p এর সব anagram এর starting indices।',
+ why:'Fixed sliding window। Window size=|p|। p এর freq আর window freq match হলে index collect করো। O(n)।',
+ intuition:'Permutation in String এর মতো কিন্তু সব indices collect করো।',
+ analogy:'🔍 Detective পুরো শহর খোঁজছে। যেখানেই suspect এর pattern match হয় সেই address note করে।',
+ codeLines:[E('vector<int> findAnagrams(string s, string p) {'),E('  int m=p.size(), n=s.size();'),E('  vector<int> res, fp(26,0), win(26,0);'),E('  for(char c:p) fp[c-\'a\']++;'),E('  for(int i=0;i<m&&i<n;i++) win[s[i]-\'a\']++;'),E('  if(fp==win) res.push_back(0);'),E('  for(int r=m; r<n; r++) {'),E('    win[s[r]-\'a\']++;'),E('    win[s[r-m]-\'a\']--;'),E('    if(fp==win) res.push_back(r-m+1);'),E('  }'),E('  return res;'),E('}')],
+ sim(){
+   const s=[...'cbaebabacd'],p=[...'abc'];const m=p.length;
+   const fp={};for(const c of p)fp[c]=(fp[c]||0)+1;
+   let win={};for(let i=0;i<m;i++)win[s[i]]=(win[s[i]]||0)+1;
+   const cmpMp=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+   const res=[];const F=[];
+   F.push(MF([...s],{...win},{m,p:'"abc"',found:'[]'},'s="cbaebabacd"。 Anagram search。',4,'init',{mapTitle:'WIN {char→cnt}:'}));
+   if(cmpMp(fp,win)){res.push(0);F.push(MF([...s],{...win},{found:'[0]',idx:0},'Match at 0!',6,'res=[0]',{win:[0,m-1],fnd:[0,1,2],mapTitle:'WIN {char→cnt}:'}));}
+   for(let r=m;r<s.length;r++){
+     win[s[r]]=(win[s[r]]||0)+1;const out=s[r-m];win[out]--;if(win[out]===0)delete win[out];
+     const match=cmpMp(fp,win);
+     if(match)res.push(r-m+1);
+     F.push(MF([...s],{...win},{r,in:'"'+s[r]+'"',out:'"'+out+'"',found:'['+res.join(',')+']'},
+       'r='+r+' +'+s[r]+' -'+out+'. Match? '+match+(match?' → idx='+(r-m+1):''),9,'check',
+       {win:[r-m+1,r],fnd:match?[r-m+1,r]:undefined,hi:[r],mapTitle:'WIN {char→cnt}:'}));
+   }
+   F.push(MF([...s],{...win},{result:'['+res.join(',')+']'},'✅ Anagram indices: ['+res.join(',')+']',12,'return res',{res:'['+res.join(',')+']'}));
+   return F;
+ }},
+// M4
+{name:'Longest Repeating Character Replacement',d:'M',
+ desc:'LeetCode 424. s="AABABBA",k=1→4। At most k replacement করে সবচেয়ে লম্বা same-char substring।',
+ why:'Variable window। Window এ dominant char এর count রাখো। (window size - max_count) > k হলে shrink। O(n)।',
+ intuition:'Window valid = window_len - max_freq <= k। অর্থাৎ max k টা non-dominant char replace করতে পারি।',
+ analogy:'🎨 রঙের দোকান। window তে সবচেয়ে বেশি যে রঙ, বাকিগুলো replace করো। k এর বেশি না।',
+ codeLines:[E('int characterReplacement(string s, int k) {'),E('  unordered_map<char,int> cnt;'),E('  int l=0, maxF=0, ans=0;'),E('  for(int r=0; r<s.size(); r++) {'),E('    maxF=max(maxF,++cnt[s[r]]);  // update max freq'),E('    while(r-l+1-maxF > k) { cnt[s[l]]--; l++; }  // shrink'),E('    ans=max(ans, r-l+1);'),E('  }'),E('  return ans;'),E('}')],
+ sim(){
+   const s=[...'AABAB'],k=1;let cnt={},l=0,maxF=0,ans=0;const F=[];
+   F.push(AF([...s],{l},{l,k,ans,maxF},'s="AABAB",k='+k+'。 Var window।',3,'l=0,maxF=0'));
+   for(let r=0;r<s.length;r++){
+     cnt[s[r]]=(cnt[s[r]]||0)+1;maxF=Math.max(maxF,cnt[s[r]]);
+     while(r-l+1-maxF>k){cnt[s[l]]--;l++;}
+     if(r-l+1>ans)ans=r-l+1;
+     F.push(AF([...s],{l,r},{l,r,'s[r]':'"'+s[r]+'"',maxF,len:r-l+1,ans},
+       'r='+r+': window=['+l+'..'+r+'] len='+(r-l+1)+' maxF='+maxF+'. ans='+ans,7,'ans='+ans,
+       {win:[l,r],hi:[r],chg:r-l+1>=ans?['ans']:undefined}));
+   }
+   F.push(AF([...s],{},{ans},'✅ Longest replacement = '+ans,9,'return '+ans,{res:ans}));
+   return F;
+ }},
+// M5
+{name:'Group Anagrams',d:'M',
+ desc:'LeetCode 49. ["eat","tea","tan","ate","nat","bat"]→[["bat"],["nat","tan"],["ate","eat","tea"]]।',
+ why:'Sort key। প্রতিটি word sort করলে same anagram group এর জন্য same key। HashMap দিয়ে group করো। O(n·m·log m)।',
+ intuition:'"eat","tea","ate" — সবগুলো sort করলে "aet"। এই key দিয়ে group করো।',
+ analogy:'📂 File sorting। Anagram গুলো same folder এ রাখো। Sorted form = folder name।',
+ codeLines:[E('vector<vector<string>> groupAnagrams(vector<string>& strs) {'),E('  unordered_map<string,vector<string>> mp;'),E('  for(string& s : strs) {'),E('    string key=s;'),E('    sort(key.begin(),key.end());  // sorted key'),E('    mp[key].push_back(s);'),E('  }'),E('  vector<vector<string>> res;'),E('  for(auto& [k,v]:mp) res.push_back(v);'),E('  return res;'),E('}')],
+ sim(){
+   const strs=['eat','tea','tan','ate'];let mp={};const F=[];
+   F.push(MF([...strs.map(s=>s[0])],{},'','strs=["eat","tea","tan","ate"]। Sort key grouping।',2,'mp={}',{mapTitle:'MAP {sorted→group}:'}));
+   for(const s of strs){
+     const key=[...s].sort().join('');mp[key]=mp[key]?mp[key]+','+s:s;
+     F.push(MF([...strs.map(w=>w[0])],{...mp},{word:'"'+s+'"',key:'"'+key+'"'},'sort("'+s+'")="'+key+'". Group updated。',5,'mp["'+key+'"]='+mp[key],{newKey:key,mapTitle:'MAP {sorted→group}:'}));
+   }
+   F.push(MF([...strs.map(s=>s[0])],{...mp},{groups:Object.keys(mp).length},'✅ '+Object.keys(mp).length+' groups found。',9,'return res',{res:Object.keys(mp).length+' groups',mapTitle:'MAP {sorted→group}:'}));
+   return F;
+ }},
+// H1
+{name:'Minimum Window Substring',d:'H',
+ desc:'LeetCode 76. s="ADOBECODEBANC",t="ABC"→"BANC"। t এর সব char ধারণ করা minimum window।',
+ why:'Variable window। need=freq(t)। have=কতটা satisfied। formed==required হলে shrink। O(n+m)।',
+ intuition:'Window expand করো। t এর সব char পেলে shrink করো। প্রতিটি valid window এ ans update।',
+ analogy:'🎯 টার্গেট board। সব target cover করো। তারপর smallest frame খোঁজো।',
+ codeLines:[E('string minWindow(string s, string t) {'),E('  unordered_map<char,int> need,win;'),E('  for(char c:t) need[c]++;'),E('  int req=need.size(), formed=0, l=0;'),E('  int mn=INT_MAX, ml=0;'),E('  for(int r=0;r<s.size();r++) {'),E('    win[s[r]]++;'),E('    if(need.count(s[r])&&win[s[r]]==need[s[r]]) formed++;'),E('    while(formed==req) {'),E('      if(r-l+1<mn){mn=r-l+1;ml=l;}'),E('      win[s[l]]--;'),E('      if(need.count(s[l])&&win[s[l]]<need[s[l]]) formed--;'),E('      l++;'),E('    }'),E('  }'),E('  return mn==INT_MAX?"":(s.substr(ml,mn));'),E('}')],
+ sim(){
+   const s=[...'ADOBEC'],t=[...'ABC'];
+   const need={};for(const c of t)need[c]=(need[c]||0)+1;
+   const req=Object.keys(need).length;let win={},formed=0,l=0,mn=Infinity,ml=0;const F=[];
+   F.push(MF([...s],{...need},{t:'"ABC"',req,formed:0},'s="ADOBEC"。 need={"A":1,"B":1,"C":1}。',3,'need built',{mapTitle:'NEED {char→cnt}:'}));
+   for(let r=0;r<s.length;r++){
+     win[s[r]]=(win[s[r]]||0)+1;
+     if(need[s[r]]&&win[s[r]]===need[s[r]])formed++;
+     F.push(MF([...s],{...win},{r,'s[r]':'"'+s[r]+'"',formed,req,l},'r='+r+': +'+s[r]+'. formed='+formed+'/'+req,7,'check formed',
+       {win:[l,r],hi:[r],mapTitle:'WIN {char→cnt}:'}));
+     while(formed===req){
+       if(r-l+1<mn){mn=r-l+1;ml=l;}
+       F.push(MF([...s],{...win},{l,r,len:r-l+1,mn,formed},'Valid! len='+(r-l+1)+'. mn='+mn+'. Shrink.',10,'mn='+mn,
+         {win:[l,r],fnd:[...Array(r-l+1)].map((_,i)=>l+i),mapTitle:'WIN {char→cnt}:'}));
+       win[s[l]]--;if(need[s[l]]&&win[s[l]]<need[s[l]])formed--;l++;
+     }
+   }
+   const result=mn===Infinity?'""':'"'+s.slice(ml,ml+mn).join('')+'"';
+   F.push(MF([...s],{...win},{result,mn},'✅ Min window = '+result,15,'return result',{res:result}));
+   return F;
+ }},
+// H2
+{name:'Substring with Concatenation of All Words',d:'H',
+ desc:'LeetCode 30. s="barfoothefoobarman",words=["foo","bar"]→[0,9]। All words এর concatenation এর starting indices।',
+ why:'Sliding window at word-level। প্রতিটি word-start position থেকে check করো। O(n·m)।',
+ intuition:'Words all same length। Word-by-word sliding window। n/word_len window check করো।',
+ analogy:'🧱 বালির ঘর। নির্দিষ্ট blocks দিয়ে ঠিক window বানাও। সব block থাকলে valid।',
+ codeLines:[E('vector<int> findSubstring(string s, vector<string>& w) {'),E('  int n=s.size(), m=w.size(), wl=w[0].size();'),E('  unordered_map<string,int> need;'),E('  for(auto& x:w) need[x]++;'),E('  vector<int> res;'),E('  for(int i=0;i<wl;i++) {'),E('    int l=i,cnt=0;'),E('    unordered_map<string,int> win;'),E('    for(int r=i;r+wl<=n;r+=wl) {'),E('      string wd=s.substr(r,wl);'),E('      if(need.count(wd)) {'),E('        win[wd]++; cnt++;'),E('        while(win[wd]>need[wd]){win[s.substr(l,wl)]--;cnt--;l+=wl;}'),E('        if(cnt==m) res.push_back(l);'),E('      } else {win.clear();cnt=0;l=r+wl;}'),E('    }'),E('  }'),E('  return res;'),E('}')],
+ sim(){
+   const s=[...'barfoobar'],words=['foo','bar'],wl=3;
+   const need={};for(const w of words)need[w]=(need[w]||0)+1;
+   const res=[];const F=[];
+   F.push(MF([...s],{...need},{wl,words:'["foo","bar"]'},'s="barfoobar"。 Word-level window。',3,'need built',{mapTitle:'NEED {word→cnt}:'}));
+   for(let i=0;i<wl;i++){
+     let l=i,cnt=0,win={};
+     for(let r=i;r+wl<=s.length;r+=wl){
+       const wd=s.slice(r,r+wl).join('');
+       if(need[wd]){
+         win[wd]=(win[wd]||0)+1;cnt++;
+         while(win[wd]>need[wd]){const lw=s.slice(l,l+wl).join('');win[lw]--;cnt--;l+=wl;}
+         F.push(MF([...s],{...win},{r,wd:'"'+wd+'"',cnt,total:words.length,l},'r='+r+': "'+wd+'". cnt='+cnt,11,'cnt='+cnt,
+           {win:[l,r+wl-1],hi:[...Array(wl)].map((_,k)=>r+k),mapTitle:'WIN {word→cnt}:'}));
+         if(cnt===words.length){res.push(l);F.push(MF([...s],{...win},{found:l,res:'['+res.join(',')+']'},'Match at l='+l+'!',13,'res.push('+l+')',{fnd:[...Array(words.length*wl)].map((_,k)=>l+k),mapTitle:'WIN {word→cnt}:'}));}
+       }else{win={};cnt=0;l=r+wl;}
+     }
+   }
+   F.push(MF([...s],{...need},{result:'['+res.join(',')+']'},'✅ Indices: ['+res.join(',')+']',18,'return res',{res:'['+res.join(',')+']',mapTitle:'NEED {word→cnt}:'}));
+   return F;
+ }},
+// H3
+{name:'Longest Substring with K Distinct',d:'H',
+ desc:'LeetCode 340. s="eceba",k=2→3 ("ece")। At most k distinct chars আছে এমন longest substring।',
+ why:'Variable window। Map তে distinct char count করো। Map.size()>k হলে l এগিয়ে দাও। O(n)।',
+ intuition:'Window তে max k different char রাখো। k exceed হলে left থেকে কমাও।',
+ analogy:'🎨 রঙ palette। মাত্র k রঙ ব্যবহার করে সবচেয়ে বড় painting করো।',
+ codeLines:[E('int lengthOfLongestSubstringKDistinct(string s, int k) {'),E('  unordered_map<char,int> win;'),E('  int l=0, ans=0;'),E('  for(int r=0; r<s.size(); r++) {'),E('    win[s[r]]++;'),E('    while(win.size()>k) {'),E('      win[s[l]]--;'),E('      if(win[s[l]]==0) win.erase(s[l]);'),E('      l++;'),E('    }'),E('    ans=max(ans, r-l+1);'),E('  }'),E('  return ans;'),E('}')],
+ sim(){
+   const s=[...'eceba'],k=2;let win={},l=0,ans=0;const F=[];
+   F.push(AF([...s],{l},{l,k,ans},'s="eceba",k='+k+'। K distinct window।',3,'l=0'));
+   for(let r=0;r<s.length;r++){
+     win[s[r]]=(win[s[r]]||0)+1;
+     while(Object.keys(win).length>k){win[s[l]]--;if(win[s[l]]===0)delete win[s[l]];l++;}
+     if(r-l+1>ans)ans=r-l+1;
+     F.push(AF([...s],{l,r},{l,r,'s[r]':'"'+s[r]+'"',distinct:Object.keys(win).length,k,ans},
+       'r='+r+': distinct='+Object.keys(win).length+'/'+k+'. ans='+ans,10,'ans='+ans,
+       {win:[l,r],hi:[r],chg:r-l+1>=ans?['ans']:undefined}));
+   }
+   F.push(AF([...s],{},{ans},'✅ Longest with k='+k+' distinct = '+ans,13,'return '+ans,{res:ans}));
+   return F;
+ }},
+// H4
+{name:'Minimum Window Subsequence',d:'H',
+ desc:'LeetCode 727. s="abcdebdde",t="bde"→"bcde"। t এর সব char order maintain করে contain করা minimum window।',
+ why:'Two pointer। s তে t scan করো (forward)। পেলে backwards scan করো minimum window খুঁজতে। O(|s|·|t|)।',
+ intuition:'Forward: t কে s তে match করো। Backward: শেষ থেকে ফিরে এসে smallest window বের করো।',
+ analogy:'🎯 Subsequence sniper। টার্গেট sequence খোঁজো, তারপর সবচেয়ে ছোট covering নাও।',
+ codeLines:[E('string minWindow(string s, string t) {'),E('  int n=s.size(), m=t.size();'),E('  int ans=-1, ansLen=INT_MAX;'),E('  int i=0;'),E('  while(i<n) {'),E('    int j=0;'),E('    while(i<n && j<m) {'),E('      if(s[i]==t[j]) j++;'),E('      i++;'),E('    }'),E('    if(j==m) {  // found all of t'),E('      int end=i;'),E('      j=m-1; i--;'),E('      while(j>=0) {  // go back'),E('        if(s[i]==t[j]) j--;'),E('        i--;'),E('      }'),E('      i++;'),E('      if(end-i<ansLen){ansLen=end-i;ans=i;}'),E('      i++;'),E('    }'),E('  }'),E('  return ans==-1?"":(s.substr(ans,ansLen));'),E('}')],
+ sim(){
+   const s=[...'abcde'],t=[...'bd'];let ans=-1,ansLen=Infinity;const F=[];
+   F.push(AF([...s],{},{s:'"abcde"',t:'"bd"'},'Subsequence window search।',4,'i=0'));
+   let i=0;
+   while(i<s.length){
+     let j=0,si=i;
+     while(si<s.length&&j<t.length){if(s[si]===t[j])j++;si++;}
+     if(j===t.length){
+       F.push(AF([...s],{},{i,end:si,found:'"'+s.slice(i,si).join('')+'"'},'Forward match i='+i+'..'+si+'. Now going back.',11,'fwd done',{win:[i,si-1],fnd:[...Array(si-i)].map((_,k)=>i+k)}));
+       let end=si;si--;j=t.length-1;
+       while(j>=0){if(s[si]===t[j])j--;si--;}
+       si++;
+       F.push(AF([...s],{},{start:si,end,len:end-si,prev_ans:ansLen},'Min window ["'+si+'"..'+end+'] len='+(end-si)+'. ansLen='+Math.min(ansLen,end-si),18,'update ans',{win:[si,end-1],fnd:[...Array(end-si)].map((_,k)=>si+k)}));
+       if(end-si<ansLen){ansLen=end-si;ans=si;}
+       i=si+1;
+     }else break;
+   }
+   const result=ans===-1?'""':'"'+s.slice(ans,ans+ansLen).join('')+'"';
+   F.push(AF([...s],{},{result,ansLen},'✅ Min window subsequence = '+result,21,'return result',{res:result}));
+   return F;
+ }},
+// H5
+{name:'Palindrome Pairs',d:'H',
+ desc:'LeetCode 336. words=["abcd","dcba","lls","s","sssll"]→[[0,1],[1,0],[3,2],[2,4]]। সব pair (i,j) যেখানে words[i]+words[j] palindrome।',
+ why:'HashMap। প্রতিটি word এর reverse map এ রাখো। প্রতিটি word এর prefix/suffix palindrome check করে pair খোঁজো। O(n·m²)।',
+ intuition:'words[i]+words[j] palindrome হতে হলে তাদের combination এ symmetry থাকতে হবে। Reverse lookup দিয়ে efficiently খোঁজো।',
+ analogy:'🔗 Chain link। দুটো chain জোড়া দিলে কি পুরো chain palindrome হয়?',
+ codeLines:[E('vector<vector<int>> palindromePairs(vector<string>& w) {'),E('  unordered_map<string,int> mp;'),E('  for(int i=0;i<w.size();i++) mp[w[i]]=i;'),E('  vector<vector<int>> res;'),E('  auto isPalin=[](string s){string r=s;reverse(r.begin(),r.end());return s==r;};'),E('  for(int i=0;i<w.size();i++) {'),E('    for(int k=0;k<=w[i].size();k++) {'),E('      string pre=w[i].substr(0,k);'),E('      string suf=w[i].substr(k);'),E('      if(isPalin(pre)) {'),E('        string rev=suf; reverse(rev.begin(),rev.end());'),E('        if(mp.count(rev)&&mp[rev]!=i) res.push_back({mp[rev],i});'),E('      }'),E('      if(k&&isPalin(suf)){'),E('        string rev=pre; reverse(rev.begin(),rev.end());'),E('        if(mp.count(rev)&&mp[rev]!=i) res.push_back({i,mp[rev]});'),E('      }'),E('    }'),E('  }'),E('  return res;'),E('}')],
+ sim(){
+   const words=['ab','ba','a'];const mp={};words.forEach((w,i)=>mp[w]=i);
+   const isPalin=s=>{const r=[...s].reverse().join('');return s===r;};
+   const res=[];const F=[];
+   F.push(MF([...words.map(w=>w[0])],{...Object.fromEntries(words.map((w,i)=>[w,i]))},{},'words=["ab","ba","a"]। Reverse lookup map।',2,'mp built',{mapTitle:'MAP {word→idx}:'}));
+   for(let i=0;i<words.length;i++){
+     for(let k=0;k<=words[i].length;k++){
+       const pre=words[i].slice(0,k),suf=words[i].slice(k);
+       if(isPalin(pre)){
+         const rev=[...suf].reverse().join('');
+         if(mp[rev]!==undefined&&mp[rev]!==i){
+           res.push([mp[rev],i]);
+           F.push(MF([...words.map(w=>w[0])],{...mp},{pair:'['+mp[rev]+','+i+']',comb:'"'+words[mp[rev]]+words[i]+'"'},
+             'Palindrome pair: words['+mp[rev]+']+words['+i+']="'+words[mp[rev]]+words[i]+'"!',11,'res.push(['+mp[rev]+','+i+'])',
+             {fnd:[mp[rev],i],mapTitle:'MAP {word→idx}:'}));
+         }
+       }
+       if(k&&isPalin(suf)){
+         const rev=[...pre].reverse().join('');
+         if(mp[rev]!==undefined&&mp[rev]!==i){
+           res.push([i,mp[rev]]);
+           F.push(MF([...words.map(w=>w[0])],{...mp},{pair:'['+i+','+mp[rev]+']',comb:'"'+words[i]+words[mp[rev]]+'"'},
+             'Pair: words['+i+']+words['+mp[rev]+']="'+words[i]+words[mp[rev]]+'"!',15,'res.push(['+i+','+mp[rev]+'])',
+             {fnd:[i,mp[rev]],mapTitle:'MAP {word→idx}:'}));
+         }
+       }
+     }
+   }
+   F.push(MF([...words.map(w=>w[0])],{...mp},{result:res.length+' pairs',pairs:res.map(p=>'['+p.join(',')+']').join(', ')},'✅ Palindrome pairs: '+res.length,20,'return res',{res:res.length+' pairs',mapTitle:'MAP {word→idx}:'}));
+   return F;
+ }}
+];
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  function buildBar(sec,probs){
+    probs.forEach((p,i)=>{
+      const btn=document.createElement('button');
+      btn.id=sec+'-pb-'+i;btn.className='pb-btn';
+      const dspan='<span style="font-size:8px;font-weight:700;margin-left:3px;color:'+(p.d==='E'?'#059669':p.d==='M'?'#d97706':'#dc2626')+'">'+p.d+'</span>';
+      btn.innerHTML=p.name+dspan;
+      btn.onclick=()=>selProb(sec,i);
+      const bar=document.getElementById(sec+'-pbar-'+p.d.toLowerCase());
+      if(bar)bar.appendChild(btn);
+    });
+  }
+  buildBar('sc',SC_PROBS);
+  buildBar('sw',SW_PROBS);
+  drawFrame('sc',null);
+  drawFrame('sw',null);
+  document.getElementById('sc-spd-lbl').textContent='2x';
+  document.getElementById('sw-spd-lbl').textContent='2x';
+});
+window.addEventListener('resize',()=>{
+  if(S.sc.frames)drawFrame('sc',S.sc.frames[S.sc.idx]);else drawFrame('sc',null);
+  if(S.sw.frames)drawFrame('sw',S.sw.frames[S.sw.idx]);else drawFrame('sw',null);
+});
+</script>
+</body>
+</html>
